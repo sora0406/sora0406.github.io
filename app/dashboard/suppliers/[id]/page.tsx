@@ -1,7 +1,3 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { ArrowLeft, Building, Mail, MapPin, Phone, User } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -66,27 +62,29 @@ const initialSuppliers = [
   },
 ]
 
-export default function SupplierDetailPage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const [supplier, setSupplier] = useState<Supplier | null>(null)
+// 新增靜態路徑參數生成
+export function generateStaticParams() {
+  return initialSuppliers.map((supplier) => ({
+    id: supplier.id,
+  }))
+}
 
-  useEffect(() => {
-    // 在實際應用中，這裡會從API獲取供應商數據
-    const foundSupplier = initialSuppliers.find((s) => s.id === params.id) || null
-    setSupplier(foundSupplier)
-  }, [params.id])
+export default function SupplierDetailPage({ params }: { params: { id: string } }) {
+  // 直接從模擬資料中取得供應商資料，不使用 React hooks
+  const supplier = initialSuppliers.find((s) => s.id === params.id) as Supplier
 
   if (!supplier) {
-    return <div className="flex items-center justify-center h-full">載入中...</div>
+    return <div className="flex items-center justify-center h-full">找不到供應商</div>
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => router.back()}>
-          \
-          <ArrowLeft className="h-4 w-4" />
-          <span className="sr-only">返回</span>
+        <Button variant="outline" size="icon" asChild>
+          <a href="/dashboard/suppliers">
+            <ArrowLeft className="h-4 w-4" />
+            <span className="sr-only">返回</span>
+          </a>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{supplier.name}</h1>
       </div>

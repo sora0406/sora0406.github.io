@@ -1,6 +1,3 @@
-"use client"
-
-import { useState } from "react"
 import Link from "next/link"
 import { ArrowLeft, Calendar, Clock, Info } from "lucide-react"
 import { format } from "date-fns"
@@ -92,9 +89,15 @@ interface Difference {
   newValue: string;
 }
 
-export default function SurveyHistoryPage({ params }: { params: { id: string } }) {
-  const [currentVersion, setCurrentVersion] = useState("2")
+// 靜態匯出所需
+export function generateStaticParams() {
+  return [{ id: "5" }]  // 問卷歷史目前只有這一個測試ID
+}
 
+export default function SurveyHistoryPage({ params }: { params: { id: string } }) {
+  // 預設顯示最新版本
+  const currentVersion = "2";
+  
   // 取得當前的修訂版本
   const revision = surveyHistory.revisions.find(r => r.version.toString() === currentVersion)
   
@@ -227,109 +230,74 @@ export default function SurveyHistoryPage({ params }: { params: { id: string } }
             </div>
           </div>
           
-          <Tabs 
-            defaultValue={currentVersion} 
-            className="mt-4" 
-            onValueChange={setCurrentVersion}
-          >
-            <TabsList className="grid grid-cols-2">
+          {/* 靜態顯示當前版本，沒有互動 */}
+          <div className="mt-4 border-b">
+            <div className="flex">
               {surveyHistory.revisions.map((rev) => (
-                <TabsTrigger key={rev.version} value={rev.version.toString()}>
+                <Button
+                  key={rev.version}
+                  variant={rev.version.toString() === currentVersion ? "default" : "ghost"}
+                  className="rounded-none h-11"
+                  disabled={rev.version.toString() !== currentVersion}
+                >
                   版本 {rev.version}
-                </TabsTrigger>
+                </Button>
               ))}
-            </TabsList>
-            
-            {surveyHistory.revisions.map((rev) => (
-              <TabsContent key={rev.version} value={rev.version.toString()} className="mt-4">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    <span className="text-sm">更新時間: {format(rev.date, "yyyy-MM-dd HH:mm")}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <Info className="h-4 w-4" />
-                    <span className="text-sm">備註: {rev.note}</span>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {rev.completedSections.map((section) => (
-                      <Badge key={section} variant="outline" className="bg-green-500/10 text-green-500">
-                        {formatSectionName(section)} 已完成
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
+            </div>
+          </div>
         </CardHeader>
         
-        <CardContent className="space-y-8">
-          {currentVersion !== "1" && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">與上一版本的差異</h3>
-              
-              {differences.length === 0 ? (
-                <p className="text-muted-foreground">沒有找到差異</p>
-              ) : (
-                <div className="space-y-4">
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span className="text-sm">更新時間: {format(revision.date, "yyyy-MM-dd HH:mm")}</span>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-medium mb-1">修訂說明:</h3>
+              <p className="text-sm text-muted-foreground">{revision.note}</p>
+            </div>
+            
+            <Separator />
+            
+            <div>
+              <h3 className="text-sm font-medium mb-2">已完成的區段:</h3>
+              <div className="flex flex-wrap gap-2">
+                {revision.completedSections.map((section) => (
+                  <Badge key={section} variant="outline">{formatSectionName(section)}</Badge>
+                ))}
+              </div>
+            </div>
+            
+            {differences.length > 0 && (
+              <>
+                <Separator />
+                
+                <div>
+                  <h3 className="text-sm font-medium mb-2 flex items-center gap-1">
+                    <Info className="h-4 w-4" />
+                    與上一版本的差異:
+                  </h3>
+                  
                   {differences.map((diff, index) => (
-                    <div key={index} className="p-4 border rounded">
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <Badge>{formatSectionName(diff.section)}</Badge>
-                          <span className="font-medium">{formatFieldName(diff.field)}</span>
+                    <div key={index} className="mt-2 p-2 border rounded-md">
+                      <p className="text-sm font-medium">{formatSectionName(diff.section)} / {formatFieldName(diff.field)}</p>
+                      <div className="grid grid-cols-2 gap-2 mt-1">
+                        <div className="p-2 bg-muted rounded-md">
+                          <p className="text-xs text-muted-foreground">舊值:</p>
+                          <p className="text-sm">{diff.oldValue}</p>
                         </div>
-                        <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-1">
-                            <h4 className="text-sm font-medium">舊值</h4>
-                            <p className="text-muted-foreground p-2 bg-muted rounded">{diff.oldValue}</p>
-                          </div>
-                          <div className="space-y-1">
-                            <h4 className="text-sm font-medium">新值</h4>
-                            <p className="text-primary p-2 bg-primary/10 rounded">{diff.newValue}</p>
-                          </div>
+                        <div className="p-2 bg-muted rounded-md">
+                          <p className="text-xs text-muted-foreground">新值:</p>
+                          <p className="text-sm">{diff.newValue}</p>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              )}
-            </div>
-          )}
-          
-          <Separator />
-          
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">版本 {revision.version} 完整資料</h3>
-            
-            <div className="space-y-6">
-              {Object.entries(revision.data).map(([sectionKey, sectionData]) => (
-                <div key={sectionKey} className="space-y-4">
-                  <h4 className="font-medium">{formatSectionName(sectionKey)}</h4>
-                  <div className="border rounded overflow-hidden">
-                    <table className="w-full">
-                      <thead className="bg-muted">
-                        <tr>
-                          <th className="px-4 py-2 text-left text-sm font-medium">欄位</th>
-                          <th className="px-4 py-2 text-left text-sm font-medium">值</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y">
-                        {Object.entries(sectionData).map(([fieldKey, value]) => (
-                          <tr key={fieldKey}>
-                            <td className="px-4 py-2 text-sm font-medium">{formatFieldName(fieldKey)}</td>
-                            <td className="px-4 py-2 text-sm">{String(value)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              ))}
-            </div>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
