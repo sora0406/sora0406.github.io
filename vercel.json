@@ -27,5 +27,10 @@
     { "source": "/", "destination": "/dashboard/supply-chain", "permanent": true }
   ],
   "framework": "nextjs",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "env": {
+    "NODEJS_VERSION": "20.x",
+    "NPM_FLAGS": "--legacy-peer-deps",
+    "SKIP_PNPM": "1"
+  }
 } 
