@@ -1,16 +1,20 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { 
-  BarChart3, Check, ChevronDown, Download, Filter, PlusCircle, Settings, X, BarChart, Activity 
+  BarChart3, ChevronDown, Download, Filter, Search, PieChart, Clock, Calendar,
+  TrendingUp, Target, BarChart, AlertTriangle, Truck, Factory, Shield, Users,
+  MapPin, ArrowUpDown, ArrowDown, BarChart2
 } from "lucide-react"
 import { format } from "date-fns"
+import dynamic from 'next/dynamic'
+import { ApexOptions } from 'apexcharts'
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { 
   DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, 
-  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger 
+  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuItem 
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -20,6 +24,11 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Progress } from "@/components/ui/progress"
+
+// 動態載入 ApexCharts，避免伺服器端渲染問題
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 // 定義問卷回覆數據的類型
 interface Answer {
@@ -46,13 +55,20 @@ interface FieldInfo {
   category: string;
   field: string;
   selected: boolean;
-  type: "organization" | "product"; // 新增類型
+  type: "organization" | "product";
 }
 
 // 定義各區塊的分類
 interface CategoryGroup {
   title: string;
   categories: string[];
+}
+
+// 定義欄位項目
+interface FieldItem {
+  category: string;
+  field: string;
+  defaultVisible?: boolean;
 }
 
 // 組織溫盤的欄位分組
@@ -64,10 +80,6 @@ const organizationGroups: CategoryGroup[] = [
   {
     title: "排放量資料",
     categories: ["排放量資料"]
-  },
-  {
-    title: "能源使用",
-    categories: ["能源使用"]
   }
 ];
 
@@ -78,47 +90,31 @@ const productGroups: CategoryGroup[] = [
     categories: ["產品資訊", "驗證資訊"]
   },
   {
-    title: "碳足跡數據和生命週期",
-    categories: ["碳足跡數據", "生命週期階段"]
+    title: "碳足跡數據",
+    categories: ["碳足跡數據"]
   }
 ];
 
-// 組織溫盤的欄位
-const organizationFields = [
-  { category: "基本資訊", field: "盤查期間" },
-  { category: "基本資訊", field: "採用標準" },
-  { category: "基本資訊", field: "邊界" },
-  { category: "排放量資料", field: "總排放量" },
-  { category: "排放量資料", field: "類別1排放量" },
-  { category: "排放量資料", field: "類別2排放量" },
-  { category: "排放量資料", field: "類別3排放量" },
-  { category: "排放量資料", field: "類別4排放量" },
-  { category: "排放量資料", field: "類別5排放量" },
-  { category: "排放量資料", field: "類別6排放量" },
-  { category: "能源使用", field: "電力" },
-  { category: "能源使用", field: "蒸氣" },
-  { category: "能源使用", field: "再生能源" },
-  { category: "驗證資訊", field: "查證" },
-  { category: "驗證資訊", field: "查證證書" }
+// 組織溫盤的欄位 - 只保留範疇一、二、三
+const organizationFields: FieldItem[] = [
+  { category: "排放量資料", field: "總排放量", defaultVisible: true },
+  { category: "排放量資料", field: "範疇一排放量", defaultVisible: true },
+  { category: "排放量資料", field: "範疇二排放量", defaultVisible: true },
+  { category: "排放量資料", field: "範疇三排放量", defaultVisible: true },
+  { category: "基本資訊", field: "盤查期間", defaultVisible: false },
+  { category: "基本資訊", field: "採用標準", defaultVisible: false },
+  { category: "基本資訊", field: "邊界", defaultVisible: false },
+  { category: "驗證資訊", field: "查證", defaultVisible: false },
+  { category: "驗證資訊", field: "查證證書", defaultVisible: false }
 ];
 
-// 產品碳足跡的欄位
-const productFields = [
-  { category: "產品資訊", field: "產品名稱" },
-  { category: "產品資訊", field: "產品ID" },
-  { category: "產品資訊", field: "系統邊界" },
-  { category: "產品資訊", field: "宣告單位" },
-  { category: "產品資訊", field: "報導期間" },
-  { category: "產品資訊", field: "生命週期" },
-  { category: "碳足跡數據", field: "產品碳足跡" },
-  { category: "生命週期階段", field: "原(物)料取得" },
-  { category: "生命週期階段", field: "產品製造" },
-  { category: "生命週期階段", field: "銷售配送" },
-  { category: "生命週期階段", field: "產品使用" },
-  { category: "生命週期階段", field: "產品廢棄" },
-  { category: "驗證資訊", field: "採用標準" },
-  { category: "驗證資訊", field: "查證" },
-  { category: "驗證資訊", field: "查證證書" }
+// 產品碳足跡的欄位 - 只保留貨運服務碳足跡
+const productFields: FieldItem[] = [
+  { category: "產品資訊", field: "產品名稱", defaultVisible: true },
+  { category: "產品資訊", field: "報導期間", defaultVisible: true },
+  { category: "碳足跡數據", field: "產品碳足跡", defaultVisible: true },
+  { category: "驗證資訊", field: "查證", defaultVisible: false },
+  { category: "驗證資訊", field: "查證證書", defaultVisible: false }
 ];
 
 // 模擬問卷回覆數據 - 組織溫盤
@@ -126,9 +122,9 @@ const organizationResponses: SurveyResponse[] = [
   {
     id: "1",
     surveyTitle: "企業碳排放評估問卷",
-    supplierName: "台灣電子股份有限公司",
-    respondentName: "王大明",
-    respondentEmail: "wang@tw-electronics.com",
+    supplierName: "新竹物流",
+    respondentName: "張小明",
+    respondentEmail: "contact@hct.com.tw",
     completedDate: new Date("2023-10-18T14:35:22"),
     type: "organization",
     answers: {
@@ -139,17 +135,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "5200.000 tCO2e",
-        "類別1排放量": "1250.000 tCO2e",
-        "類別2排放量": "3500.000 tCO2e",
-        "類別3排放量": "350.000 tCO2e",
-        "類別4排放量": "80.000 tCO2e",
-        "類別5排放量": "15.000 tCO2e",
-        "類別6排放量": "5.000 tCO2e"
-      },
-      "能源使用": {
-        "電力": "7,500,000 度",
-        "蒸氣": "2,200 噸",
-        "再生能源": "500,000 度"
+        "範疇一排放量": "1250.000 tCO2e",
+        "範疇二排放量": "3500.000 tCO2e",
+        "範疇三排放量": "450.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -160,9 +148,9 @@ const organizationResponses: SurveyResponse[] = [
   {
     id: "2",
     surveyTitle: "組織溫室氣體盤查報告",
-    supplierName: "綠能科技有限公司",
-    respondentName: "李小華",
-    respondentEmail: "lee@green-tech.com",
+    supplierName: "統一速達",
+    respondentName: "李大華",
+    respondentEmail: "info@t-cat.com.tw",
     completedDate: new Date("2023-09-25T10:22:15"),
     type: "organization",
     answers: {
@@ -173,17 +161,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "3200.000 tCO2e",
-        "類別1排放量": "850.000 tCO2e",
-        "類別2排放量": "2100.000 tCO2e",
-        "類別3排放量": "180.000 tCO2e",
-        "類別4排放量": "45.000 tCO2e",
-        "類別5排放量": "20.000 tCO2e",
-        "類別6排放量": "5.000 tCO2e"
-      },
-      "能源使用": {
-        "電力": "4,500,000 度",
-        "蒸氣": "1,500 噸",
-        "再生能源": "800,000 度"
+        "範疇一排放量": "850.000 tCO2e",
+        "範疇二排放量": "2100.000 tCO2e",
+        "範疇三排放量": "250.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -194,9 +174,9 @@ const organizationResponses: SurveyResponse[] = [
   {
     id: "3",
     surveyTitle: "2023年度溫室氣體盤查",
-    supplierName: "友好塑膠工業有限公司",
-    respondentName: "張小方",
-    respondentEmail: "chang@friendly-plastic.com",
+    supplierName: "宅配通",
+    respondentName: "王美麗",
+    respondentEmail: "contact@pelican.com.tw",
     completedDate: new Date("2023-11-05T09:15:00"),
     type: "organization",
     answers: {
@@ -207,21 +187,299 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "4800.000 tCO2e",
-        "類別1排放量": "1500.000 tCO2e",
-        "類別2排放量": "2800.000 tCO2e",
-        "類別3排放量": "320.000 tCO2e",
-        "類別4排放量": "120.000 tCO2e",
-        "類別5排放量": "40.000 tCO2e",
-        "類別6排放量": "20.000 tCO2e"
-      },
-      "能源使用": {
-        "電力": "6,200,000 度",
-        "蒸氣": "1,800 噸",
-        "再生能源": "200,000 度"
+        "範疇一排放量": "1500.000 tCO2e",
+        "範疇二排放量": "2800.000 tCO2e",
+        "範疇三排放量": "500.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
         "查證證書": "TUV-ISO14064-2023-003"
+      }
+    }
+  },
+  {
+    id: "org4",
+    surveyTitle: "組織溫室氣體排放盤查",
+    supplierName: "長榮國際儲運",
+    respondentName: "林志明",
+    respondentEmail: "service@evergreen.com.tw",
+    completedDate: new Date("2023-08-20T15:30:10"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2022年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "營運控制權法"
+      },
+      "排放量資料": {
+        "總排放量": "7600.000 tCO2e",
+        "範疇一排放量": "2300.000 tCO2e",
+        "範疇二排放量": "4500.000 tCO2e",
+        "範疇三排放量": "800.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "SGS-ISO14064-2022-004"
+      }
+    }
+  },
+  {
+    id: "org5",
+    surveyTitle: "企業溫室氣體盤查",
+    supplierName: "台塑汽車貨運",
+    respondentName: "陳志遠",
+    respondentEmail: "chen@fpg-transport.com.tw",
+    completedDate: new Date("2023-09-15T11:40:25"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2022年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "營運控制權法"
+      },
+      "排放量資料": {
+        "總排放量": "6800.000 tCO2e",
+        "範疇一排放量": "2100.000 tCO2e",
+        "範疇二排放量": "3900.000 tCO2e",
+        "範疇三排放量": "800.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "DNV-ISO14064-2022-005"
+      }
+    }
+  },
+  {
+    id: "org6",
+    surveyTitle: "運輸業溫室氣體盤查報告",
+    supplierName: "捷盛運輸",
+    respondentName: "黃麗華",
+    respondentEmail: "huanglh@js-transport.com.tw",
+    completedDate: new Date("2023-07-20T09:30:45"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2022年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "股權比例法"
+      },
+      "排放量資料": {
+        "總排放量": "2800.000 tCO2e",
+        "範疇一排放量": "950.000 tCO2e",
+        "範疇二排放量": "1650.000 tCO2e",
+        "範疇三排放量": "200.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "BSI-ISO14064-2022-006"
+      }
+    }
+  },
+  {
+    id: "org7",
+    surveyTitle: "行銷物流碳排放評估",
+    supplierName: "統昶行銷",
+    respondentName: "劉建宏",
+    respondentEmail: "liou@tonchang.com",
+    completedDate: new Date("2023-10-05T14:20:15"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "營運控制權法"
+      },
+      "排放量資料": {
+        "總排放量": "2200.000 tCO2e",
+        "範疇一排放量": "650.000 tCO2e",
+        "範疇二排放量": "1350.000 tCO2e",
+        "範疇三排放量": "200.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "TUV-ISO14064-2023-007"
+      }
+    }
+  },
+  {
+    id: "org8",
+    surveyTitle: "物流業碳排放報告",
+    supplierName: "捷盟行銷",
+    respondentName: "林俊傑",
+    respondentEmail: "lin@jm-logistics.com",
+    completedDate: new Date("2023-11-15T10:10:30"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "營運控制權法"
+      },
+      "排放量資料": {
+        "總排放量": "2400.000 tCO2e",
+        "範疇一排放量": "780.000 tCO2e",
+        "範疇二排放量": "1400.000 tCO2e",
+        "範疇三排放量": "220.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "SGS-ISO14064-2023-008"
+      }
+    }
+  },
+  {
+    id: "org9",
+    surveyTitle: "文化行銷溫室氣體盤查",
+    supplierName: "大智通文化行銷",
+    respondentName: "周慧敏",
+    respondentEmail: "chou@dzt-marketing.com.tw",
+    completedDate: new Date("2023-08-28T16:45:20"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2022年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "營運控制權法"
+      },
+      "排放量資料": {
+        "總排放量": "1950.000 tCO2e",
+        "範疇一排放量": "520.000 tCO2e",
+        "範疇二排放量": "1250.000 tCO2e",
+        "範疇三排放量": "180.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "BSI-ISO14064-2022-009"
+      }
+    }
+  },
+  {
+    id: "org10",
+    surveyTitle: "貨櫃運輸溫室氣體排放報告",
+    supplierName: "中國貨櫃運輸",
+    respondentName: "張世昌",
+    respondentEmail: "chang@cct.com.tw",
+    completedDate: new Date("2023-12-01T09:25:40"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "股權比例法"
+      },
+      "排放量資料": {
+        "總排放量": "9200.000 tCO2e",
+        "範疇一排放量": "3100.000 tCO2e",
+        "範疇二排放量": "5200.000 tCO2e",
+        "範疇三排放量": "900.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "DNV-ISO14064-2023-010"
+      }
+    }
+  },
+  {
+    id: "org11",
+    surveyTitle: "快遞企業碳排放盤查",
+    supplierName: "捷迅",
+    respondentName: "王建民",
+    respondentEmail: "wang@jetspeed.com.tw",
+    completedDate: new Date("2023-09-10T13:50:25"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2022年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "營運控制權法"
+      },
+      "排放量資料": {
+        "總排放量": "3100.000 tCO2e",
+        "範疇一排放量": "950.000 tCO2e",
+        "範疇二排放量": "1950.000 tCO2e",
+        "範疇三排放量": "200.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "TUV-ISO14064-2022-011"
+      }
+    }
+  },
+  {
+    id: "org12",
+    surveyTitle: "冷凍冷藏運輸溫室氣體盤查",
+    supplierName: "裕國冷凍冷藏",
+    respondentName: "李美玲",
+    respondentEmail: "li@yukuo-cold.com.tw",
+    completedDate: new Date("2023-11-20T11:30:15"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "營運控制權法"
+      },
+      "排放量資料": {
+        "總排放量": "4900.000 tCO2e",
+        "範疇一排放量": "1800.000 tCO2e",
+        "範疇二排放量": "2700.000 tCO2e",
+        "範疇三排放量": "400.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "SGS-ISO14064-2023-012"
+      }
+    }
+  },
+  {
+    id: "org13",
+    surveyTitle: "航空貨運碳排放評估",
+    supplierName: "台灣航空貨運承攬",
+    respondentName: "鄭明仁",
+    respondentEmail: "cheng@taf.com.tw",
+    completedDate: new Date("2023-10-15T15:15:30"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "股權比例法"
+      },
+      "排放量資料": {
+        "總排放量": "5500.000 tCO2e",
+        "範疇一排放量": "1700.000 tCO2e",
+        "範疇二排放量": "3100.000 tCO2e",
+        "範疇三排放量": "700.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "BSI-ISO14064-2023-013"
+      }
+    }
+  },
+  {
+    id: "org14",
+    surveyTitle: "國際物流溫室氣體盤查",
+    supplierName: "好好國際物流",
+    respondentName: "蔡志明",
+    respondentEmail: "tsai@goodgood-logistics.com",
+    completedDate: new Date("2023-12-10T10:45:20"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月-12月",
+        "採用標準": "ISO 14064-1:2018",
+        "邊界": "營運控制權法"
+      },
+      "排放量資料": {
+        "總排放量": "3700.000 tCO2e",
+        "範疇一排放量": "1100.000 tCO2e",
+        "範疇二排放量": "2200.000 tCO2e",
+        "範疇三排放量": "400.000 tCO2e"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "TUV-ISO14064-2023-014"
       }
     }
   }
@@ -232,22 +490,22 @@ const productResponses: SurveyResponse[] = [
   {
     id: "4",
     surveyTitle: "產品碳足跡資訊收集",
-    supplierName: "台灣半導體科技股份有限公司",
-    respondentName: "陳志明",
-    respondentEmail: "chen@tw-semicon.com",
+    supplierName: "長榮國際儲運",
+    respondentName: "林志明",
+    respondentEmail: "service@evergreen.com.tw",
     completedDate: new Date("2023-08-15T16:42:30"),
     type: "product",
     answers: {
       "產品資訊": {
-        "產品名稱": "高效能記憶體晶片",
-        "產品ID": "MEM-2023-A1",
+        "產品名稱": "高效能貨運服務",
+        "產品ID": "FRT-2023-A1",
         "系統邊界": "搖籃到大門",
-        "宣告單位": "1片 DRAM",
+        "宣告單位": "1噸貨物運輸",
         "報導期間": "2022年",
         "生命週期": "10年"
       },
       "碳足跡數據": {
-        "產品碳足跡": "2.5 kgCO2e/片"
+        "產品碳足跡": "2.5 kgCO2e/噸公里"
       },
       "生命週期階段": {
         "原(物)料取得": "1.2 kgCO2e/片",
@@ -344,143 +602,234 @@ const extractAllFields = (data: SurveyResponse[], type: "organization" | "produc
     id: `${field.category}-${field.field}-${type}`,
     category: field.category,
     field: field.field,
-    selected: false,
+    selected: field.defaultVisible !== undefined ? field.defaultVisible : true, // 使用預設可見性
     type
   }));
 };
 
-export default function SurveyResultsPage() {
-  // 狀態管理
-  const [tabValue, setTabValue] = useState<"organization" | "product">("organization"); // 添加 tab 狀態
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFields, setSelectedFields] = useState<string[]>([]);
-  const [orgFields, setOrgFields] = useState<FieldInfo[]>(() => 
-    extractAllFields(surveyResponsesData, "organization").map(field => ({
-      ...field,
-      selected: true // 預設所有欄位都選中
-    }))
-  );
-  const [productFields, setProductFields] = useState<FieldInfo[]>(() => 
-    extractAllFields(surveyResponsesData, "product").map(field => ({
-      ...field,
-      selected: true // 預設所有欄位都選中
-    }))
-  );
-  const [selectedCategory, setSelectedCategory] = useState("all");
+// 獲取所有報導年度
+const extractYears = (): string[] => {
+  const years = new Set<string>();
   
-  // 新增當前查看的資料區塊
-  const [currentOrgBlockIndex, setCurrentOrgBlockIndex] = useState(0);
-  const [currentProductBlockIndex, setCurrentProductBlockIndex] = useState(0);
+  // 從組織溫盤中獲取年份
+  organizationResponses.forEach(response => {
+    const period = response.answers["基本資訊"]?.["盤查期間"] || "";
+    const yearMatch = period.match(/(\d{4})年/);
+    if (yearMatch && yearMatch[1]) {
+      years.add(yearMatch[1]);
+    }
+  });
+  
+  // 從產品碳足跡中獲取年份
+  productResponses.forEach(response => {
+    const period = response.answers["產品資訊"]?.["報導期間"] || "";
+    const yearMatch = period.match(/(\d{4})年/);
+    if (yearMatch && yearMatch[1]) {
+      years.add(yearMatch[1]);
+    }
+  });
+  
+  return Array.from(years).sort().reverse();
+};
 
-  // 獲取當前顯示的區塊索引
-  const currentBlockIndex = useMemo(() => {
-    return tabValue === "organization" ? currentOrgBlockIndex : currentProductBlockIndex;
-  }, [tabValue, currentOrgBlockIndex, currentProductBlockIndex]);
+// 計算碳足跡統計數據
+const calculateCarbonStats = (responses: SurveyResponse[], year: string | null = null) => {
+  // 過濾指定年份的數據
+  const filteredResponses = year 
+    ? responses.filter(response => {
+        if (response.type === "organization") {
+          return response.answers["基本資訊"]?.["盤查期間"]?.includes(`${year}年`);
+        } else {
+          return response.answers["產品資訊"]?.["報導期間"]?.includes(`${year}年`);
+        }
+      })
+    : responses;
   
-  // 取得當前的欄位集合
+  // 計算組織溫盤總排放量
+  const orgTotalEmission = filteredResponses
+    .filter(response => response.type === "organization")
+    .reduce((total, response) => {
+      const emissionStr = response.answers["排放量資料"]?.["總排放量"] || "0";
+      const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
+      return total + emission;
+    }, 0);
+  
+  // 計算範疇一、二、三排放量
+  const scope1Emission = filteredResponses
+    .filter(response => response.type === "organization")
+    .reduce((total, response) => {
+      const emissionStr = response.answers["排放量資料"]?.["範疇一排放量"] || "0";
+      const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
+      return total + emission;
+    }, 0);
+  
+  const scope2Emission = filteredResponses
+    .filter(response => response.type === "organization")
+    .reduce((total, response) => {
+      const emissionStr = response.answers["排放量資料"]?.["範疇二排放量"] || "0";
+      const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
+      return total + emission;
+    }, 0);
+  
+  const scope3Emission = filteredResponses
+    .filter(response => response.type === "organization")
+    .reduce((total, response) => {
+      const emissionStr = response.answers["排放量資料"]?.["範疇三排放量"] || "0";
+      const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
+      return total + emission;
+    }, 0);
+  
+  // 計算產品碳足跡總量
+  const productTotalFootprint = filteredResponses
+    .filter(response => response.type === "product")
+    .reduce((total, response) => {
+      const footprintStr = response.answers["碳足跡數據"]?.["產品碳足跡"] || "0";
+      const footprintParts = footprintStr.split(" ");
+      const footprint = parseFloat(footprintParts[0]) || 0;
+      return total + footprint;
+    }, 0);
+  
+  // 獲取供應商數量
+  const orgCount = new Set(
+    filteredResponses
+      .filter(response => response.type === "organization")
+      .map(response => response.supplierName)
+  ).size;
+  
+  const productCount = new Set(
+    filteredResponses
+      .filter(response => response.type === "product")
+      .map(response => response.supplierName)
+  ).size;
+  
+  return {
+    orgTotalEmission: orgTotalEmission.toFixed(2),
+    scope1Emission: scope1Emission.toFixed(2),
+    scope2Emission: scope2Emission.toFixed(2),
+    scope3Emission: scope3Emission.toFixed(2),
+    productTotalFootprint: productTotalFootprint.toFixed(2),
+    orgCount,
+    productCount,
+    totalResponses: filteredResponses.length
+  };
+};
+
+// 增加虛擬台灣地區資料
+const taiwanRegions = [
+  { id: "north", name: "北部", suppliers: ["新竹物流", "統一速達", "捷迅", "捷盟行銷", "台灣航空貨運承攬", "好好國際物流"], lat: 25.047763, lng: 121.517551 },
+  { id: "central", name: "中部", suppliers: ["統昶行銷", "大智通文化行銷", "裕國冷凍冷藏"], lat: 24.147735, lng: 120.673648 },
+  { id: "south", name: "南部", suppliers: ["宅配通", "捷盛運輸", "台塑汽車貨運"], lat: 22.997415, lng: 120.212608 },
+  { id: "east", name: "東部", suppliers: [], lat: 23.993908, lng: 121.601171 },
+  { id: "international", name: "國際", suppliers: ["長榮國際儲運", "中國貨櫃運輸"], lat: 25.077760, lng: 121.233561 }
+];
+
+export default function WarRoomPage() {
+  // 狀態管理
+  const [searchText, setSearchText] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [tabValue, setTabValue] = useState<"organization" | "product">("product");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [showDate, setShowDate] = useState<boolean>(true);
+  const [orgFields, setOrgFields] = useState<FieldInfo[]>([]);
+  const [productFields, setProductFields] = useState<FieldInfo[]>([]);
+  const [currentOrgBlockIndex, setCurrentOrgBlockIndex] = useState<number>(0);
+  const [currentProductBlockIndex, setCurrentProductBlockIndex] = useState<number>(0);
+  const [stats, setStats] = useState(calculateCarbonStats(surveyResponsesData));
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [activeChart, setActiveChart] = useState<"suppliers" | "map">("suppliers");
+  
+  // 所有可用年份
+  const availableYears = useMemo(() => extractYears(), []);
+  
+  // 初始化欄位選擇
+  useEffect(() => {
+    setOrgFields(extractAllFields(organizationResponses, "organization"));
+    setProductFields(extractAllFields(productResponses, "product"));
+    setIsDataLoaded(true);
+    
+    // 預設選擇最新年份
+    if (availableYears.length > 0) {
+      setSelectedYear(availableYears[0]);
+    }
+  }, [availableYears]);
+  
+  // 當選擇的年份變化時重新計算統計數據
+  useEffect(() => {
+    setStats(calculateCarbonStats(surveyResponsesData, selectedYear));
+  }, [selectedYear]);
+  
+  // 當前所有欄位
   const allFields = useMemo(() => {
     return tabValue === "organization" ? orgFields : productFields;
   }, [tabValue, orgFields, productFields]);
   
-  // 基本欄位選擇狀態
-  const [showSupplier, setShowSupplier] = useState(true);
-  const [showRespondent, setShowRespondent] = useState(false);
-  const [showDate, setShowDate] = useState(false);
-  const [showSurvey, setShowSurvey] = useState(false);
-  
-  // 根據當前 tab 和搜索詞過濾回覆
-  const filteredResponses = useMemo(() => {
-    const typeResponses = surveyResponsesData.filter(response => response.type === tabValue);
-    
-    if (!searchTerm.trim()) return typeResponses;
-    
-    return typeResponses.filter(response => {
-      const searchLower = searchTerm.toLowerCase();
-      return (
-        response.surveyTitle.toLowerCase().includes(searchLower) ||
-        response.supplierName.toLowerCase().includes(searchLower) ||
-        response.respondentName.toLowerCase().includes(searchLower) ||
-        response.respondentEmail.toLowerCase().includes(searchLower)
-      );
-    });
-  }, [searchTerm, tabValue]);
-  
-  // 根據類別過濾欄位
-  const filteredFields = useMemo(() => {
-    if (selectedCategory === "all") return allFields;
-    return allFields.filter(field => field.category === selectedCategory);
-  }, [allFields, selectedCategory]);
-  
-  // 獲取當前類型的區塊分組
+  // 當前區塊分組
   const currentGroups = useMemo(() => {
     return tabValue === "organization" ? organizationGroups : productGroups;
   }, [tabValue]);
   
-  // 按區塊分組欄位
-  const fieldsByGroup = useMemo(() => {
-    const groups = tabValue === "organization" ? organizationGroups : productGroups;
-    return groups.reduce<Record<string, FieldInfo[]>>((acc, group) => {
-      acc[group.title] = allFields.filter(field => group.categories.includes(field.category));
-      return acc;
-    }, {});
-  }, [allFields, tabValue]);
+  // 當前區塊索引
+  const currentBlockIndex = useMemo(() => {
+    return tabValue === "organization" ? currentOrgBlockIndex : currentProductBlockIndex;
+  }, [tabValue, currentOrgBlockIndex, currentProductBlockIndex]);
   
-  // 獲取所有類別
-  const categories = useMemo(() => {
-    return Array.from(new Set(allFields.map(field => field.category)));
-  }, [allFields]);
-  
-  // 處理欄位選擇
-  const toggleField = (fieldId: string) => {
-    if (tabValue === "organization") {
-      setOrgFields(prev => 
-        prev.map(field => 
-          field.id === fieldId 
-            ? { ...field, selected: !field.selected } 
-            : field
-        )
-      );
-    } else {
-      setProductFields(prev => 
-        prev.map(field => 
-          field.id === fieldId 
-            ? { ...field, selected: !field.selected } 
-            : field
-        )
-      );
+  // 根據當前類別過濾欄位
+  const fieldsByCategory = useMemo(() => {
+    if (selectedCategory === "all") {
+      return allFields;
     }
-  };
+    return allFields.filter(field => field.category === selectedCategory);
+  }, [allFields, selectedCategory]);
   
-  // 全選/取消全選當前類別的欄位
-  const toggleAllFields = (selected: boolean) => {
-    if (tabValue === "organization") {
-      setOrgFields(prev => 
-        prev.map(field => 
-          selectedCategory === "all" || field.category === selectedCategory
-            ? { ...field, selected } 
-            : field
-        )
-      );
-    } else {
-      setProductFields(prev => 
-        prev.map(field => 
-          selectedCategory === "all" || field.category === selectedCategory
-            ? { ...field, selected } 
-            : field
-        )
-      );
-    }
-  };
-  
-  // 目前選中的欄位
-  const selectedFieldsInfo = useMemo(() => {
+  // 取得所有被選擇的欄位
+  const selectedFields = useMemo(() => {
     return allFields.filter(field => field.selected);
   }, [allFields]);
   
-  // 生成 CSV 數據
-  const generateCSV = () => {
-    // 實作CSV匯出功能
-    console.log("匯出CSV", tabValue);
+  // 按組分組欄位
+  const fieldsByGroup = useMemo(() => {
+    const result: { [key: string]: FieldInfo[] } = {};
+    
+    currentGroups.forEach(group => {
+      result[group.title] = allFields.filter(field => 
+        group.categories.includes(field.category)
+      );
+    });
+    
+    return result;
+  }, [allFields, currentGroups]);
+  
+  // 過濾回覆
+  const filteredResponses = useMemo(() => {
+    let responses = surveyResponsesData.filter(response => response.type === tabValue);
+    
+    // 按年份過濾
+    if (selectedYear) {
+      responses = responses.filter(response => {
+        if (response.type === "organization") {
+          return response.answers["基本資訊"]?.["盤查期間"]?.includes(`${selectedYear}年`);
+    } else {
+          return response.answers["產品資訊"]?.["報導期間"]?.includes(`${selectedYear}年`);
+        }
+      });
+    }
+    
+    // 按搜尋文字過濾
+    if (searchText) {
+      const searchLower = searchText.toLowerCase();
+      responses = responses.filter(response => 
+        response.supplierName.toLowerCase().includes(searchLower) ||
+        response.respondentName.toLowerCase().includes(searchLower) ||
+        response.respondentEmail.toLowerCase().includes(searchLower)
+      );
+    }
+    
+    return responses;
+  }, [surveyResponsesData, tabValue, selectedYear, searchText]);
+  
+  // 處理年份選擇
+  const handleYearChange = (year: string) => {
+    setSelectedYear(year === "all" ? null : year);
   };
 
   // 處理標籤頁切換
@@ -488,395 +837,853 @@ export default function SurveyResultsPage() {
     setTabValue(value as "organization" | "product");
     setSelectedCategory("all");
   };
-
-  // 處理區塊切換
-  const handleBlockChange = (index: number) => {
-    if (tabValue === "organization") {
-      setCurrentOrgBlockIndex(index);
-    } else {
-      setCurrentProductBlockIndex(index);
-    }
-  };
   
   // 模擬打開原始問卷的函數
   const viewOriginalSurvey = (responseId: string) => {
     console.log(`查看問卷 ID: ${responseId}`);
-    // 實際實現可能需要導航到問卷詳情頁面
-    // router.push(`/dashboard/surveys/responses/${responseId}`);
   };
-
-  // 計算總碳足跡和總排放量
-  const totalStats = useMemo(() => {
-    // 計算組織溫盤總排放量
-    const orgTotalEmission = organizationResponses.reduce((total, response) => {
+  
+  // 計算總碳足跡和總排放量的分佈
+  const calculateScopesPercentage = () => {
+    const total = parseFloat(stats.orgTotalEmission);
+    if (total === 0) return { scope1: 0, scope2: 0, scope3: 0 };
+    
+    const scope1 = (parseFloat(stats.scope1Emission) / total) * 100;
+    const scope2 = (parseFloat(stats.scope2Emission) / total) * 100;
+    const scope3 = (parseFloat(stats.scope3Emission) / total) * 100;
+    
+    return { scope1, scope2, scope3 };
+  };
+  
+  const scopePercentages = calculateScopesPercentage();
+  
+  // 計算排放量最高的供應商資料
+  const topEmitters = useMemo(() => {
+    // 組織排放量
+    const orgEmitters = organizationResponses
+      .filter(response => !selectedYear || response.answers["基本資訊"]?.["盤查期間"]?.includes(`${selectedYear}年`))
+      .map(response => {
       const emissionStr = response.answers["排放量資料"]?.["總排放量"] || "0";
       const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
-      return total + emission;
-    }, 0);
-
-    // 計算產品碳足跡總量
-    const productTotalFootprint = productResponses.reduce((total, response) => {
+        return {
+          name: response.supplierName,
+          value: emission,
+          unit: "tCO2e",
+          type: "organization"
+        };
+      })
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 5);
+    
+    // 產品碳足跡
+    const productEmitters = productResponses
+      .filter(response => !selectedYear || response.answers["產品資訊"]?.["報導期間"]?.includes(`${selectedYear}年`))
+      .map(response => {
       const footprintStr = response.answers["碳足跡數據"]?.["產品碳足跡"] || "0";
       const footprintParts = footprintStr.split(" ");
       const footprint = parseFloat(footprintParts[0]) || 0;
-      const unit = footprintParts[1] || "kgCO2e";
-      return total + footprint;
+        return {
+          name: response.supplierName,
+          value: footprint,
+          unit: footprintParts[1] || "kgCO2e",
+          type: "product"
+        };
+      })
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 5);
+    
+    return {
+      organization: orgEmitters,
+      product: productEmitters
+    };
+  }, [organizationResponses, productResponses, selectedYear]);
+  
+  // 計算供應商區域分布
+  const supplierRegionDistribution = useMemo(() => {
+    // 獲取所有供應商名稱
+    const allSuppliers = new Set([
+      ...organizationResponses.map(r => r.supplierName),
+      ...productResponses.map(r => r.supplierName)
+    ]);
+    
+    // 計算每個區域的供應商數量
+    const distribution = taiwanRegions.map(region => {
+      // 計算此區域的供應商數量
+      const count = region.suppliers.filter(s => allSuppliers.has(s)).length;
+      // 計算此區域供應商的總排放量
+      const totalEmission = [...organizationResponses, ...productResponses]
+        .filter(r => region.suppliers.includes(r.supplierName))
+        .reduce((sum, r) => {
+          if (r.type === "organization") {
+            const emissionStr = r.answers["排放量資料"]?.["總排放量"] || "0";
+            return sum + (parseFloat(emissionStr.split(" ")[0]) || 0);
+          } else {
+            const footprintStr = r.answers["碳足跡數據"]?.["產品碳足跡"] || "0";
+            return sum + (parseFloat(footprintStr.split(" ")[0]) || 0);
+          }
     }, 0);
 
     return {
-      orgTotalEmission: orgTotalEmission.toFixed(2),
-      productTotalFootprint: productTotalFootprint.toFixed(2),
-      orgCount: organizationResponses.length,
-      productCount: productResponses.length
+        ...region,
+        count,
+        totalEmission: totalEmission.toFixed(2)
+      };
+    });
+    
+    return distribution;
+  }, [organizationResponses, productResponses]);
+  
+  // 生成組織排放量圖表配置
+  const organizationChartOptions = useMemo<ApexOptions>(() => {
+    return {
+      chart: {
+        type: 'bar' as const,
+        toolbar: {
+          show: false
+        },
+        fontFamily: 'inherit',
+        background: '#ffffff',
+        animations: {
+          enabled: true,
+          easing: 'easeinout',
+          speed: 800,
+          animateGradually: {
+            enabled: true,
+            delay: 150
+          },
+          dynamicAnimation: {
+            enabled: true,
+            speed: 350
+          }
+        }
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 8,
+          horizontal: false,
+          columnWidth: '60%',
+          distributed: true,
+          dataLabels: {
+            position: 'top'
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        offsetY: -30,
+        style: {
+          fontSize: '12px',
+          colors: ['#333']
+        },
+        formatter: function(val: number, opt: any) {
+          return val.toFixed(2) + ' tCO2e';
+        }
+      },
+      colors: ['#0284c7', '#0369a1', '#075985', '#0c4a6e', '#082f49'],
+      xaxis: {
+        categories: topEmitters.organization.map(item => item.name),
+        labels: {
+          style: {
+            fontSize: '12px',
+            fontWeight: 600
+          },
+          rotate: -45,
+          rotateAlways: false,
+          trim: false
+        },
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        }
+      },
+      yaxis: {
+        labels: {
+          formatter: function(val: number) {
+            return val.toFixed(0) + ' tCO2e';
+          },
+          style: {
+            fontSize: '12px'
+          }
+        },
+        title: {
+          text: '排放量 (tCO2e)',
+          style: {
+            fontSize: '13px',
+            fontWeight: 500
+          }
+        }
+      },
+      title: {
+        text: '組織溫室氣體排放量 (tCO2e)',
+        align: 'center',
+        style: {
+          fontSize: '14px',
+          fontWeight: 600,
+          color: '#334155'
+        },
+        offsetY: 10
+      },
+      subtitle: {
+        text: selectedYear ? `${selectedYear}年度數據` : '所有年度數據',
+        align: 'center',
+        style: {
+          fontSize: '12px',
+          color: '#64748b'
+        },
+        offsetY: 30
+      },
+      tooltip: {
+        y: {
+          formatter: function(val: number) {
+            return val.toFixed(2) + ' tCO2e';
+          }
+        },
+        theme: 'light',
+        style: {
+          fontSize: '12px'
+        }
+      },
+      grid: {
+        borderColor: '#f1f5f9',
+        strokeDashArray: 4,
+        position: 'back'
+      },
+      legend: {
+        show: false
+      }
     };
-  }, []);
+  }, [topEmitters.organization, selectedYear]);
+  
+  // 生成產品碳足跡圖表配置
+  const productChartOptions = useMemo<ApexOptions>(() => {
+    return {
+      chart: {
+        type: 'bar' as const,
+        toolbar: {
+          show: false
+        },
+        fontFamily: 'inherit',
+        background: '#ffffff',
+        animations: {
+          enabled: true,
+          easing: 'easeinout',
+          speed: 800,
+          animateGradually: {
+            enabled: true,
+            delay: 150
+          },
+          dynamicAnimation: {
+            enabled: true,
+            speed: 350
+          }
+        }
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 8,
+          horizontal: false,
+          columnWidth: '60%',
+          distributed: true,
+          dataLabels: {
+            position: 'top'
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        offsetY: -30,
+        style: {
+          fontSize: '12px',
+          colors: ['#333']
+        },
+        formatter: function(val: number, opt: any) {
+          const emitter = topEmitters.product[opt.dataPointIndex];
+          return val.toFixed(2) + ' ' + (emitter ? emitter.unit : 'kgCO2e');
+        }
+      },
+      colors: ['#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a'],
+      xaxis: {
+        categories: topEmitters.product.map(item => item.name),
+        labels: {
+          style: {
+            fontSize: '12px',
+            fontWeight: 600
+          },
+          rotate: -45,
+          rotateAlways: false,
+          trim: false
+        },
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        }
+      },
+      yaxis: {
+        labels: {
+          formatter: function(val: number) {
+            return val.toFixed(0);
+          },
+          style: {
+            fontSize: '12px'
+          }
+        },
+        title: {
+          text: '碳足跡 (kgCO2e/噸公里)',
+          style: {
+            fontSize: '13px',
+            fontWeight: 500
+          }
+        }
+      },
+      title: {
+        text: '貨運服務碳足跡',
+        align: 'center',
+        style: {
+          fontSize: '14px',
+          fontWeight: 600,
+          color: '#334155'
+        },
+        offsetY: 10
+      },
+      subtitle: {
+        text: selectedYear ? `${selectedYear}年度數據` : '所有年度數據',
+        align: 'center',
+        style: {
+          fontSize: '12px',
+          color: '#64748b'
+        },
+        offsetY: 30
+      },
+      tooltip: {
+        y: {
+          formatter: function(val: number, opt: any) {
+            const emitter = topEmitters.product[opt.dataPointIndex];
+            return val.toFixed(2) + ' ' + (emitter ? emitter.unit : 'kgCO2e');
+          }
+        },
+        theme: 'light',
+        style: {
+          fontSize: '12px'
+        }
+      },
+      grid: {
+        borderColor: '#f1f5f9',
+        strokeDashArray: 4,
+        position: 'back'
+      },
+      legend: {
+        show: false
+      }
+    };
+  }, [topEmitters.product, selectedYear]);
 
   return (
     <div className="space-y-6">
-      {/* Topbar - 加入RWD響應式設計 */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">問卷分析</h1>
+          <h1 className="text-2xl font-bold tracking-tight">碳排放戰情室</h1>
           <p className="text-sm text-muted-foreground">
-            檢視所有已回覆的問卷結果並進行自訂分析
+            監控供應鏈碳排放狀況，追蹤減碳進度
           </p>
         </div>
-        <Button onClick={generateCSV} className="whitespace-nowrap self-start sm:self-auto">
-          <Download className="mr-2 h-4 w-4" />
-          匯出CSV
-        </Button>
+        
+        {/* 年份選擇 */}
+        <div className="flex items-center gap-2">
+          <Label htmlFor="year-select" className="text-sm font-medium">年度:</Label>
+          <Select 
+            value={selectedYear || "all"}
+            onValueChange={handleYearChange}
+          >
+            <SelectTrigger id="year-select" className="w-[120px]">
+              <SelectValue placeholder="選擇年份" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">所有年份</SelectItem>
+              {availableYears.map(year => (
+                <SelectItem key={year} value={year}>{year}年</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       
-      {/* 統計摘要區塊 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className={`bg-gradient-to-br from-blue-50 to-blue-100 border-blue-150 ${tabValue === 'organization' ? 'ring-2 ring-blue-300' : ''}`}>
+      {/* 數據儀表板 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="bg-white">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg text-blue-800 flex items-center">
-              <Activity className="mr-2 h-5 w-5" />
-              組織溫室氣體總排放量
-            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Truck className="h-5 w-5 text-blue-500" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">貨運服務碳足跡總量</CardTitle>
+            </div>
+            <CardDescription>
+              {selectedYear ? `${selectedYear}年` : '所有年份'}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex justify-between items-end">
-              <div>
-                <div className="text-3xl font-bold text-blue-900">
-                  {totalStats.orgTotalEmission} <span className="text-lg">tCO2e</span>
-                </div>
-                <p className="text-sm text-blue-700 mt-1">來自 {totalStats.orgCount} 家供應商</p>
-              </div>
-              <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-200/50"
-                onClick={() => setTabValue("organization")}>
-                查看詳情
-              </Button>
+            <div className="text-2xl font-bold">
+              {stats.productTotalFootprint} <span className="text-sm font-normal">kgCO2e/噸公里</span>
             </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              來自 {stats.productCount} 家供應商
+            </p>
           </CardContent>
         </Card>
         
-        <Card className={`bg-gradient-to-br from-green-50 to-green-100 border-green-200 ${tabValue === 'product' ? 'ring-2 ring-green-300' : ''}`}>
+        <Card className="bg-white">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg text-green-800 flex items-center">
-              <BarChart className="mr-2 h-5 w-5" />
-              產品碳足跡總量
-            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Factory className="h-5 w-5 text-slate-500" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">組織總排放量</CardTitle>
+            </div>
+            <CardDescription>
+              {selectedYear ? `${selectedYear}年` : '所有年份'}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex justify-between items-end">
-              <div>
-                <div className="text-3xl font-bold text-green-900">
-                  {totalStats.productTotalFootprint} <span className="text-lg">kgCO2e</span>
-                </div>
-                <p className="text-sm text-green-700 mt-1">來自 {totalStats.productCount} 個產品</p>
-              </div>
-              <Button variant="outline" className="border-green-300 text-green-700 hover:bg-green-200/50"
-                onClick={() => setTabValue("product")}>
-                查看詳情
-              </Button>
+            <div className="text-2xl font-bold">
+              {stats.orgTotalEmission} <span className="text-sm font-normal">tCO2e</span>
             </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              來自 {stats.orgCount} 家供應商
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-white">
+          <CardHeader className="pb-2">
+            <div className="flex items-center space-x-2">
+              <Shield className="h-5 w-5 text-green-500" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">範疇一排放量</CardTitle>
+            </div>
+            <CardDescription>直接排放</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {stats.scope1Emission} <span className="text-sm font-normal">tCO2e</span>
+            </div>
+            <Progress 
+              value={scopePercentages.scope1} 
+              className="h-2 mt-2 bg-muted"
+            />
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-white">
+          <CardHeader className="pb-2">
+            <div className="flex items-center space-x-2">
+              <TrendingUp className="h-5 w-5 text-blue-500" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">範疇二排放量</CardTitle>
+            </div>
+            <CardDescription>能源間接排放</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {stats.scope2Emission} <span className="text-sm font-normal">tCO2e</span>
+            </div>
+            <Progress 
+              value={scopePercentages.scope2} 
+              className="h-2 mt-2 bg-muted"
+            />
           </CardContent>
         </Card>
       </div>
       
-      <div className="mb-6">
-        <Tabs defaultValue="organization" value={tabValue} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="organization">組織溫盤</TabsTrigger>
-            <TabsTrigger value="product">產品碳足跡</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
-      
+      {/* 數據可視化圖表 */}
       <Card>
         <CardHeader>
-          <CardTitle>
-            {tabValue === "organization" ? "組織溫室氣體盤查結果" : "產品碳足跡評估結果"}
-          </CardTitle>
-          <CardDescription>
-            共有 {filteredResponses.length} 份問卷回覆
-          </CardDescription>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <CardTitle>供應商碳排放視覺化</CardTitle>
+            <div className="flex items-center space-x-2 mt-2 md:mt-0">
+              <Button 
+                variant={activeChart === "suppliers" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setActiveChart("suppliers")}
+                className="flex items-center gap-1"
+              >
+                <BarChart2 className="h-4 w-4" />
+                排放量排名
+              </Button>
+              <Button 
+                variant={activeChart === "map" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setActiveChart("map")}
+                className="flex items-center gap-1"
+              >
+                <MapPin className="h-4 w-4" />
+                供應商分佈
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {activeChart === "suppliers" ? (
+            <div className="space-y-8">
+              {/* 兩個圖表並排顯示 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* 使用 ApexCharts 的組織溫盤排放量排名 */}
+                <div className="space-y-3">
+                  <div className="h-80">
+                    {typeof window !== 'undefined' && topEmitters.organization.length > 0 ? (
+                      <ReactApexChart 
+                        options={organizationChartOptions} 
+                        series={[{ 
+                          name: '排放量', 
+                          data: topEmitters.organization.map(item => item.value) 
+                        }]} 
+                        type="bar" 
+                        height={300} 
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <p className="text-muted-foreground">沒有可用數據</p>
+              </div>
+                    )}
+                      </div>
+                  
+                  {/* 前五大組織排放量列表 */}
+                  <Card className="mt-4">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium">前五大組織碳排放供應商</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-[50px]">排名</TableHead>
+                            <TableHead>供應商名稱</TableHead>
+                            <TableHead className="text-right">排放量</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {topEmitters.organization.map((item, index) => (
+                            <TableRow key={`org-${index}`}>
+                              <TableCell className="font-medium">{index + 1}</TableCell>
+                              <TableCell>{item.name}</TableCell>
+                              <TableCell className="text-right">{item.value.toFixed(2)} {item.unit}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                    </div>
+                
+                {/* 使用 ApexCharts 的產品碳足跡排名 */}
+                <div className="space-y-3">
+                  <div className="h-80">
+                    {typeof window !== 'undefined' && topEmitters.product.length > 0 ? (
+                      <ReactApexChart 
+                        options={productChartOptions} 
+                        series={[{ 
+                          name: '碳足跡', 
+                          data: topEmitters.product.map(item => item.value) 
+                        }]} 
+                        type="bar" 
+                        height={300} 
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <p className="text-muted-foreground">沒有可用數據</p>
+                        </div>
+                    )}
+                        </div>
+                  
+                  {/* 前五大產品碳足跡列表 */}
+                  <Card className="mt-4">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium">前五大產品碳足跡供應商</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-[50px]">排名</TableHead>
+                            <TableHead>供應商名稱</TableHead>
+                            <TableHead className="text-right">碳足跡</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {topEmitters.product.map((item, index) => (
+                            <TableRow key={`prod-${index}`}>
+                              <TableCell className="font-medium">{index + 1}</TableCell>
+                              <TableCell>{item.name}</TableCell>
+                              <TableCell className="text-right">{item.value.toFixed(2)} {item.unit}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                        </div>
+                        </div>
+                      </div>
+          ) : (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center">
+                <MapPin className="h-5 w-5 text-green-500 mr-2" />
+                供應商區域分佈
+              </h3>
+              
+              {/* 台灣地圖模擬 */}
+              <div className="relative w-full h-[400px] bg-slate-100 rounded-lg overflow-hidden">
+                {/* 模擬台灣地圖背景 - 在實際實現時可替換為真實的地圖組件 */}
+                <div className="absolute inset-0 p-4 flex items-center justify-center">
+                  <svg viewBox="0 0 400 600" className="w-full h-full max-w-md max-h-[400px]">
+                    {/* 簡化的台灣輪廓 */}
+                    <path
+                      d="M200,100 C300,120 350,200 340,300 C330,400 270,500 200,550 C130,500 70,400 60,300 C50,200 100,120 200,100"
+                      fill="#e2e8f0"
+                      stroke="#64748b"
+                      strokeWidth="2"
+                    />
+                    
+                    {/* 區域標記點 */}
+                    {supplierRegionDistribution.map((region) => {
+                      const x = ((region.id === "north" ? 180 : 
+                                 region.id === "central" ? 170 : 
+                                 region.id === "south" ? 160 : 
+                                 region.id === "east" ? 240 :
+                                 300));
+                      
+                      const y = ((region.id === "north" ? 150 : 
+                                 region.id === "central" ? 280 : 
+                                 region.id === "south" ? 410 : 
+                                 region.id === "east" ? 280 :
+                                 100));
+                      
+                      // 根據供應商數量和排放量決定圓圈大小
+                      const size = region.count > 0 ? Math.max(10, Math.min(40, region.count * 10)) : 0;
+                      
+                      return region.count > 0 ? (
+                        <g key={region.id}>
+                          <circle
+                            cx={x}
+                            cy={y}
+                            r={size}
+                            fill={region.id === "international" ? "rgba(236, 72, 153, 0.6)" : "rgba(59, 130, 246, 0.6)"}
+                            stroke={region.id === "international" ? "#ec4899" : "#3b82f6"}
+                            strokeWidth="2"
+                          />
+                          <text
+                            x={x}
+                            y={y}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            fill="white"
+                            fontSize="12"
+                            fontWeight="bold"
+                          >
+                            {region.count}
+                          </text>
+                          <text
+                            x={x}
+                            y={y + size + 15}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            fill="#1e293b"
+                            fontSize="12"
+                            fontWeight="medium"
+                          >
+                            {region.name}
+                          </text>
+                        </g>
+                      ) : null;
+                    })}
+                  </svg>
+                        </div>
+                      </div>
+              
+              {/* 區域詳情列表 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                {supplierRegionDistribution
+                  .filter(region => region.count > 0)
+                  .map(region => (
+                    <Card key={region.id} className="bg-white">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium">{region.name}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-1">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-muted-foreground">供應商數量:</span>
+                            <span className="font-medium">{region.count}</span>
+                                  </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-muted-foreground">排放總量:</span>
+                            <span className="font-medium">{region.totalEmission} tCO2e</span>
+                            </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                      ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      
+      {/* 主要資料卡 */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle>供應商碳排放資料</CardTitle>
+            <div className="flex items-center gap-2">
+              <div className="relative w-60">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="搜尋供應商..."
+                  className="pl-8"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+              </div>
+              <Button variant="outline" size="sm" onClick={() => setShowDate(!showDate)}>
+                <Clock className="h-4 w-4 mr-1" />
+                {showDate ? "隱藏日期" : "顯示日期"}
+              </Button>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-1" />
+                匯出
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {/* 搜索與欄位選擇 - 改進RWD */}
-            <div className="flex flex-col sm:flex-row flex-wrap gap-4">
-              <div className="flex items-center gap-2 w-full sm:w-auto sm:flex-1">
-                <Input
-                  placeholder="搜索問卷或供應商..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full sm:max-w-xs"
-                />
-              </div>
+            <Tabs value={tabValue} onValueChange={handleTabChange}>
+              <TabsList>
+                <TabsTrigger value="product" className="relative">
+                  產品碳足跡
+                  <Badge className="ml-2 bg-blue-500">{filteredResponses.filter(r => r.type === "product").length}</Badge>
+                </TabsTrigger>
+                <TabsTrigger value="organization">
+                  組織溫室氣體排放
+                  <Badge className="ml-2 bg-slate-500">{filteredResponses.filter(r => r.type === "organization").length}</Badge>
+                </TabsTrigger>
+              </TabsList>
               
-              <div className="flex items-center gap-2 self-start">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="gap-2 whitespace-nowrap">
-                      <Settings className="h-4 w-4" />
-                      顯示欄位
-                      {selectedFieldsInfo.length > 0 && (
-                        <Badge>{selectedFieldsInfo.length}</Badge>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[300px] md:w-96 p-0" align="end">
-                    <div className="p-4 border-b">
-                      <div className="font-medium">欄位設定</div>
-                      <div className="text-sm text-muted-foreground mt-1">
-                        選擇您想要在表格中顯示的欄位
-                      </div>
-                    </div>
-                    <div className="p-4 border-b">
-                      <div className="flex flex-wrap items-center gap-4 mb-4">
-                        <div className="flex items-center gap-2">
-                          <Checkbox 
-                            id="show-supplier" 
-                            checked={showSupplier} 
-                            onCheckedChange={(checked) => setShowSupplier(!!checked)}
-                          />
-                          <Label htmlFor="show-supplier">供應商</Label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Checkbox 
-                            id="show-respondent" 
-                            checked={showRespondent} 
-                            onCheckedChange={(checked) => setShowRespondent(!!checked)}
-                          />
-                          <Label htmlFor="show-respondent">填寫人</Label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Checkbox 
-                            id="show-date" 
-                            checked={showDate} 
-                            onCheckedChange={(checked) => setShowDate(!!checked)}
-                          />
-                          <Label htmlFor="show-date">日期</Label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Checkbox 
-                            id="show-survey" 
-                            checked={showSurvey} 
-                            onCheckedChange={(checked) => setShowSurvey(!!checked)}
-                          />
-                          <Label htmlFor="show-survey">問卷</Label>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* 修改欄位設定，按群組顯示 */}
-                    <Tabs defaultValue={currentGroups[0].title} className="w-full">
-                      <div className="px-4 pt-4">
-                        <TabsList className="mb-2 overflow-x-auto w-full flex items-center">
-                          {currentGroups.map(group => (
-                            <TabsTrigger key={group.title} value={group.title} className="flex-shrink-0">
-                              {group.title}
-                            </TabsTrigger>
-                          ))}
-                        </TabsList>
-                        <div className="flex items-center gap-2 justify-end">
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => toggleAllFields(true)}
-                          >
-                            全選
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => toggleAllFields(false)}
-                          >
-                            清除
-                          </Button>
-                        </div>
-                      </div>
-                      {currentGroups.map(group => (
-                        <TabsContent key={group.title} value={group.title} className="m-0">
-                          <ScrollArea className="h-72">
-                            <div className="px-4 py-2 space-y-4">
-                              {allFields
-                                .filter(field => group.categories.includes(field.category))
-                                .map((fieldInfo) => (
-                                  <div key={fieldInfo.id} className="flex items-center gap-2">
-                                    <Checkbox 
-                                      id={fieldInfo.id} 
-                                      checked={fieldInfo.selected} 
-                                      onCheckedChange={() => toggleField(fieldInfo.id)}
-                                    />
-                                    <Label htmlFor={fieldInfo.id} className="flex-1 cursor-pointer">
-                                      <span className="text-xs text-muted-foreground mr-2">
-                                        [{fieldInfo.category}]
-                                      </span>
-                                      {fieldInfo.field}
-                                    </Label>
-                                  </div>
-                                ))
+              <div className="mt-4">
+                {/* 無論產品或組織都使用單一整合表格 */}
+                <TabsContent value={tabValue}>
+                  <div className="flex justify-end mb-2">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="flex items-center gap-1">
+                          <Filter className="h-4 w-4" />
+                          顯示欄位
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuLabel>選擇要顯示的欄位</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {(tabValue === "organization" ? organizationFields : productFields).map((field) => (
+                          <DropdownMenuCheckboxItem
+                            key={`${field.category}-${field.field}`}
+                            checked={allFields.find(f => f.category === field.category && f.field === field.field)?.selected}
+                            onCheckedChange={(checked) => {
+                              // 更新欄位選擇
+                              if (tabValue === "organization") {
+                                setOrgFields(prev => 
+                                  prev.map(f => 
+                                    f.category === field.category && f.field === field.field 
+                                      ? { ...f, selected: !!checked } 
+                                      : f
+                                  )
+                                );
+                              } else {
+                                setProductFields(prev => 
+                                  prev.map(f => 
+                                    f.category === field.category && f.field === field.field 
+                                      ? { ...f, selected: !!checked } 
+                                      : f
+                                  )
+                                );
                               }
-                            </div>
-                          </ScrollArea>
-                        </TabsContent>
-                      ))}
-                    </Tabs>
-                  </PopoverContent>
-                </Popover>
-              </div>
-            </div>
-            
-            {/* 資料區塊選擇區 */}
-            <div className="mt-6">
-              <Tabs 
-                defaultValue={currentGroups[0].title} 
-                value={currentGroups[currentBlockIndex].title}
-                onValueChange={(value) => {
-                  const newIndex = currentGroups.findIndex(group => group.title === value);
-                  if (newIndex !== -1) handleBlockChange(newIndex);
-                }}
-                className="w-full"
-              >
-                <TabsList className="w-full flex justify-start mb-4 overflow-x-auto p-1 bg-muted rounded-lg">
-                  {currentGroups.map((group, index) => (
-                    <TabsTrigger 
-                      key={group.title} 
-                      value={group.title}
-                      className="px-4 py-2 flex-shrink-0 font-medium"
-                    >
-                      {group.title}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-                
-                {currentGroups.map((group, groupIndex) => {
-                  const groupFields = fieldsByGroup[group.title].filter(field => field.selected);
-                  
-                  return (
-                    <TabsContent 
-                      key={group.title} 
-                      value={group.title} 
-                      className="m-0 space-y-4"
-                    >
-                      {groupFields.length === 0 ? (
-                        <div className="p-8 text-center text-muted-foreground border rounded-md">
-                          尚未選擇此區塊的顯示欄位
-                        </div>
-                      ) : (
-                        <div className="overflow-hidden rounded-md border">
-                          <div className="overflow-x-auto">
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                                  {/* 供應商識別資訊始終顯示 */}
-                                  <TableHead className="sticky left-0 z-20 bg-background whitespace-nowrap">供應商名稱</TableHead>
-                                  {showSurvey && <TableHead className="whitespace-nowrap">問卷名稱</TableHead>}
-                                  {showRespondent && (
-                                    <>
-                                      <TableHead className="whitespace-nowrap">填寫人</TableHead>
-                                      <TableHead className="whitespace-nowrap">填寫人Email</TableHead>
-                                    </>
-                                  )}
-                                  
-                                  {/* 欄位資料 */}
-                                  {groupFields.map((fieldInfo) => (
-                                    <TableHead key={fieldInfo.id} className="whitespace-nowrap">
-                                      <div className="flex flex-col">
-                                        <span className="text-xs font-normal text-muted-foreground">
-                                          {fieldInfo.category}
-                                        </span>
-                                        <span>{fieldInfo.field}</span>
-                                      </div>
-                                    </TableHead>
-                                  ))}
-                                  
-                                  {showDate && <TableHead className="whitespace-nowrap">更新時間</TableHead>}
-                                  <TableHead className="whitespace-nowrap">操作</TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {filteredResponses.length === 0 ? (
-                                  <TableRow>
-                                    <TableCell colSpan={100} className="text-center h-32">
-                                      沒有找到符合條件的問卷回覆
-                                    </TableCell>
-                                  </TableRow>
-                                ) : (
-                                  filteredResponses.map((response) => (
-                                    <TableRow key={response.id}>
-                                      {/* 供應商識別資訊始終顯示 */}
-                                      <TableCell className="sticky left-0 z-20 bg-background font-medium whitespace-nowrap">
-                                        {response.supplierName}
-                                      </TableCell>
-                                      {showSurvey && (
-                                        <TableCell className="whitespace-nowrap">
-                                          {response.surveyTitle}
-                                        </TableCell>
-                                      )}
-                                      {showRespondent && (
-                                        <>
-                                          <TableCell className="whitespace-nowrap">
-                                            {response.respondentName}
-                                          </TableCell>
-                                          <TableCell className="whitespace-nowrap">
-                                            {response.respondentEmail}
-                                          </TableCell>
-                                        </>
-                                      )}
-                                      
-                                      {/* 欄位資料 */}
-                                      {groupFields.map((fieldInfo) => (
-                                        <TableCell key={fieldInfo.id} className="whitespace-nowrap">
-                                          {response.answers[fieldInfo.category]?.[fieldInfo.field] || "-"}
-                                        </TableCell>
-                                      ))}
-                                      
-                                      {showDate && (
-                                        <TableCell className="whitespace-nowrap">
-                                          {format(response.completedDate, "yyyy-MM-dd HH:mm")}
-                                        </TableCell>
-                                      )}
-                                      
-                                      {/* 操作按鈕 */}
-                                      <TableCell className="whitespace-nowrap">
-                                        <Button 
-                                          variant="ghost" 
-                                          size="sm"
-                                          onClick={() => viewOriginalSurvey(response.id)}
-                                          className="hover:bg-primary/10"
-                                        >
-                                          <BarChart3 className="h-4 w-4 mr-1" />
-                                          查看問卷
-                                        </Button>
-                                      </TableCell>
-                                    </TableRow>
-                                  ))
+                            }}
+                          >
+                            {field.field}
+                          </DropdownMenuCheckboxItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  <div className="rounded-md border">
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-[180px]">供應商</TableHead>
+                            
+                            {selectedFields.map((fieldInfo) => (
+                              <TableHead key={fieldInfo.id} className="whitespace-nowrap">
+                                {fieldInfo.field}
+                              </TableHead>
+                            ))}
+                            
+                            {showDate && (
+                              <TableHead className="whitespace-nowrap">完成日期</TableHead>
+                            )}
+                            
+                            <TableHead className="text-right">操作</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredResponses.length === 0 ? (
+                            <TableRow>
+                              <TableCell 
+                                colSpan={selectedFields.length + 3} 
+                                className="h-24 text-center"
+                              >
+                                沒有符合條件的數據
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            filteredResponses.map((response) => (
+                              <TableRow key={response.id}>
+                                <TableCell className="font-medium">
+                                  {response.supplierName}
+                                  <div className="text-xs text-muted-foreground">
+                                    {response.respondentName}
+                                  </div>
+                                </TableCell>
+                                
+                                {selectedFields.map((fieldInfo) => (
+                                  <TableCell key={fieldInfo.id} className="whitespace-nowrap">
+                                    {response.answers[fieldInfo.category]?.[fieldInfo.field] || "-"}
+                                  </TableCell>
+                                ))}
+                                
+                                {showDate && (
+                                  <TableCell className="whitespace-nowrap">
+                                    {format(response.completedDate, "yyyy-MM-dd")}
+                                  </TableCell>
                                 )}
-                              </TableBody>
-                            </Table>
-                          </div>
-                        </div>
-                      )}
-                    </TabsContent>
-                  );
-                })}
-              </Tabs>
-            </div>
+                                
+                                <TableCell className="text-right">
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    onClick={() => viewOriginalSurvey(response.id)}
+                                  >
+                                    <BarChart3 className="h-4 w-4 mr-1" />
+                                    查看詳情
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          )}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </div>
+                </TabsContent>
+              </div>
+            </Tabs>
           </div>
         </CardContent>
       </Card>

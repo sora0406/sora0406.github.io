@@ -23,12 +23,12 @@ interface Supplier {
 const initialSuppliers = [
   {
     id: "1",
-    name: "台灣電子股份有限公司",
+    name: "新竹物流",
     contact: "張小明",
-    email: "contact@taiwanelectronics.com",
-    phone: "02-1234-5678",
-    address: "台北市信義區信義路五段7號",
-    description: "專業電子元件製造商，提供高品質的電子零件和解決方案。",
+    email: "contact@hct.com.tw",
+    phone: "02-2216-5589",
+    address: "新北市新莊區新北大道三段7號",
+    description: "提供全台灣快速貨物配送服務，專攻電子商務與B2C的物流解決方案。",
     carbonData: {
       organizational: 1250,
       product: 85,
@@ -36,12 +36,12 @@ const initialSuppliers = [
   },
   {
     id: "2",
-    name: "綠能科技有限公司",
+    name: "統一速達",
     contact: "李大華",
-    email: "info@greentechltd.com",
-    phone: "03-9876-5432",
-    address: "新竹科學園區研發路2號",
-    description: "專注於可再生能源技術的研發和生產，提供太陽能和風能解決方案。",
+    email: "info@t-cat.com.tw",
+    phone: "02-2552-5525",
+    address: "台北市大同區承德路三段210號",
+    description: "提供全台物流整合服務，包括貨件收寄、倉儲與配送等一條龍服務。",
     carbonData: {
       organizational: 980,
       product: 45,
@@ -49,12 +49,12 @@ const initialSuppliers = [
   },
   {
     id: "3",
-    name: "永續材料工業股份有限公司",
+    name: "宅配通",
     contact: "王美麗",
-    email: "contact@sustainablematerials.com",
-    phone: "04-2222-3333",
-    address: "台中市西屯區工業區一路88號",
-    description: "生產環保和可持續材料，專注於減少環境影響的創新解決方案。",
+    email: "contact@pelican.com.tw",
+    phone: "02-2659-5511",
+    address: "台北市南港區三重路66號",
+    description: "專注於最後一哩路的宅配服務，提供台灣本島及離島的運送服務。",
     carbonData: {
       organizational: 1100,
       product: 60,

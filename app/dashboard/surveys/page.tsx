@@ -19,7 +19,7 @@ const initialSurveys = [
     title: "企業碳排放評估問卷",
     description: "評估供應商的碳排放量和減碳措施，包含範疇1-3的排放數據和能源消耗資訊",
     totalQuestions: 28,
-    respondents: ["台灣電子股份有限公司", "綠能科技有限公司"],
+    respondents: ["新竹物流", "統一速達"],
     deadline: new Date("2023-12-15"),
     status: "active",
     responseRate: 65,
@@ -29,7 +29,7 @@ const initialSurveys = [
     title: "供應鏈風險評估問卷",
     description: "評估供應商的供應鏈風險和業務連續性計劃",
     totalQuestions: 15,
-    respondents: ["永續材料工業股份有限公司", "綠能科技有限公司"],
+    respondents: ["宅配通", "統一速達"],
     deadline: new Date("2023-11-20"),
     status: "completed",
     responseRate: 100,
@@ -39,7 +39,7 @@ const initialSurveys = [
     title: "產品碳足跡資訊收集",
     description: "收集供應商產品的碳足跡數據，包含原料取得、製造、運輸和廢棄階段的排放",
     totalQuestions: 22,
-    respondents: ["台灣電子股份有限公司"],
+    respondents: ["新竹物流"],
     deadline: new Date("2023-10-10"),
     status: "expired",
     responseRate: 0,
@@ -49,7 +49,7 @@ const initialSurveys = [
     title: "2023年度供應商ESG評估",
     description: "全面評估供應商在環境、社會和公司治理方面的表現",
     totalQuestions: 36,
-    respondents: ["台灣電子股份有限公司", "永續材料工業股份有限公司", "綠能科技有限公司"],
+    respondents: ["新竹物流", "宅配通", "統一速達"],
     deadline: new Date("2023-12-30"),
     status: "active",
     responseRate: 42,
@@ -94,7 +94,7 @@ export default function SurveysPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">問卷模板</h1>
+            {/* <h1 className="text-2xl font-bold tracking-tight">問卷模板</h1> */}
             <p className="text-sm text-muted-foreground">建立和管理供應商碳排放與ESG相關資訊收集問卷</p>
           </div>
           <Button asChild>

@@ -19,8 +19,8 @@ const mySurveys = [
     id: "1",
     title: "企業碳排放評估問卷",
     description: "請提供貴公司的碳排放數據和減碳措施",
-    sender: "台灣永續科技股份有限公司",
-    senderLogo: "/company-logos/sustainable-tech.png",
+    sender: "新竹物流",
+    senderLogo: "/company-logos/hct-logistics.png",
     sentDate: new Date("2023-11-01"),
     deadline: new Date("2023-12-15"),
     status: "pending", // pending, inProgress, completed, expired
@@ -32,8 +32,8 @@ const mySurveys = [
     id: "2",
     title: "供應鏈風險評估問卷",
     description: "評估貴公司的供應鏈風險和業務連續性計劃",
-    sender: "綠能科技有限公司",
-    senderLogo: "/company-logos/green-tech.png",
+    sender: "統一速達",
+    senderLogo: "/company-logos/t-cat.png",
     sentDate: new Date("2023-10-15"),
     deadline: new Date("2023-11-30"),
     status: "inProgress",
@@ -45,8 +45,8 @@ const mySurveys = [
     id: "3",
     title: "產品碳足跡資訊收集",
     description: "請提供貴公司產品的碳足跡數據",
-    sender: "台灣電子股份有限公司",
-    senderLogo: "/company-logos/tw-electronics.png",
+    sender: "宅配通",
+    senderLogo: "/company-logos/pelican.png",
     sentDate: new Date("2023-09-20"),
     deadline: new Date("2023-10-20"),
     status: "completed",
@@ -58,8 +58,8 @@ const mySurveys = [
     id: "4",
     title: "2023年度供應商ESG評估",
     description: "全面評估貴公司在環境、社會和公司治理方面的表現",
-    sender: "台灣永續科技股份有限公司",
-    senderLogo: "/company-logos/sustainable-tech.png",
+    sender: "長榮國際儲運",
+    senderLogo: "/company-logos/evergreen.png",
     sentDate: new Date("2023-10-01"),
     deadline: new Date("2023-10-31"),
     status: "expired",
@@ -71,8 +71,8 @@ const mySurveys = [
     id: "5",
     title: "供應商能源使用調查",
     description: "關於貴公司能源使用效率和再生能源使用情況的調查",
-    sender: "綠能科技有限公司",
-    senderLogo: "/company-logos/green-tech.png",
+    sender: "台塑汽車貨運",
+    senderLogo: "/company-logos/fpcc-logistics.png",
     sentDate: new Date("2023-09-01"),
     deadline: new Date("2023-09-30"),
     status: "completed",
@@ -247,7 +247,7 @@ export default function MySurveysPage() {
     <TooltipProvider>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">我的問卷</h1>
+          {/* <h1 className="text-2xl font-bold tracking-tight">我的問卷</h1> */}
           <p className=" text-sm text-muted-foreground">管理和回覆指派給您的問卷</p>
         </div>
         

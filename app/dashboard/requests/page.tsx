@@ -17,8 +17,8 @@ const initialRequests = [
   {
     id: "1",
     title: "2023年度碳排放數據收集",
-    suppliers: ["台灣電子股份有限公司", "綠能科技有限公司"],
-    requestedData: ["組織溫盤碳排放", "原物料/產品碳足跡"],
+    suppliers: ["新竹物流", "統一速達"],
+    requestedData: ["組織溫盤碳排放", "產品碳足跡"],
     deadline: new Date("2023-12-31"),
     status: "active",
     reminderDays: 3,
@@ -26,7 +26,7 @@ const initialRequests = [
   {
     id: "2",
     title: "供應商基本信息更新",
-    suppliers: ["永續材料工業股份有限公司", "台灣電子股份有限公司"],
+    suppliers: ["宅配通", "新竹物流"],
     requestedData: ["公司基本資訊"],
     deadline: new Date("2023-11-15"),
     status: "completed",
@@ -35,8 +35,8 @@ const initialRequests = [
   {
     id: "3",
     title: "產品碳足跡調查",
-    suppliers: ["綠能科技有限公司"],
-    requestedData: ["原物料/產品碳足跡"],
+    suppliers: ["統一速達"],
+    requestedData: ["產品碳足跡"],
     deadline: new Date("2023-10-30"),
     status: "expired",
     reminderDays: 7,
@@ -73,7 +73,7 @@ export default function RequestsPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">數據要求</h1>
+            {/* <h1 className="text-2xl font-bold tracking-tight">數據要求</h1> */}
             <p className="text-smtext-muted-foreground">管理您向供應商發送的數據要求</p>
           </div>
           <div className="flex gap-2">

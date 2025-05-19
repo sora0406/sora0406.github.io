@@ -270,11 +270,11 @@ export default function QuestionnairePage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <Button variant="ghost" size="sm" className="mb-2" onClick={() => router.push("/dashboard/projects")}>
+          {/* <Button variant="ghost" size="sm" className="mb-2" onClick={() => router.push("/dashboard/projects")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             返回專案管理
-          </Button>
-          <h1 className="text-2xl font-bold tracking-tight">問卷追蹤</h1>
+          </Button> */}
+          {/* <h1 className="text-2xl font-bold tracking-tight">問卷追蹤</h1> */}
           <p className="text-sm text-muted-foreground">
             追蹤供應商問卷填寫狀況、到期日，及時發送提醒
           </p>

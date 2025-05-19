@@ -1,470 +1,238 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { 
-  ArrowLeft,
-  Calendar,
-  CheckCircle2,
-  ChevronDown,
-  ChevronRight,
-  CircleAlert,
-  Clock, 
-  Search,
-  Sliders,
-} from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+import { Plus, MoreHorizontal, Clock, Users } from "lucide-react"
+import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DraggableProvided } from "@hello-pangea/dnd"
 
-// 模擬組織邊界
-const organizationBoundaries = [
-  { id: "boundary1", name: "台灣子公司" },
-  { id: "boundary2", name: "中國製造基地" },
-  { id: "boundary3", name: "美國分公司" },
-  { id: "boundary4", name: "歐盟事業部" }
-]
+interface Task {
+  id: string
+  title: string
+  description: string
+  dueDate: string
+  assignee: string
+  priority: string
+}
 
-// 模擬專案資料
-const projects = [
-  {
-    id: "p1",
-    name: "台灣總部碳排放盤查",
-    boundary: "boundary1",
-    startDate: "2023-01-15",
-    endDate: "2023-12-31",
-    status: "in_progress", // in_progress, completed, delayed, not_started
-    progress: 78,
-    responsible: "張小明",
-    subProjects: [
+interface Column {
+  id: string
+  title: string
+  color: string
+  items: Task[]
+}
+
+interface Columns {
+  [key: string]: Column
+}
+
+// 模擬數據
+const initialColumns: Columns = {
+  "not-started": {
+    id: "not-started",
+    title: "未開始",
+    color: "bg-gray-500/10 text-gray-500",
+    items: [
       {
-        id: "p1-1",
-        name: "範疇一排放盤查",
-        progress: 100,
-        status: "completed",
-        dueDate: "2023-06-30"
+        id: "task-1",
+        title: "供應商碳盤查問卷",
+        description: "收集供應商的碳排放數據",
+        dueDate: "2024-04-15",
+        assignee: "王小明",
+        priority: "高",
       },
       {
-        id: "p1-2",
-        name: "範疇二排放盤查",
-        progress: 95,
-        status: "in_progress",
-        dueDate: "2023-09-30"
+        id: "task-2",
+        title: "數據分析報告",
+        description: "分析供應商的碳排放趨勢",
+        dueDate: "2024-04-20",
+        assignee: "李小華",
+        priority: "中",
       },
-      {
-        id: "p1-3",
-        name: "範疇三排放盤查",
-        progress: 45,
-        status: "in_progress",
-        dueDate: "2023-12-31"
-      }
-    ]
+    ],
   },
-  {
-    id: "p2",
-    name: "中國工廠能源轉型專案",
-    boundary: "boundary2",
-    startDate: "2023-03-10",
-    endDate: "2023-11-30",
-    status: "delayed",
-    progress: 65,
-    responsible: "李大華",
-    subProjects: [
+  "in-progress": {
+    id: "in-progress",
+    title: "進行中",
+    color: "bg-yellow-500/10 text-yellow-500",
+    items: [
       {
-        id: "p2-1",
-        name: "太陽能板安裝",
-        progress: 80,
-        status: "delayed",
-        dueDate: "2023-08-15"
+        id: "task-3",
+        title: "供應商訪談",
+        description: "與主要供應商進行面對面訪談",
+        dueDate: "2024-04-10",
+        assignee: "張大明",
+        priority: "高",
       },
-      {
-        id: "p2-2",
-        name: "能源管理系統建置",
-        progress: 50,
-        status: "in_progress",
-        dueDate: "2023-10-30"
-      }
-    ]
+    ],
   },
-  {
-    id: "p3",
-    name: "美國市場永續包裝轉換",
-    boundary: "boundary3",
-    startDate: "2023-05-20",
-    endDate: "2024-05-20",
-    status: "in_progress",
-    progress: 40,
-    responsible: "John Smith",
-    subProjects: [
+  "completed": {
+    id: "completed",
+    title: "已完成",
+    color: "bg-green-500/10 text-green-500",
+    items: [
       {
-        id: "p3-1",
-        name: "包裝材料研發",
-        progress: 70,
-        status: "in_progress",
-        dueDate: "2023-11-30"
+        id: "task-4",
+        title: "問卷設計",
+        description: "設計供應商碳盤查問卷",
+        dueDate: "2024-03-25",
+        assignee: "陳小美",
+        priority: "高",
       },
-      {
-        id: "p3-2",
-        name: "供應商認證",
-        progress: 35,
-        status: "in_progress",
-        dueDate: "2024-02-28"
-      },
-      {
-        id: "p3-3",
-        name: "市場推廣",
-        progress: 10,
-        status: "not_started",
-        dueDate: "2024-05-20"
-      }
-    ]
+    ],
   },
-  {
-    id: "p4",
-    name: "歐盟法規遵循專案",
-    boundary: "boundary4",
-    startDate: "2023-01-01",
-    endDate: "2023-09-30",
-    status: "completed",
-    progress: 100,
-    responsible: "Hans Mueller",
-    subProjects: [
-      {
-        id: "p4-1",
-        name: "CSRD報告準備",
-        progress: 100,
-        status: "completed",
-        dueDate: "2023-06-30"
-      },
-      {
-        id: "p4-2",
-        name: "法規符合度評估",
-        progress: 100,
-        status: "completed",
-        dueDate: "2023-09-30"
-      }
-    ]
-  },
-  {
-    id: "p5",
-    name: "台灣產品生命週期評估",
-    boundary: "boundary1",
-    startDate: "2023-07-01",
-    endDate: "2024-02-28",
-    status: "in_progress",
-    progress: 35,
-    responsible: "王美麗",
-    subProjects: [
-      {
-        id: "p5-1",
-        name: "資料收集與盤查",
-        progress: 60,
-        status: "in_progress",
-        dueDate: "2023-10-31"
-      },
-      {
-        id: "p5-2",
-        name: "生命週期影響評估",
-        progress: 20,
-        status: "in_progress",
-        dueDate: "2023-12-31"
-      },
-      {
-        id: "p5-3",
-        name: "報告編製與審查",
-        progress: 0,
-        status: "not_started",
-        dueDate: "2024-02-28"
-      }
-    ]
-  }
-]
+}
 
 export default function ProjectProgressPage() {
-  const router = useRouter()
-  const [searchTerm, setSearchTerm] = useState("")
-  const [boundaryFilter, setBoundaryFilter] = useState("all")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [expandedProject, setExpandedProject] = useState<string | null>(null)
-  
-  // 計算各類型專案數量
-  const counts = {
-    all: projects.length,
-    in_progress: projects.filter(p => p.status === "in_progress").length,
-    completed: projects.filter(p => p.status === "completed").length,
-    delayed: projects.filter(p => p.status === "delayed").length,
-  }
-  
-  // 計算總體完成率
-  const overallProgress = Math.round(
-    projects.reduce((sum, project) => sum + project.progress, 0) / projects.length
-  )
-  
-  // 過濾專案
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = 
-      project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.responsible.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesBoundary = boundaryFilter === "all" || project.boundary === boundaryFilter;
-    const matchesStatus = statusFilter === "all" || project.status === statusFilter;
-    
-    return matchesSearch && matchesBoundary && matchesStatus;
-  });
-  
-  // 獲取專案狀態標籤
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "completed":
-        return <Badge className="bg-green-500">已完成</Badge>;
-      case "in_progress":
-        return <Badge className="bg-blue-500">進行中</Badge>;
-      case "delayed":
-        return <Badge className="bg-amber-500">進度落後</Badge>;
-      case "not_started":
-        return <Badge className="bg-slate-500">未開始</Badge>;
-      default:
-        return null;
-    }
-  };
-  
-  // 獲取邊界名稱
-  const getBoundaryName = (boundaryId: string) => {
-    const boundary = organizationBoundaries.find(b => b.id === boundaryId);
-    return boundary ? boundary.name : boundaryId;
-  };
-  
-  // 處理專案展開/收合
-  const toggleProject = (projectId: string) => {
-    if (expandedProject === projectId) {
-      setExpandedProject(null);
+  const [columns, setColumns] = useState<Columns>(initialColumns)
+
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return
+
+    const { source, destination } = result
+
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[source.droppableId]
+      const destColumn = columns[destination.droppableId]
+      const sourceItems = [...sourceColumn.items]
+      const destItems = [...destColumn.items]
+      const [removed] = sourceItems.splice(source.index, 1)
+      destItems.splice(destination.index, 0, removed)
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...sourceColumn,
+          items: sourceItems,
+        },
+        [destination.droppableId]: {
+          ...destColumn,
+          items: destItems,
+        },
+      })
     } else {
-      setExpandedProject(projectId);
+      const column = columns[source.droppableId]
+      const copiedItems = [...column.items]
+      const [removed] = copiedItems.splice(source.index, 1)
+      copiedItems.splice(destination.index, 0, removed)
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...column,
+          items: copiedItems,
+        },
+      })
     }
-  };
-  
+  }
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "高":
+        return "bg-red-500/10 text-red-500"
+      case "中":
+        return "bg-yellow-500/10 text-yellow-500"
+      case "低":
+        return "bg-green-500/10 text-green-500"
+      default:
+        return "bg-gray-500/10 text-gray-500"
+    }
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <Button variant="ghost" size="sm" className="mb-2" onClick={() => router.push("/dashboard/projects")}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            返回專案管理
+    <div className="flex-1 space-y-4  ">
+      <div className="flex items-center justify-between space-y-2">
+      <div className="flex items-center space-x-2">
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            新增任務
           </Button>
-          <h1 className="text-2xl font-bold tracking-tight">專案進度追蹤</h1>
-          <p className="text-sm text-muted-foreground">
-            查看各組織邊界的專案進度和狀態
-          </p>
         </div>
+        {/* <h2 className="text-3xl font-bold tracking-tight">專案進度</h2> */}
+     
       </div>
-      
-      {/* 狀態統計卡片 */}
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">全部專案</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{counts.all}</div>
-            <div className="text-xs text-muted-foreground mt-1">整體完成率 {overallProgress}%</div>
-            <Progress value={overallProgress} className="h-2 mt-2" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">進行中</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-500">{counts.in_progress}</div>
-            <div className="text-xs text-muted-foreground mt-1">佔總專案 {Math.round((counts.in_progress / counts.all) * 100)}%</div>
-            <Progress value={(counts.in_progress / counts.all) * 100} className="h-2 mt-2" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">已完成</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-500">{counts.completed}</div>
-            <div className="text-xs text-muted-foreground mt-1">佔總專案 {Math.round((counts.completed / counts.all) * 100)}%</div>
-            <Progress value={(counts.completed / counts.all) * 100} className="h-2 mt-2" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">進度落後</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-amber-500">{counts.delayed}</div>
-            <div className="text-xs text-muted-foreground mt-1">佔總專案 {Math.round((counts.delayed / counts.all) * 100)}%</div>
-            <Progress value={(counts.delayed / counts.all) * 100} className="h-2 mt-2" />
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* 工具欄 */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <div className="relative max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="搜尋專案名稱或負責人..."
-            className="pl-8 max-w-md"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          <Select value={boundaryFilter} onValueChange={setBoundaryFilter}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="選擇組織邊界" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">所有邊界</SelectItem>
-              {organizationBoundaries.map(boundary => (
-                <SelectItem key={boundary.id} value={boundary.id}>
-                  {boundary.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="篩選狀態" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">所有狀態</SelectItem>
-              <SelectItem value="in_progress">進行中</SelectItem>
-              <SelectItem value="completed">已完成</SelectItem>
-              <SelectItem value="delayed">進度落後</SelectItem>
-              <SelectItem value="not_started">未開始</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      
-      {/* 專案列表 */}
-      <div>
-        {filteredProjects.length === 0 ? (
-          <div className="text-center text-muted-foreground py-8 border rounded-md">
-            找不到符合條件的專案
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {filteredProjects.map(project => (
-              <Card key={project.id} className="overflow-hidden">
-                <CardHeader className="p-4 pb-0">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => toggleProject(project.id)} 
-                        className="rounded-full w-8 h-8"
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {Object.entries(columns).map(([columnId, column]) => (
+            <div key={columnId} className="flex flex-col">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Badge className={column.color}>
+                    {column.title}
+                  </Badge>
+                  <span className="text-sm text-gray-500">
+                    {column.items.length}
+                  </span>
+                </div>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <Droppable droppableId={columnId}>
+                {(provided: DroppableProvided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="flex-1 space-y-4"
+                  >
+                    {column.items.map((item, index) => (
+                      <Draggable
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
                       >
-                        {expandedProject === project.id ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
-                      </Button>
-                      <CardTitle className="text-lg">{project.name}</CardTitle>
-                      {getStatusBadge(project.status)}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-sm text-muted-foreground">
-                        負責人: {project.responsible}
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-4 pt-2">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-2 gap-2">
-                    <div className="flex flex-wrap gap-4">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                          {getBoundaryName(project.boundary)}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span>
-                          {project.startDate} 至 {project.endDate}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-sm font-medium">{project.progress}%</div>
-                      <Progress value={project.progress} className="h-2 w-[120px]" />
-                    </div>
-                  </div>
-                  
-                  <Collapsible open={expandedProject === project.id}>
-                    <CollapsibleContent className="pt-3 border-t mt-2">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>子專案名稱</TableHead>
-                            <TableHead>截止日期</TableHead>
-                            <TableHead>狀態</TableHead>
-                            <TableHead>進度</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {project.subProjects.map(subProject => (
-                            <TableRow key={subProject.id}>
-                              <TableCell className="font-medium">
-                                {subProject.name}
-                              </TableCell>
-                              <TableCell>{subProject.dueDate}</TableCell>
-                              <TableCell>{getStatusBadge(subProject.status)}</TableCell>
-                              <TableCell>
-                                <div className="flex items-center gap-2">
-                                  <Progress value={subProject.progress} className="h-2 w-[80px]" />
-                                  <span className="text-sm">{subProject.progress}%</span>
-                                  {subProject.status === "delayed" && (
-                                    <CircleAlert className="h-4 w-4 text-amber-500" />
-                                  )}
-                                  {subProject.status === "completed" && (
-                                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                                  )}
+                        {(provided: DraggableProvided) => (
+                          <Card
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="cursor-grab active:cursor-grabbing"
+                          >
+                            <CardHeader className="p-4">
+                              <div className="flex items-start justify-between">
+                                <div className="space-y-1">
+                                  <CardTitle className="text-base">
+                                    {item.title}
+                                  </CardTitle>
+                                  <CardDescription>
+                                    {item.description}
+                                  </CardDescription>
                                 </div>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
+                                <Button variant="ghost" size="icon">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </CardHeader>
+                            <CardContent className="p-4 pt-0">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                  <div className="flex items-center gap-1 text-sm text-gray-500">
+                                    <Clock className="h-4 w-4" />
+                                    <span>{item.dueDate}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1 text-sm text-gray-500">
+                                    <Users className="h-4 w-4" />
+                                    <span>{item.assignee}</span>
+                                  </div>
+                                </div>
+                                <Badge className={getPriorityColor(item.priority)}>
+                                  {item.priority}
+                                </Badge>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+          ))}
+        </div>
+      </DragDropContext>
     </div>
   )
 } 

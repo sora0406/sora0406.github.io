@@ -37,7 +37,7 @@ export default function ProjectsPage() {
               </div>
             </dl>
             <Button variant="outline" className="w-full justify-between" asChild>
-              <Link href="/dashboard/projects/questionnaires">
+              <Link href="/dashboard/questionnaires">
                 進入問卷追蹤
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Link>

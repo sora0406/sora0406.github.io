@@ -27,7 +27,7 @@ const initialRequests = [
         status: "submitted",
       },
     ],
-    requestedData: ["組織溫盤碳排放", "原物料/產品碳足跡"],
+    requestedData: ["組織溫盤碳排放", "產品碳足跡"],
     deadline: new Date("2023-12-31"),
     status: "active",
     createdAt: new Date("2023-10-01"),
@@ -69,7 +69,7 @@ const initialRequests = [
         status: "not_submitted",
       },
     ],
-    requestedData: ["原物料/產品碳足跡"],
+    requestedData: ["產品碳足跡"],
     deadline: new Date("2023-10-30"),
     status: "expired",
     createdAt: new Date("2023-09-01"),
@@ -148,7 +148,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
           </a>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{request.title}</h1>
+          {/* <h1 className="text-3xl font-bold tracking-tight">{request.title}</h1> */}
           <div className="flex items-center gap-2 mt-1">
             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">創建於 {format(request.createdAt, "yyyy-MM-dd")}</span>

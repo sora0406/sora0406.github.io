@@ -13,84 +13,126 @@ import { cn } from "@/lib/utils"
 
 // 擴展路由定義，增加子路由
 const routes = [
+  // {
+  //   path: "/dashboard",
+  //   name: "儀表板",
+  //   icon: Home,
+  // },
+  // {
+  //   path: "/dashboard/projects",
+  //   name: "計畫管理",
+  //   icon: Briefcase,
+  //   subRoutes: [
+  //     { path: "/dashboard/projects/questionnaires", name: "問卷追蹤" },
+  //     { path: "/dashboard/projects/progress", name: "組織計畫" }
+  //   ]
+  // },
+
   {
-    path: "/dashboard",
-    name: "儀表板",
-    icon: Home,
+    path: "/dashboard/supply-chain",
+    name: "供應鏈管理",
+    icon: Package,
+    subRoutes: [
+      { path: "/dashboard/suppliers", name: "供應商管理" },
+      { path: "/dashboard/requests", name: "數據要求" },
+      { path: "/dashboard/projects/questionnaires", name: "問卷追蹤" },
+      { path: "/dashboard/survey-results", name: "戰情室" },
+      // 暫時隱藏的路由
+      // { path: "/dashboard/surveys", name: "問卷模板管理" },
+      // { path: "/dashboard/my-surveys", name: "我的問卷" },
+    ]
   },
+
+  {
+    path: "/dashboard/projects/progress",
+    name: "組織計畫",
+    icon: Briefcase,
+  },
+  
+  // 以下路由保留但不在主導航中顯示，只通過子路由訪問
+  // 供應商管理移到供應鏈子路由中
   {
     path: "/dashboard/suppliers",
     name: "供應商管理",
     icon: Users,
     subRoutes: [
       { path: "/dashboard/suppliers/new", name: "創建供應商" }
-    ]
+    ],
+    hideInMainNav: true // 新增標記，表示在主導航中隱藏
   },
 
-  {
-    path: "/dashboard/surveys",
-    name: "問卷模板",
-    icon: ClipboardList,
-    subRoutes: [
-      { path: "/dashboard/surveys/new", name: "創建問卷" }
-    ]
-  },
+  // 數據要求移到供應鏈子路由中
   {
     path: "/dashboard/requests",
     name: "數據要求",
     icon: FileText,
     subRoutes: [
       { path: "/dashboard/requests/new", name: "創建數據要求" }
-    ]
+    ],
+    hideInMainNav: true // 新增標記，表示在主導航中隱藏
   },
+  
+  // 問卷分析改名為戰情室，移到供應鏈子路由中
+  {
+    path: "/dashboard/survey-results",
+    name: "戰情室",
+    icon: BarChart3,
+    subRoutes: [
+      { path: "/dashboard/survey-results/export", name: "數據匯出" }
+    ],
+    hideInMainNav: true // 新增標記，表示在主導航中隱藏
+  },
+
+  // 問卷追蹤移到供應鏈子路由中
+  {
+    path: "/dashboard/projects/questionnaires",
+    name: "問卷追蹤",
+    icon: ClipboardList,
+    hideInMainNav: true // 新增標記，表示在主導航中隱藏
+  },
+  
+  // 暫時隱藏但保留以後使用
+  {
+    path: "/dashboard/surveys",
+    name: "問卷模板管理",
+    icon: ClipboardList,
+    subRoutes: [
+      { path: "/dashboard/surveys/new", name: "創建問卷" }
+    ],
+    hidden: true, // 新增標記，表示完全隱藏
+    hideInMainNav: true
+  },
+  
+  // 暫時隱藏但保留以後使用
   {
     path: "/dashboard/my-surveys",
     name: "我的問卷",
     icon: ClipboardCheck,
     subRoutes: [
       { path: "/dashboard/my-surveys/history", name: "問卷歷史" }
-    ]
+    ],
+    hidden: true, // 新增標記，表示完全隱藏
+    hideInMainNav: true
   },
-  {
-    path: "/dashboard/survey-results",
-    name: "問卷分析",
-    icon: BarChart3,
-    subRoutes: [
-      { path: "/dashboard/survey-results/export", name: "數據匯出" }
-    ]
-  },
-  {
-    path: "/dashboard/projects",
-    name: "專案管理",
-    icon: Briefcase,
-    subRoutes: [
-      { path: "/dashboard/projects/questionnaires", name: "問卷追蹤" },
-      { path: "/dashboard/projects/progress", name: "專案進度" }
-    ]
-  },
-//  {
-  //  path: "/dashboard/reports",
- //   name: "報告",
- //   icon: BarChart3,
- // },
 ]
 
 // 定義精確的路徑映射表
 const exactPathMap: Record<string, string> = {
   "/dashboard": "儀表板",
+  "/dashboard/supply-chain": "供應鏈管理",
   "/dashboard/suppliers": "供應商管理",
   "/dashboard/suppliers/new": "創建供應商",
   "/dashboard/requests": "數據要求",
   "/dashboard/requests/new": "創建數據要求",
-  "/dashboard/surveys": "問卷模板",
+  "/dashboard/surveys": "問卷模板管理",
   "/dashboard/surveys/new": "創建問卷",
   "/dashboard/my-surveys": "我的問卷",
   "/dashboard/my-surveys/history": "問卷歷史",
-  "/dashboard/survey-results": "問卷分析",
+  "/dashboard/survey-results": "戰情室",
   "/dashboard/survey-results/export": "數據匯出",
-  "/dashboard/projects": "專案管理",
+  "/dashboard/projects": "計畫管理",
   "/dashboard/projects/questionnaires": "問卷追蹤",
-  "/dashboard/projects/progress": "專案進度",
+  "/dashboard/projects/progress": "組織計畫",
 };
 
 // 導航路徑部分生成函數
@@ -139,6 +181,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const [expanded, setExpanded] = useState(false)
+  const [openSubMenu, setOpenSubMenu] = useState("")
   const pathname = usePathname()
 
   // 使用直接的路徑映射表獲取頁面標題
@@ -194,6 +237,15 @@ export default function DashboardLayout({
   // 生成當前頁面的麵包屑
   const breadcrumbs = generateBreadcrumbs(pathname);
 
+  // 切換子菜單的開關狀態
+  const toggleSubMenu = (path: string) => {
+    if (openSubMenu === path) {
+      setOpenSubMenu("")
+    } else {
+      setOpenSubMenu(path)
+    }
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* 桌面側邊欄 */}
@@ -215,25 +267,65 @@ export default function DashboardLayout({
           </Link>
         </div>
         <div className="flex flex-col gap-2 p-2">
-          {routes.map((route) => (
-            <Link
-              key={route.path}
-              href={route.path}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors group",
-                pathname === route.path || pathname.startsWith(`${route.path}/`)
-                  ? "bg-[#ffffff]/[0.16] text-[#F2A900]"
-                  : "text-[#ADADAD] hover:bg-[#F2A900]/[0.16] hover:text-[#F2A900]",
+          {routes.filter(route => !route.hideInMainNav && !route.hidden).map((route) => (
+            <div key={route.path}>
+              <div
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors group",
+                  (pathname === route.path || pathname.startsWith(`${route.path}/`) || openSubMenu === route.path)
+                    ? "bg-[#ffffff]/[0.16] text-[#F2A900]"
+                    : "text-[#ADADAD] hover:bg-[#F2A900]/[0.16] hover:text-[#F2A900]",
+                  "cursor-pointer"
+                )}
+                onClick={() => route.subRoutes && route.subRoutes.length > 0 ? toggleSubMenu(route.path) : undefined}
+              >
+                <Link
+                  href={route.path}
+                  className="flex items-center gap-3 flex-1"
+                  onClick={(e) => {
+                    if (route.subRoutes && route.subRoutes.length > 0) {
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  <route.icon className={cn(
+                    "h-5 w-5",
+                    (pathname === route.path || pathname.startsWith(`${route.path}/`) || openSubMenu === route.path)
+                      ? "text-[#F2A900]" 
+                      : "text-[#ADADAD] group-hover:text-[#F2A900]"
+                  )} />
+                  {expanded && <span>{route.name}</span>}
+                </Link>
+                {expanded && route.subRoutes && route.subRoutes.length > 0 && (
+                  <ChevronRight 
+                    className={cn(
+                      "h-4 w-4 transition-transform",
+                      openSubMenu === route.path ? "rotate-90" : ""
+                    )}
+                  />
+                )}
+              </div>
+              
+              {/* 子路由菜單 */}
+              {expanded && route.subRoutes && route.subRoutes.length > 0 && openSubMenu === route.path && (
+                <div className="ml-4 pl-4 border-l border-[#333333] space-y-1 mt-1">
+                  {route.subRoutes.map((subRoute) => (
+                    <Link
+                      key={subRoute.path}
+                      href={subRoute.path}
+                      className={cn(
+                        "flex items-center gap-2 rounded-lg px-3 py-2 text-sm",
+                        pathname === subRoute.path || pathname.startsWith(`${subRoute.path}/`)
+                          ? "text-[#F2A900]"
+                          : "text-[#ADADAD] hover:text-[#F2A900]"
+                      )}
+                    >
+                      {subRoute.name}
+                    </Link>
+                  ))}
+                </div>
               )}
-            >
-              <route.icon className={cn(
-                "h-5 w-5",
-                pathname === route.path || pathname.startsWith(`${route.path}/`)
-                  ? "text-[#F2A900]" 
-                  : "text-[#ADADAD] group-hover:text-[#F2A900]"
-              )} />
-              {expanded && <span>{route.name}</span>}
-            </Link>
+            </div>
           ))}
         </div>
         <Button
@@ -270,25 +362,65 @@ export default function DashboardLayout({
                       </Link>
                     </div>
                     <nav className="grid gap-2 p-4">
-                      {routes.map((route) => (
-                        <Link
-                          key={route.path}
-                          href={route.path}
-                          className={cn(
-                            "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium group",
-                            pathname === route.path || pathname.startsWith(`${route.path}/`)
-                              ? "bg-[#F2A900]/[0.16] text-[#F2A900]"
-                              : "text-[#ADADAD] hover:bg-[#F2A900]/[0.16] hover:text-[#F2A900]",
+                      {routes.filter(route => !route.hideInMainNav && !route.hidden).map((route) => (
+                        <div key={route.path}>
+                          <div
+                            className={cn(
+                              "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium group",
+                              (pathname === route.path || pathname.startsWith(`${route.path}/`) || openSubMenu === route.path)
+                                ? "bg-[#F2A900]/[0.16] text-[#F2A900]"
+                                : "text-[#ADADAD] hover:bg-[#F2A900]/[0.16] hover:text-[#F2A900]",
+                              "cursor-pointer"
+                            )}
+                            onClick={() => route.subRoutes && route.subRoutes.length > 0 ? toggleSubMenu(route.path) : undefined}
+                          >
+                            <Link
+                              href={route.path}
+                              className="flex items-center gap-2 flex-1"
+                              onClick={(e) => {
+                                if (route.subRoutes && route.subRoutes.length > 0) {
+                                  e.preventDefault();
+                                }
+                              }}
+                            >
+                              <route.icon className={cn(
+                                "h-5 w-5",
+                                (pathname === route.path || pathname.startsWith(`${route.path}/`) || openSubMenu === route.path)
+                                  ? "text-[#F2A900]" 
+                                  : "text-[#ADADAD] group-hover:text-[#F2A900]"
+                              )} />
+                              {route.name}
+                            </Link>
+                            {route.subRoutes && route.subRoutes.length > 0 && (
+                              <ChevronRight 
+                                className={cn(
+                                  "h-4 w-4 transition-transform",
+                                  openSubMenu === route.path ? "rotate-90" : ""
+                                )}
+                              />
+                            )}
+                          </div>
+                          
+                          {/* 子路由菜單 */}
+                          {route.subRoutes && route.subRoutes.length > 0 && openSubMenu === route.path && (
+                            <div className="ml-4 pl-4 border-l border-[#333333] space-y-1 mt-1">
+                              {route.subRoutes.map((subRoute) => (
+                                <Link
+                                  key={subRoute.path}
+                                  href={subRoute.path}
+                                  className={cn(
+                                    "flex items-center gap-2 rounded-lg px-3 py-2 text-sm",
+                                    pathname === subRoute.path || pathname.startsWith(`${subRoute.path}/`)
+                                      ? "text-[#F2A900]"
+                                      : "text-[#ADADAD] hover:text-[#F2A900]"
+                                  )}
+                                >
+                                  {subRoute.name}
+                                </Link>
+                              ))}
+                            </div>
                           )}
-                        >
-                          <route.icon className={cn(
-                            "h-5 w-5",
-                            pathname === route.path || pathname.startsWith(`${route.path}/`)
-                              ? "text-[#F2A900]" 
-                              : "text-[#ADADAD] group-hover:text-[#F2A900]"
-                          )} />
-                          {route.name}
-                        </Link>
+                        </div>
                       ))}
                     </nav>
                   </SheetContent>

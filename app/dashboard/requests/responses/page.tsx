@@ -113,9 +113,9 @@ const responseData: Response[] = [
     },
     supplier: {
       id: "s1",
-      name: "台灣電子股份有限公司",
+      name: "新竹物流",
       companyId: "TW12345678",
-      email: "contact@taiwanelectronics.com",
+      email: "contact@hct.com.tw",
     },
     submittedAt: "2023-10-15",
     status: "pending_review",
@@ -146,9 +146,9 @@ const responseData: Response[] = [
     },
     supplier: {
       id: "s2",
-      name: "綠能科技有限公司",
+      name: "統一速達",
       companyId: "TW23456789",
-      email: "info@greentechltd.com",
+      email: "info@t-cat.com.tw",
     },
     submittedAt: "2023-10-10",
     status: "approved",
@@ -157,7 +157,7 @@ const responseData: Response[] = [
     files: [
       {
         id: "f3",
-        name: "綠能科技碳排放數據.pdf",
+        name: "統一速達碳排放數據.pdf",
         type: "application/pdf",
         size: "3.1 MB",
       }
@@ -173,9 +173,9 @@ const responseData: Response[] = [
     },
     supplier: {
       id: "s3",
-      name: "永續材料工業股份有限公司",
+      name: "宅配通",
       companyId: "TW34567890",
-      email: "contact@sustainablematerials.com",
+      email: "contact@pelican.com.tw",
     },
     submittedAt: "2023-10-20",
     status: "needs_revision",
@@ -200,9 +200,9 @@ const responseData: Response[] = [
     },
     supplier: {
       id: "s1",
-      name: "台灣電子股份有限公司",
+      name: "新竹物流",
       companyId: "TW12345678",
-      email: "contact@taiwanelectronics.com",
+      email: "contact@hct.com.tw",
     },
     submittedAt: "2023-10-05",
     status: "rejected",
@@ -211,7 +211,7 @@ const responseData: Response[] = [
     files: [
       {
         id: "f5",
-        name: "台電基本資訊更新.pdf",
+        name: "新竹物流基本資訊更新.pdf",
         type: "application/pdf",
         size: "1.2 MB",
       }
@@ -226,10 +226,10 @@ const responseData: Response[] = [
       deadline: "2023-10-30",
     },
     supplier: {
-      id: "s2",
-      name: "綠能科技有限公司",
-      companyId: "TW23456789",
-      email: "info@greentechltd.com",
+      id: "s4",
+      name: "長榮國際儲運",
+      companyId: "TW45678901",
+      email: "service@evergreen.com.tw",
     },
     submittedAt: "2023-10-25",
     status: "pending_review",

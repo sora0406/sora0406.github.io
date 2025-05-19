@@ -92,7 +92,7 @@ export default function SurveyHistoryPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">問卷歷史紀錄</h1>
+        {/* <h1 className="text-2xl font-bold">問卷歷史紀錄</h1> */}
         <Button variant="outline" asChild>
           <Link href="/dashboard/my-surveys">
             返回我的問卷
