@@ -24,12 +24,12 @@
     }
   ],
   "redirects": [
-    { "source": "/", "destination": "/dashboard/supply-chain", "permanent": true }
+    { "source": "/", "destination": "/dashboard/survey-results", "permanent": true }
   ],
   "framework": "nextjs",
   "outputDirectory": ".next",
   "env": {
-    "NODEJS_VERSION": "20.x",
+    "NODEJS_VERSION": "18.20.3",
     "NPM_FLAGS": "--legacy-peer-deps",
     "SKIP_PNPM": "1"
   }

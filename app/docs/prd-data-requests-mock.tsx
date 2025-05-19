@@ -9,12 +9,12 @@ export const requestTemplates = [
   {
     id: "temp-001",
     name: "年度碳排放數據收集",
-    description: "收集供應商的年度碳排放數據，包括範疇一、二、三的排放量",
+    description: "收集供應商的年度碳排放數據，包括類別1、二、三的排放量",
     category: "環境",
     fields: [
-      { id: "f1", name: "範疇一排放量", type: "number", unit: "噸CO2當量", required: true },
-      { id: "f2", name: "範疇二排放量", type: "number", unit: "噸CO2當量", required: true },
-      { id: "f3", name: "範疇三排放量", type: "number", unit: "噸CO2當量", required: false },
+      { id: "f1", name: "類別1排放量", type: "number", unit: "噸CO2當量", required: true },
+      { id: "f2", name: "類別2排放量", type: "number", unit: "噸CO2當量", required: true },
+      { id: "f3", name: "類別3排放量", type: "number", unit: "噸CO2當量", required: false },
       { id: "f4", name: "減碳目標", type: "text", required: false },
       { id: "f5", name: "報告文件", type: "file", accept: ".pdf,.doc,.docx", required: true },
       { id: "f6", name: "驗證文件", type: "file", accept: ".pdf", required: false },
@@ -67,7 +67,7 @@ export const activeRequests = [
     id: "req-001",
     templateId: "temp-001",
     name: "2023年度碳排放數據收集",
-    description: "請提供貴公司2023年度的碳排放數據，需包含範疇一、二的排放量，以及相關報告文件。",
+    description: "請提供貴公司2023年度的碳排放數據，需包含類別1、二的排放量，以及相關報告文件。",
     status: "進行中",
     priority: "高",
     createdAt: "2023-04-01",
@@ -254,9 +254,9 @@ export const submissionExamples = [
     reviewedAt: "2023-04-22 14:30",
     reviewedBy: "wang_manager",
     data: {
-      "f1": "2500000", // 範疇一排放量
-      "f2": "3100000", // 範疇二排放量
-      "f3": "15000000", // 範疇三排放量
+      "f1": "2500000", // 類別1排放量
+      "f2": "3100000", // 類別2排放量
+      "f3": "15000000", // 類別3排放量
       "f4": "2030年減少30%排放量", // 減碳目標
       "f5": [{ name: "TSMC_ESG_Report_2023.pdf", size: "5.2MB", uploadedAt: "2023-04-20 16:25" }], // 報告文件
       "f6": [{ name: "TSMC_Carbon_Verification_2023.pdf", size: "2.1MB", uploadedAt: "2023-04-20 16:28" }], // 驗證文件
@@ -265,12 +265,12 @@ export const submissionExamples = [
     comments: [
       {
         author: "wang_manager",
-        content: "資料完整，感謝提供。請補充說明範疇三的計算方法。",
+        content: "資料完整，感謝提供。請補充說明類別3的計算方法。",
         timestamp: "2023-04-21 10:15"
       },
       {
         author: "supplier_tsmc",
-        content: "範疇三的計算基於供應鏈普查和已驗證的排放系數，詳細方法已補充在報告附錄中。",
+        content: "類別3的計算基於供應鏈普查和已驗證的排放系數，詳細方法已補充在報告附錄中。",
         timestamp: "2023-04-21 15:30"
       },
       {
@@ -291,18 +291,18 @@ export const submissionExamples = [
     reviewedAt: null,
     reviewedBy: null,
     data: {
-      "f1": "1800000", // 範疇一排放量
-      "f2": "2500000", // 範疇二排放量
-      "f3": "", // 範疇三排放量
+      "f1": "1800000", // 類別1排放量
+      "f2": "2500000", // 類別2排放量
+      "f3": "", // 類別3排放量
       "f4": "2025年實現碳中和", // 減碳目標
       "f5": [{ name: "Foxconn_Carbon_Report_2023.pdf", size: "4.8MB", uploadedAt: "2023-04-25 14:15" }], // 報告文件
       "f6": [], // 驗證文件
-      "f7": "範疇三排放量尚在統計中，將於下月提供補充資料" // 備註說明
+      "f7": "類別3排放量尚在統計中，將於下月提供補充資料" // 備註說明
     },
     comments: [
       {
         author: "assistant_manager",
-        content: "請提供範疇一和範疇二的驗證文件。",
+        content: "請提供類別1和類別2的驗證文件。",
         timestamp: "2023-04-26 09:45"
       }
     ]

@@ -397,21 +397,21 @@ export default function NewRequestPage() {
                     <p className="text-sm font-medium">組織溫室氣體排放量(單位：tCO2e):</p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1">
                       <div>
-                        <p className="text-xs font-medium">範疇一排放量:</p>
+                        <p className="text-xs font-medium">類別1排放量:</p>
                         <p className="text-sm text-muted-foreground">{request.scopeOneEmission || '0'}</p>
                         <Badge variant={request.scopeOneRequired ? "default" : "outline"} className="mt-1">
                           {request.scopeOneRequired ? "必填" : "選填"}
                         </Badge>
                       </div>
                       <div>
-                        <p className="text-xs font-medium">範疇二排放量:</p>
+                        <p className="text-xs font-medium">類別2排放量:</p>
                         <p className="text-sm text-muted-foreground">{request.scopeTwoEmission || '0'}</p>
                         <Badge variant={request.scopeTwoRequired ? "default" : "outline"} className="mt-1">
                           {request.scopeTwoRequired ? "必填" : "選填"}
                         </Badge>
                       </div>
                       <div>
-                        <p className="text-xs font-medium">範疇三排放量:</p>
+                        <p className="text-xs font-medium">類別3排放量:</p>
                         <p className="text-sm text-muted-foreground">{request.scopeThreeEmission || '0'}</p>
                         <Badge variant={request.scopeThreeRequired ? "default" : "outline"} className="mt-1">
                           {request.scopeThreeRequired ? "必填" : "選填"}
@@ -532,7 +532,7 @@ export default function NewRequestPage() {
               <div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="font-medium">範疇一排放量</div>
+                    <div className="font-medium">類別1排放量</div>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
@@ -540,7 +540,7 @@ export default function NewRequestPage() {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p className="max-w-xs">範疇一排放是指企業直接產生的溫室氣體排放，如自有設備、車輛等燃燒化石燃料所產生的排放</p>
+                        <p className="max-w-xs">類別1排放是指企業直接產生的溫室氣體排放，如自有設備、車輛等燃燒化石燃料所產生的排放</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -560,7 +560,7 @@ export default function NewRequestPage() {
               <div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="font-medium">範疇二排放量</div>
+                    <div className="font-medium">類別2排放量</div>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
@@ -568,7 +568,7 @@ export default function NewRequestPage() {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p className="max-w-xs">範疇二排放是指企業因購買電力、熱能、蒸汽等能源而間接產生的溫室氣體排放</p>
+                        <p className="max-w-xs">類別2排放是指企業因購買電力、熱能、蒸汽等能源而間接產生的溫室氣體排放</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -588,7 +588,7 @@ export default function NewRequestPage() {
               <div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="font-medium">範疇三排放量</div>
+                    <div className="font-medium">類別3排放量</div>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
@@ -596,7 +596,7 @@ export default function NewRequestPage() {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p className="max-w-xs">範疇三排放是指企業價值鏈中的其他間接排放，包括採購的商品和服務、商務旅行、員工通勤、投資等活動產生的排放</p>
+                        <p className="max-w-xs">類別3排放是指企業價值鏈中的其他間接排放，包括採購的商品和服務、商務旅行、員工通勤、投資等活動產生的排放</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>

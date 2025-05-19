@@ -13,20 +13,15 @@ import { cn } from "@/lib/utils"
 
 // 擴展路由定義，增加子路由
 const routes = [
-  // {
-  //   path: "/dashboard",
-  //   name: "儀表板",
-  //   icon: Home,
-  // },
-  // {
-  //   path: "/dashboard/projects",
-  //   name: "計畫管理",
-  //   icon: Briefcase,
-  //   subRoutes: [
-  //     { path: "/dashboard/projects/questionnaires", name: "問卷追蹤" },
-  //     { path: "/dashboard/projects/progress", name: "組織計畫" }
-  //   ]
-  // },
+  // 問卷分析改名為戰情室，移到最前面
+  {
+    path: "/dashboard/survey-results",
+    name: "碳排放戰情室",
+    icon: BarChart3,
+    subRoutes: [
+      { path: "/dashboard/survey-results/export", name: "數據匯出" }
+    ],
+  },
 
   {
     path: "/dashboard/supply-chain",
@@ -72,17 +67,6 @@ const routes = [
     hideInMainNav: true // 新增標記，表示在主導航中隱藏
   },
   
-  // 問卷分析改名為戰情室，移到供應鏈子路由中
-  {
-    path: "/dashboard/survey-results",
-    name: "戰情室",
-    icon: BarChart3,
-    subRoutes: [
-      { path: "/dashboard/survey-results/export", name: "數據匯出" }
-    ],
-    hideInMainNav: true // 新增標記，表示在主導航中隱藏
-  },
-
   // 問卷追蹤移到供應鏈子路由中
   {
     path: "/dashboard/projects/questionnaires",
@@ -128,7 +112,7 @@ const exactPathMap: Record<string, string> = {
   "/dashboard/surveys/new": "創建問卷",
   "/dashboard/my-surveys": "我的問卷",
   "/dashboard/my-surveys/history": "問卷歷史",
-  "/dashboard/survey-results": "戰情室",
+  "/dashboard/survey-results": "碳排放戰情室",
   "/dashboard/survey-results/export": "數據匯出",
   "/dashboard/projects": "計畫管理",
   "/dashboard/projects/questionnaires": "問卷追蹤",

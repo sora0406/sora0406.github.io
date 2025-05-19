@@ -95,12 +95,11 @@ const productGroups: CategoryGroup[] = [
   }
 ];
 
-// 組織溫盤的欄位 - 只保留範疇一、二、三
+// 組織溫盤的欄位 - 只保留類別1、二、三
 const organizationFields: FieldItem[] = [
-  { category: "排放量資料", field: "總排放量", defaultVisible: true },
-  { category: "排放量資料", field: "範疇一排放量", defaultVisible: true },
-  { category: "排放量資料", field: "範疇二排放量", defaultVisible: true },
-  { category: "排放量資料", field: "範疇三排放量", defaultVisible: true },
+  { category: "排放量資料", field: "類別1排放量", defaultVisible: true },
+  { category: "排放量資料", field: "類別2排放量", defaultVisible: true },
+  { category: "排放量資料", field: "類別3排放量", defaultVisible: true },
   { category: "基本資訊", field: "盤查期間", defaultVisible: false },
   { category: "基本資訊", field: "採用標準", defaultVisible: false },
   { category: "基本資訊", field: "邊界", defaultVisible: false },
@@ -135,9 +134,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "5200.000 tCO2e",
-        "範疇一排放量": "1250.000 tCO2e",
-        "範疇二排放量": "3500.000 tCO2e",
-        "範疇三排放量": "450.000 tCO2e"
+        "類別1排放量": "1250.000 tCO2e",
+        "類別2排放量": "3500.000 tCO2e",
+        "類別3排放量": "450.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -161,9 +160,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "3200.000 tCO2e",
-        "範疇一排放量": "850.000 tCO2e",
-        "範疇二排放量": "2100.000 tCO2e",
-        "範疇三排放量": "250.000 tCO2e"
+        "類別1排放量": "850.000 tCO2e",
+        "類別2排放量": "2100.000 tCO2e",
+        "類別3排放量": "250.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -187,9 +186,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "4800.000 tCO2e",
-        "範疇一排放量": "1500.000 tCO2e",
-        "範疇二排放量": "2800.000 tCO2e",
-        "範疇三排放量": "500.000 tCO2e"
+        "類別1排放量": "1500.000 tCO2e",
+        "類別2排放量": "2800.000 tCO2e",
+        "類別3排放量": "500.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -213,9 +212,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "7600.000 tCO2e",
-        "範疇一排放量": "2300.000 tCO2e",
-        "範疇二排放量": "4500.000 tCO2e",
-        "範疇三排放量": "800.000 tCO2e"
+        "類別1排放量": "2300.000 tCO2e",
+        "類別2排放量": "4500.000 tCO2e",
+        "類別3排放量": "800.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -239,9 +238,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "6800.000 tCO2e",
-        "範疇一排放量": "2100.000 tCO2e",
-        "範疇二排放量": "3900.000 tCO2e",
-        "範疇三排放量": "800.000 tCO2e"
+        "類別1排放量": "2100.000 tCO2e",
+        "類別2排放量": "3900.000 tCO2e",
+        "類別3排放量": "800.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -265,9 +264,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "2800.000 tCO2e",
-        "範疇一排放量": "950.000 tCO2e",
-        "範疇二排放量": "1650.000 tCO2e",
-        "範疇三排放量": "200.000 tCO2e"
+        "類別1排放量": "950.000 tCO2e",
+        "類別2排放量": "1650.000 tCO2e",
+        "類別3排放量": "200.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -291,9 +290,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "2200.000 tCO2e",
-        "範疇一排放量": "650.000 tCO2e",
-        "範疇二排放量": "1350.000 tCO2e",
-        "範疇三排放量": "200.000 tCO2e"
+        "類別1排放量": "650.000 tCO2e",
+        "類別2排放量": "1350.000 tCO2e",
+        "類別3排放量": "200.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -317,9 +316,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "2400.000 tCO2e",
-        "範疇一排放量": "780.000 tCO2e",
-        "範疇二排放量": "1400.000 tCO2e",
-        "範疇三排放量": "220.000 tCO2e"
+        "類別1排放量": "780.000 tCO2e",
+        "類別2排放量": "1400.000 tCO2e",
+        "類別3排放量": "220.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -343,9 +342,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "1950.000 tCO2e",
-        "範疇一排放量": "520.000 tCO2e",
-        "範疇二排放量": "1250.000 tCO2e",
-        "範疇三排放量": "180.000 tCO2e"
+        "類別1排放量": "520.000 tCO2e",
+        "類別2排放量": "1250.000 tCO2e",
+        "類別3排放量": "180.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -369,9 +368,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "9200.000 tCO2e",
-        "範疇一排放量": "3100.000 tCO2e",
-        "範疇二排放量": "5200.000 tCO2e",
-        "範疇三排放量": "900.000 tCO2e"
+        "類別1排放量": "3100.000 tCO2e",
+        "類別2排放量": "5200.000 tCO2e",
+        "類別3排放量": "900.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -395,9 +394,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "3100.000 tCO2e",
-        "範疇一排放量": "950.000 tCO2e",
-        "範疇二排放量": "1950.000 tCO2e",
-        "範疇三排放量": "200.000 tCO2e"
+        "類別1排放量": "950.000 tCO2e",
+        "類別2排放量": "1950.000 tCO2e",
+        "類別3排放量": "200.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -421,9 +420,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "4900.000 tCO2e",
-        "範疇一排放量": "1800.000 tCO2e",
-        "範疇二排放量": "2700.000 tCO2e",
-        "範疇三排放量": "400.000 tCO2e"
+        "類別1排放量": "1800.000 tCO2e",
+        "類別2排放量": "2700.000 tCO2e",
+        "類別3排放量": "400.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -447,9 +446,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "5500.000 tCO2e",
-        "範疇一排放量": "1700.000 tCO2e",
-        "範疇二排放量": "3100.000 tCO2e",
-        "範疇三排放量": "700.000 tCO2e"
+        "類別1排放量": "1700.000 tCO2e",
+        "類別2排放量": "3100.000 tCO2e",
+        "類別3排放量": "700.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -473,9 +472,9 @@ const organizationResponses: SurveyResponse[] = [
       },
       "排放量資料": {
         "總排放量": "3700.000 tCO2e",
-        "範疇一排放量": "1100.000 tCO2e",
-        "範疇二排放量": "2200.000 tCO2e",
-        "範疇三排放量": "400.000 tCO2e"
+        "類別1排放量": "1100.000 tCO2e",
+        "類別2排放量": "2200.000 tCO2e",
+        "類別3排放量": "400.000 tCO2e"
       },
       "驗證資訊": {
         "查證": "是",
@@ -654,11 +653,11 @@ const calculateCarbonStats = (responses: SurveyResponse[], year: string | null =
       return total + emission;
     }, 0);
   
-  // 計算範疇一、二、三排放量
+  // 計算類別1、二、三排放量
   const scope1Emission = filteredResponses
     .filter(response => response.type === "organization")
     .reduce((total, response) => {
-      const emissionStr = response.answers["排放量資料"]?.["範疇一排放量"] || "0";
+      const emissionStr = response.answers["排放量資料"]?.["類別1排放量"] || "0";
       const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
       return total + emission;
     }, 0);
@@ -666,7 +665,7 @@ const calculateCarbonStats = (responses: SurveyResponse[], year: string | null =
   const scope2Emission = filteredResponses
     .filter(response => response.type === "organization")
     .reduce((total, response) => {
-      const emissionStr = response.answers["排放量資料"]?.["範疇二排放量"] || "0";
+      const emissionStr = response.answers["排放量資料"]?.["類別2排放量"] || "0";
       const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
       return total + emission;
     }, 0);
@@ -674,7 +673,7 @@ const calculateCarbonStats = (responses: SurveyResponse[], year: string | null =
   const scope3Emission = filteredResponses
     .filter(response => response.type === "organization")
     .reduce((total, response) => {
-      const emissionStr = response.answers["排放量資料"]?.["範疇三排放量"] || "0";
+      const emissionStr = response.answers["排放量資料"]?.["類別3排放量"] || "0";
       const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
       return total + emission;
     }, 0);
@@ -1257,7 +1256,7 @@ export default function WarRoomPage() {
           <CardHeader className="pb-2">
             <div className="flex items-center space-x-2">
               <Shield className="h-5 w-5 text-green-500" />
-              <CardTitle className="text-sm font-medium text-muted-foreground">範疇一排放量</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">類別1排放量</CardTitle>
             </div>
             <CardDescription>直接排放</CardDescription>
           </CardHeader>
@@ -1276,7 +1275,7 @@ export default function WarRoomPage() {
           <CardHeader className="pb-2">
             <div className="flex items-center space-x-2">
               <TrendingUp className="h-5 w-5 text-blue-500" />
-              <CardTitle className="text-sm font-medium text-muted-foreground">範疇二排放量</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">類別2排放量</CardTitle>
             </div>
             <CardDescription>能源間接排放</CardDescription>
           </CardHeader>

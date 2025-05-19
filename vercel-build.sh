@@ -18,7 +18,7 @@ fi
 # 強制使用npm而非pnpm
 if [ -f ".npmrc" ]; then
   echo "Updating .npmrc"
-  echo "use-node-version=20.x" >> .npmrc
+  echo "use-node-version=18.20.3" >> .npmrc
   echo "node-linker=hoisted" >> .npmrc
   echo "prefer-frozen-lockfile=false" >> .npmrc
   echo "ignore-pnpmfile=true" >> .npmrc
