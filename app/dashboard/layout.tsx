@@ -81,7 +81,7 @@ const routes = [
     shortName: "供應商",
     icon: Users,
     subRoutes: [
-      { path: "/dashboard/suppliers/new", name: "創建供應商", navKey: "suppliers.add_new" }
+      { path: "/dashboard/suppliers/new", name: "創建供應商", navKey: "suppliers_add_new" }
     ],
   },
   {
@@ -91,7 +91,7 @@ const routes = [
     shortName: "數據",
     icon: FileText,
     subRoutes: [
-      { path: "/dashboard/requests/new", name: "創建數據要求", navKey: "requests.create_new" }
+      { path: "/dashboard/requests/new", name: "創建數據要求", navKey: "requests_create_new" }
     ],
   },
   {
@@ -132,7 +132,7 @@ const routes = [
     name: "供應商管理",
     icon: Users,
     subRoutes: [
-      { path: "/dashboard/suppliers/new", name: "創建供應商", navKey: "suppliers.add_new" }
+      { path: "/dashboard/suppliers/new", name: "創建供應商", navKey: "suppliers_add_new" }
     ],
     hideInMainNav: true // 新增標記，表示在主導航中隱藏，這是重複項
   },
@@ -143,7 +143,7 @@ const routes = [
     name: "數據要求",
     icon: FileText,
     subRoutes: [
-      { path: "/dashboard/requests/new", name: "創建數據要求", navKey: "requests.create_new" }
+      { path: "/dashboard/requests/new", name: "創建數據要求", navKey: "requests_create_new" }
     ],
     hideInMainNav: true // 新增標記，表示在主導航中隱藏，這是重複項
   },
@@ -162,7 +162,7 @@ const routes = [
     name: "問卷模板管理",
     icon: ClipboardList,
     subRoutes: [
-      { path: "/dashboard/surveys/new", name: "創建問卷", navKey: "surveys.create_new" }
+      { path: "/dashboard/surveys/new", name: "創建問卷", navKey: "surveys_create_new" }
     ],
     hidden: true, // 新增標記，表示完全隱藏
     hideInMainNav: true
@@ -174,7 +174,7 @@ const routes = [
     name: "我的問卷",
     icon: ClipboardCheck,
     subRoutes: [
-      { path: "/dashboard/my-surveys/history", name: "問卷歷史", navKey: "my_surveys.history" }
+      { path: "/dashboard/my-surveys/history", name: "問卷歷史", navKey: "my_surveys_history" }
     ],
     hidden: true, // 新增標記，表示完全隱藏
     hideInMainNav: true
@@ -194,21 +194,21 @@ const routes = [
 
 // 定義精確的路徑映射表
 const exactPathMap: Record<string, string> = {
-  "/dashboard": "儀表板",
-  "/dashboard/supply-chain": "供應鏈管理",
-  "/dashboard/suppliers": "供應商管理",
-  "/dashboard/suppliers/new": "創建供應商",
-  "/dashboard/requests": "數據要求",
-  "/dashboard/requests/new": "創建數據要求",
-  "/dashboard/surveys": "問卷模板管理",
-  "/dashboard/surveys/new": "創建問卷",
-  "/dashboard/my-surveys": "我的問卷",
-  "/dashboard/my-surveys/history": "問卷歷史",
-  "/dashboard/survey-results": "碳排放戰情室",
-  "/dashboard/survey-results/export": "數據匯出",
-  "/dashboard/projects": "計畫管理",
-  "/dashboard/projects/questionnaires": "問卷追蹤",
-  "/dashboard/projects/progress": "組織計畫",
+  "/dashboard": "dashboard",
+  "/dashboard/supply-chain": "supply_chain",
+  "/dashboard/suppliers": "suppliers", 
+  "/dashboard/suppliers/new": "suppliers_add_new",
+  "/dashboard/requests": "data_requests",
+  "/dashboard/requests/new": "requests_create_new",
+  "/dashboard/surveys": "surveys",
+  "/dashboard/surveys/new": "surveys_create_new",
+  "/dashboard/my-surveys": "my_surveys",
+  "/dashboard/my-surveys/history": "my_surveys_history",
+  "/dashboard/survey-results": "war_room",
+  "/dashboard/survey-results/export": "data_export",
+  "/dashboard/projects": "projects",
+  "/dashboard/projects/questionnaires": "questionnaires",
+  "/dashboard/projects/progress": "projects",
 };
 
 // 獲取縮寫名稱的函數
@@ -280,40 +280,40 @@ export default function DashboardLayout({
   const router = useRouter()
 
   // 使用直接的路徑映射表獲取頁面標題
-  let pageName = exactPathMap[pathname] || "供應鏈管理系統";
+  let pageNameKey = exactPathMap[pathname] || "supply_chain";
   
   // 處理動態路徑
-  if (!pageName || pageName === "供應鏈管理系統") {
+  if (!pageNameKey || pageNameKey === "supply_chain") {
     if (pathname.match(/^\/dashboard\/suppliers\/\d+\/edit/)) {
-      pageName = "編輯供應商";
+      pageNameKey = "suppliers_edit";
     } else if (pathname.match(/^\/dashboard\/suppliers\/\d+/)) {
-      pageName = "供應商詳情";
+      pageNameKey = "suppliers_details";
     } else if (pathname.match(/^\/dashboard\/requests\/\d+\/edit/)) {
-      pageName = "編輯數據要求";
+      pageNameKey = "requests_edit";
     } else if (pathname.match(/^\/dashboard\/requests\/\d+/)) {
-      pageName = "數據要求詳情";
+      pageNameKey = "requests_details";
     } else if (pathname.match(/^\/dashboard\/surveys\/\d+\/edit/)) {
-      pageName = "編輯問卷";
+      pageNameKey = "surveys_edit";
     } else if (pathname.match(/^\/dashboard\/surveys\/\d+/)) {
-      pageName = "問卷詳情";
+      pageNameKey = "surveys_details";
     } else if (pathname.match(/^\/dashboard\/my-surveys\/\d+\/history/)) {
-      pageName = "問卷版本歷史";
+      pageNameKey = "my_surveys_history";
     } else if (pathname.match(/^\/dashboard\/my-surveys\/\d+\/edit/)) {
-      pageName = "編輯問卷";
+      pageNameKey = "my_surveys_edit";
     } else if (pathname.match(/^\/dashboard\/my-surveys\/\d+/)) {
-      pageName = "問卷詳情";
+      pageNameKey = "my_surveys_details";
     } else {
       // 如果都沒匹配到，嘗試從主路由獲取名稱
       const mainRoute = routes.find(route => pathname.startsWith(route.path));
-      if (mainRoute) {
-        pageName = mainRoute.name;
+      if (mainRoute && mainRoute.navKey) {
+        pageNameKey = mainRoute.navKey;
       }
     }
   }
 
   // 輸出調試信息
   console.log('當前路徑:', pathname);
-  console.log('頁面標題:', pageName);
+  console.log('頁面標題鍵:', pageNameKey);
 
   // 生成當前頁面的麵包屑
   const breadcrumbs = generateBreadcrumbs(pathname);
@@ -575,7 +575,9 @@ export default function DashboardLayout({
 
                 {/* 功能標題 */}
                 <div className="hidden lg:block">
-                  <h1 className="text-xl font-semibold">{pageName}</h1>
+                  <h1 className="text-xl font-semibold">
+                    {tNav ? tNav(pageNameKey, {fallback: pageNameKey.split('.').pop()}) : pageNameKey}
+                  </h1>
                 </div>
 
             

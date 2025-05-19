@@ -53,6 +53,7 @@ interface Supplier {
   phone: string;
   address: string;
   country: string;
+  vehicles?: number;
   mergeRecords?: {
     sourceId: string;
     sourceName: string;
@@ -110,6 +111,7 @@ const initialSuppliers = [
     phone: "02-2216-5589",
     address: "新北市新莊區新北大道三段7號",
     country: "Taiwan",
+    vehicles: 3800,
   },
   {
     id: "2",
@@ -120,6 +122,7 @@ const initialSuppliers = [
     phone: "02-2552-5525",
     address: "台北市大同區承德路三段210號",
     country: "Taiwan",
+    vehicles: 2500,
   },
   {
     id: "3",
@@ -130,6 +133,7 @@ const initialSuppliers = [
     phone: "02-2659-5511",
     address: "台北市南港區三重路66號",
     country: "Taiwan",
+    vehicles: 2000,
   },
   {
     id: "4",
@@ -140,6 +144,7 @@ const initialSuppliers = [
     phone: "02-2500-1800",
     address: "台北市松山區民生東路三段135號",
     country: "Taiwan",
+    vehicles: 1500,
   },
   {
     id: "5",
@@ -150,6 +155,7 @@ const initialSuppliers = [
     phone: "02-2718-6168",
     address: "台北市松山區敦化北路201號",
     country: "Taiwan",
+    vehicles: 1200,
   },
   {
     id: "6",
@@ -160,6 +166,7 @@ const initialSuppliers = [
     phone: "03-3868-1288",
     address: "桃園市蘆竹區南崁路二段337號",
     country: "Taiwan",
+    vehicles: 1000,
   },
   {
     id: "7",
@@ -170,6 +177,7 @@ const initialSuppliers = [
     phone: "02-2269-5803",
     address: "新北市土城區中央路三段240號",
     country: "Taiwan",
+    vehicles: 900,
   },
   {
     id: "8",
@@ -180,6 +188,7 @@ const initialSuppliers = [
     phone: "02-2999-6788",
     address: "新北市新店區中正路516號",
     country: "Taiwan",
+    vehicles: 800,
   },
   {
     id: "9",
@@ -190,6 +199,7 @@ const initialSuppliers = [
     phone: "02-2531-3000",
     address: "台北市中山區建國北路二段258號",
     country: "Taiwan",
+    vehicles: 700,
   },
   {
     id: "10",
@@ -200,6 +210,7 @@ const initialSuppliers = [
     phone: "02-2381-3456",
     address: "台北市中正區忠孝西路一段66號",
     country: "Taiwan",
+    vehicles: 600,
   },
   {
     id: "11",
@@ -210,6 +221,7 @@ const initialSuppliers = [
     phone: "03-3932-333",
     address: "桃園市大園區三民路二段75號",
     country: "Taiwan",
+    vehicles: 500,
   },
   {
     id: "12",
@@ -220,6 +232,7 @@ const initialSuppliers = [
     phone: "02-2500-5500",
     address: "台北市南港區三重路19-3號",
     country: "Taiwan",
+    vehicles: 400,
   },
   {
     id: "13",
@@ -230,6 +243,7 @@ const initialSuppliers = [
     phone: "03-3931-3931",
     address: "桃園市大園區航勤北路3號",
     country: "Taiwan",
+    vehicles: 300,
   },
   {
     id: "14",
@@ -240,6 +254,7 @@ const initialSuppliers = [
     phone: "02-2658-5858",
     address: "台北市大安區復興南路一段137號",
     country: "Taiwan",
+    vehicles: 200,
   },
 ]
 
@@ -1001,6 +1016,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
+            <h1 className="text-xl font-bold mb-2">{translate('title', '供應商管理')}</h1>
             <p className="text-muted-foreground">
               {translate('manageSuppliersDescription', '管理您的供應商信息和數據收集流程')}
             </p>
@@ -1031,19 +1047,20 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>公司名稱</TableHead>
-                  <TableHead>國家</TableHead>
-                <TableHead>聯絡人</TableHead>
-                <TableHead>電子郵件</TableHead>
-                <TableHead>電話</TableHead>
-                <TableHead className="text-right">操作</TableHead>
+                <TableHead>{translate('company_name', '公司名稱')}</TableHead>
+                <TableHead>{translate('country', '國家')}</TableHead>
+                <TableHead>{translate('contact', '聯絡人')}</TableHead>
+                <TableHead>{translate('email', '電子郵件')}</TableHead>
+                <TableHead>{translate('phone', '電話')}</TableHead>
+                <TableHead>{translate('vehicles', '車輛數量')}</TableHead>
+                <TableHead className="text-right">{translate('action', '操作')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredSuppliers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center">
-                    沒有找到供應商
+                  <TableCell colSpan={7} className="text-center">
+                    {translate('no_supplier', '沒有找到供應商')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -1059,6 +1076,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
                     <TableCell>{supplier.contact}</TableCell>
                     <TableCell>{supplier.email}</TableCell>
                     <TableCell>{supplier.phone}</TableCell>
+                    <TableCell>{supplier.vehicles?.toLocaleString() || '-'}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                           <Dialog>

@@ -83,8 +83,8 @@ export function RequestsPage({ t }: { t: (key: string, params?: Record<string, a
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            {/* <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1> */}
-            <p className="text-smtext-muted-foreground">{t('description')}</p>
+            <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1>
+            <p className="text-smtext-muted-foreground">{t('titleDscription')}</p>
           </div>
           <div className="flex gap-2">
             <Button variant="css-secondary" onClick={() => handleNavigate("/dashboard/requests/responses")}>
