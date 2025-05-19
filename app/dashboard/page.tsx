@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback, useEffect } from "react"
 import Link from "next/link"
 import { Download, FileText, Plus, Upload, Users, ClipboardList } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { redirect, usePathname } from "next/navigation"
 import {
   Dialog,
   DialogContent,
@@ -114,6 +115,12 @@ type Supplier = {
 };
 
 export default function DashboardPage() {
+  // 檢查當前路徑，如果是根路徑 /dashboard，則重定向到 /dashboard/survey-results
+  const pathname = usePathname();
+  if (pathname === '/dashboard' || pathname.endsWith('/dashboard')) {
+    redirect('/dashboard/survey-results');
+  }
+
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false)
   const [newSupplier, setNewSupplier] = useState<Supplier>({
@@ -182,6 +189,12 @@ export default function DashboardPage() {
     setIsImportDialogOpen(false)
   }
 
+  // 添加 handleNavigate 函數
+  const handleNavigate = (path: string) => {
+    console.log("Navigating to:", path);
+    window.location.href = path;
+  };
+
   return (
     <div className="space-y-6">
       {/* 快捷功能卡片 */}
@@ -195,9 +208,11 @@ export default function DashboardPage() {
             {/* 導入供應商 */}
             <Dialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="w-full justify-start">
-                  <Download className="mr-2 h-4 w-4" />
-                  導入供應商
+                <Button  variant="css-secondary" asChild>
+                  <div className="flex items-center">
+                    <Download className="mr-2 h-4 w-4" />
+                    導入供應商111
+                  </div>
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-3xl">
@@ -300,7 +315,7 @@ export default function DashboardPage() {
             {/* 添加供應商 */}
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="css-primary" className="w-full justify-start">
                   <Plus className="mr-2 h-4 w-4" />
                   添加供應商
                 </Button>
@@ -363,19 +378,19 @@ export default function DashboardPage() {
             </Dialog>
 
             {/* 創建要求 */}
-            <Button variant="outline" className="w-full justify-start" asChild>
-              <Link href="/dashboard/requests/new">
+            <Button variant="css-primary" className="w-full justify-start" onClick={() => handleNavigate("/dashboard/requests/new")}>
+              <div className="flex items-center w-full">
                 <FileText className="mr-2 h-4 w-4" />
                 創建要求
-              </Link>
+              </div>
             </Button>
             
             {/* 創建問卷 */}
-            <Button variant="outline" className="w-full justify-start" asChild>
-              <Link href="/dashboard/surveys/new">
+            <Button variant="css-secondary" className="w-full justify-start" onClick={() => handleNavigate("/dashboard/surveys/new")}>
+              <div className="flex items-center w-full">
                 <ClipboardList className="mr-2 h-4 w-4" />
                 創建問卷
-              </Link>
+              </div>
             </Button>
           </CardContent>
         </Card>
@@ -389,8 +404,8 @@ export default function DashboardPage() {
             <div className="text-2xl font-bold">{initialSuppliers.length}</div>
             <p className="text-xs text-muted-foreground">管理您的供應商信息</p>
             <div className="mt-4">
-              <Button variant="outline" className="w-full" asChild>
-                <Link href="/dashboard/suppliers">查看所有供應商</Link>
+              <Button variant="outline" className="w-full" onClick={() => handleNavigate("/dashboard/suppliers")}>
+                查看所有供應商
               </Button>
             </div>
           </CardContent>
@@ -405,8 +420,8 @@ export default function DashboardPage() {
             <div className="text-2xl font-bold">5</div>
             <p className="text-xs text-muted-foreground">查看活躍的數據要求</p>
             <div className="mt-4">
-              <Button variant="outline" className="w-full" asChild>
-                <Link href="/dashboard/requests">查看所有要求</Link>
+              <Button variant="outline" className="w-full" onClick={() => handleNavigate("/dashboard/requests")}>
+                查看所有要求
               </Button>
             </div>
           </CardContent>
@@ -421,8 +436,8 @@ export default function DashboardPage() {
             <div className="text-2xl font-bold">3</div>
             <p className="text-xs text-muted-foreground">查看已建立的問卷</p>
             <div className="mt-4">
-              <Button variant="outline" className="w-full" asChild>
-                <Link href="/dashboard/surveys">查看所有問卷</Link>
+              <Button variant="outline" className="w-full" onClick={() => handleNavigate("/dashboard/surveys")}>
+                查看所有問卷
               </Button>
             </div>
           </CardContent>

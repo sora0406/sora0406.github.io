@@ -67,7 +67,7 @@ export default function SupplyChainPage() {
                 {module.title === "供應商管理" && "管理您的供應商資訊、聯絡人與地理分佈"}
                 {module.title === "數據要求" && "向供應商提出數據要求並追蹤回應狀態"}
                 {module.title === "問卷追蹤" && "查看問卷完成進度與催覆進度"}
-                {module.title === "碳排放戰情室" && "視覺化呈現供應鏈碳排放數據"}
+                {module.title === "戰情室" && "視覺化呈現供應鏈碳排放數據"}
               </p>
             </CardContent>
             <CardFooter className="p-4 pt-0">

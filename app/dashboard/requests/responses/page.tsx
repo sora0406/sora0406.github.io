@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import React from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -252,7 +252,7 @@ const responseData: Response[] = [
   }
 ];
 
-export default function ResponsesPage() {
+export default function ResponsesPage({ t }: { t?: any }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [responses, setResponses] = useState<Response[]>(responseData);
@@ -374,18 +374,34 @@ export default function ResponsesPage() {
     setReviewDialogOpen(true);
   };
 
+  // 如果有特定的請求ID，篩選僅顯示該請求的回應
+  useEffect(() => {
+    if (requestParam) {
+      setResponses(responseData.filter(response => response.requestId === requestParam));
+    } else {
+      setResponses(responseData);
+    }
+  }, [requestParam]);
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
-          <Button variant="ghost" size="sm" className="mb-2" onClick={() => router.push("/dashboard/requests")}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            返回數據要求
-          </Button>
-          <h1 className="text-2xl font-bold tracking-tight">數據要求回應管理</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t?.('responses_title') || '回應列表'}</h1>
           <p className="text-sm text-muted-foreground">
-            管理供應商提交的數據要求回應，進行審核和評估
+            {requestParam 
+              ? t?.('responses_for_specific_request') || `查看特定數據要求的回應` 
+              : t?.('responses_for_all_requests') || `所有要求的回應`}
           </p>
+        </div>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => router.back()}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {t?.('back') || '返回'}
+          </Button>
         </div>
       </div>
       
@@ -439,23 +455,25 @@ export default function ResponsesPage() {
       
       {/* 工具欄 */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <div className="relative max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="搜尋要求標題或供應商..."
-            className="pl-8 max-w-md"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="flex mb-4">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder={t?.('search') || "搜索供應商或請求..."}
+              className="pl-8"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
         <div className="flex gap-2 shrink-0 flex-wrap">
           <Select value={requestFilter} onValueChange={setRequestFilter}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="選擇數據要求" />
+              <SelectValue placeholder={t?.('filter') || "選擇數據要求"} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">所有數據要求</SelectItem>
+              <SelectItem value="all">{t?.('view_all') || "所有數據要求"}</SelectItem>
               {uniqueRequests.map(request => (
                 <SelectItem key={request.id} value={request.id}>
                   {request.title}
@@ -466,10 +484,10 @@ export default function ResponsesPage() {
           
           <Select value={statusFilter} onValueChange={setStatusFilter as (value: string) => void}>
             <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="篩選狀態" />
+              <SelectValue placeholder={t?.('filter') || "篩選狀態"} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">所有狀態</SelectItem>
+              <SelectItem value="all">{t?.('view_all') || "所有狀態"}</SelectItem>
               <SelectItem value="pending_review">待審核</SelectItem>
               <SelectItem value="approved">已通過</SelectItem>
               <SelectItem value="rejected">已拒絕</SelectItem>
@@ -479,76 +497,79 @@ export default function ResponsesPage() {
         </div>
       </div>
       
-      {/* 回應表格 */}
-      <div className="border rounded-md">
+      {/* 數據回應表格 */}
+      <div className="border rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>數據要求</TableHead>
-              <TableHead>供應商</TableHead>
-              <TableHead>提交時間</TableHead>
-              <TableHead>檔案數量</TableHead>
-              <TableHead>狀態</TableHead>
-              <TableHead>審核時間</TableHead>
-              <TableHead className="text-right">操作</TableHead>
+            <TableRow className="bg-slate-50">
+              <TableHead className="w-[250px]">{t?.('request_name') || "要求名稱"}</TableHead>
+              <TableHead className="w-[200px]">{t?.('supplier') || "供應商"}</TableHead>
+              <TableHead className="w-[120px]">{t?.('submission_date') || "提交日期"}</TableHead>
+              <TableHead className="w-[120px]">狀態</TableHead>
+              <TableHead>檔案</TableHead>
+              <TableHead className="text-right">{t?.('action') || "操作"}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredResponses.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground py-6">
-                  找不到符合條件的回應
+                <TableCell colSpan={6} className="h-24 text-center">
+                  沒有找到符合的回應
                 </TableCell>
               </TableRow>
             ) : (
-              filteredResponses.map((response) => (
+              filteredResponses.map(response => (
                 <TableRow key={response.id}>
-                  <TableCell className="font-medium">{response.request.title}</TableCell>
+                  <TableCell className="font-medium">
+                    <div className="flex flex-col">
+                      <span>{response.request.title}</span>
+                      <span className="text-xs text-muted-foreground">
+                        截止日期: {response.request.deadline}
+                      </span>
+                    </div>
+                  </TableCell>
                   <TableCell>
-                    <div>
-                      <div>{response.supplier.name}</div>
-                      <div className="text-xs text-muted-foreground">
+                    <div className="flex flex-col">
+                      <span>{response.supplier.name}</span>
+                      <span className="text-xs text-muted-foreground">
                         {response.supplier.companyId}
-                      </div>
+                      </span>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                      {response.submittedAt}
-                    </div>
-                  </TableCell>
-                  <TableCell>{response.files.length} 個檔案</TableCell>
+                  <TableCell>{response.submittedAt}</TableCell>
                   <TableCell>{getStatusBadge(response.status)}</TableCell>
                   <TableCell>
-                    {response.reviewedAt ? (
-                      <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                        {response.reviewedAt}
-                      </div>
-                    ) : (
-                      <span className="text-muted-foreground">尚未審核</span>
-                    )}
+                    <div className="flex flex-col gap-1">
+                      {response.files.map(file => (
+                        <div key={file.id} className="flex items-center text-sm">
+                          {getFileIcon(file.type)}
+                          <span className="ml-2">{file.name}</span>
+                          <span className="ml-1 text-xs text-muted-foreground">
+                            ({file.size})
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="sm">
                           <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">更多選項</span>
+                          <span className="sr-only">菜單</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>回應操作</DropdownMenuLabel>
+                        <DropdownMenuLabel>{t?.('action') || "操作"}</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => handleViewDetails(response)}>
                           <Eye className="h-4 w-4 mr-2" />
-                          查看詳情
+                          {t?.('view_response') || "查看回應"}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleStartReview(response)}>
                           <CheckCircle2 className="h-4 w-4 mr-2" />
-                          {response.status === "pending_review" ? "進行審核" : "修改審核"}
+                          審核
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
                         <DropdownMenuItem>
                           <Download className="h-4 w-4 mr-2" />
                           下載所有檔案
@@ -638,7 +659,7 @@ export default function ResponsesPage() {
                 setDetailsDialogOpen(false);
                 handleStartReview(selectedResponse);
               }}>
-                {selectedResponse.status === "pending_review" ? "進行審核" : "修改審核"}
+                審核
               </Button>
             </DialogFooter>
           </DialogContent>

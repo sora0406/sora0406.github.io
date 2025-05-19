@@ -11,14 +11,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { CircleIcon } from "lucide-react"
 
 // 模擬數據要求
 const initialRequests = [
   {
     id: "1",
     title: "2023年度碳排放數據收集",
+    description: "請提供貴公司2023年度的碳排放數據，包括範疇1、2和3的排放數據。",
     suppliers: ["新竹物流", "統一速達"],
-    requestedData: ["組織溫盤碳排放", "產品碳足跡"],
+    requestedData: ["組織溫室氣體排放", "產品碳足跡"],
     deadline: new Date("2023-12-31"),
     status: "active",
     reminderDays: 3,
@@ -26,6 +28,7 @@ const initialRequests = [
   {
     id: "2",
     title: "供應商基本信息更新",
+    description: "請更新貴公司的基本聯絡資訊、主要產品服務清單及認證情況。",
     suppliers: ["宅配通", "新竹物流"],
     requestedData: ["公司基本資訊"],
     deadline: new Date("2023-11-15"),
@@ -35,6 +38,7 @@ const initialRequests = [
   {
     id: "3",
     title: "產品碳足跡調查",
+    description: "請提供貴公司主要產品的碳足跡數據，包括生產、運輸和使用階段的碳排放資訊。",
     suppliers: ["統一速達"],
     requestedData: ["產品碳足跡"],
     deadline: new Date("2023-10-30"),
@@ -43,9 +47,15 @@ const initialRequests = [
   },
 ]
 
-export default function RequestsPage() {
+export function RequestsPage({ t }: { t: (key: string, params?: Record<string, any>) => string }) {
   const [requests, setRequests] = useState(initialRequests)
   const [searchTerm, setSearchTerm] = useState("")
+  
+  // 添加 handleNavigate 函數
+  const handleNavigate = (path: string) => {
+    console.log("Navigating to:", path);
+    window.location.href = path;
+  };
 
   // 過濾數據要求
   const filteredRequests = requests.filter(
@@ -58,13 +68,13 @@ export default function RequestsPage() {
   const getStatusBadge = (status: "active" | "completed" | "expired" | string) => {
     switch (status) {
       case "active":
-        return <Badge className="bg-green-500">進行中</Badge>
+        return <Badge className="bg-green-500">{t('status_active')}</Badge>
       case "completed":
-        return <Badge className="bg-blue-500">已完成</Badge>
+        return <Badge className="bg-blue-500">{t('status_completed')}</Badge>
       case "expired":
-        return <Badge variant="destructive">已過期</Badge>
+        return <Badge variant="destructive">{t('status_expired')}</Badge>
       default:
-        return <Badge variant="outline">未知</Badge>
+        return <Badge variant="outline">{t('status_unknown')}</Badge>
     }
   }
 
@@ -73,21 +83,17 @@ export default function RequestsPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            {/* <h1 className="text-2xl font-bold tracking-tight">數據要求</h1> */}
-            <p className="text-smtext-muted-foreground">管理您向供應商發送的數據要求</p>
+            {/* <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1> */}
+            <p className="text-smtext-muted-foreground">{t('description')}</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" asChild>
-              <Link href="/dashboard/requests/responses">
-                <MessageSquare className="mr-2 h-4 w-4" />
-                查看回應
-              </Link>
+            <Button variant="css-secondary" onClick={() => handleNavigate("/dashboard/requests/responses")}>
+              <MessageSquare className="mr-2 h-4 w-4" />
+              {t('view_response')}
             </Button>
-            <Button asChild>
-              <Link href="/dashboard/requests/new">
-                <Plus className="mr-2 h-4 w-4" />
-                創建要求
-              </Link>
+            <Button variant="css-primary" onClick={() => handleNavigate("/dashboard/requests/new")}>
+              <Plus className="mr-2 h-4 w-4" />
+              {t('new_request')}
             </Button>
           </div>
         </div>
@@ -100,7 +106,7 @@ export default function RequestsPage() {
             <div className="m-4 flex items-center gap-2">
               <Search className="h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="搜索數據要求..."
+                placeholder={t('search')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="max-w-sm"
@@ -109,63 +115,46 @@ export default function RequestsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>標題</TableHead>
-                  <TableHead>供應商</TableHead>
-                  <TableHead>要求數據</TableHead>
-                  <TableHead>截止日期</TableHead>
-                  <TableHead>提醒設定</TableHead>
-                  <TableHead>狀態</TableHead>
-                  <TableHead className="text-right">操作</TableHead>
+                  <TableHead>{t('request_name')}</TableHead>
+                  <TableHead>{t('suppliers')}</TableHead>
+                  <TableHead>{t('deadline')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
+                  <TableHead className="text-right">{t('action')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredRequests.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center">
-                      沒有找到數據要求
+                      {t('no_requests_found')}
                     </TableCell>
                   </TableRow>
                 ) : (
                   filteredRequests.map((request) => (
                     <TableRow key={request.id}>
-                      <TableCell className="font-medium">{request.title}</TableCell>
-                      <TableCell>{request.suppliers.join(", ")}</TableCell>
-                      <TableCell>{request.requestedData.join(", ")}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                          {format(request.deadline, "yyyy-MM-dd")}
-                        </div>
+                      <TableCell className="font-medium">
+                        <div className="text-base font-medium">{request.title}</div>
+                        <div className="text-sm text-muted-foreground">{request.description}</div>
                       </TableCell>
-                      <TableCell>到期前 {request.reminderDays} 天</TableCell>
+                      <TableCell>
+                        {request.suppliers.map((supplier: any, idx: number) => (
+                          <div className="flex items-center gap-2" key={idx}>
+                            <CircleIcon className="h-2 w-2" />
+                            <span className="text-sm">{supplier}</span>
+                          </div>
+                        ))}
+                      </TableCell>
+                      <TableCell>{format(request.deadline, "yyyy-MM-dd")}</TableCell>
                       <TableCell>{getStatusBadge(request.status)}</TableCell>
-                      <TableCell className="text-right">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button variant="outline" size="icon" asChild>
-                              <Link href={`/dashboard/requests/${request.id}`}>
-                                <Eye className="h-4 w-4" />
-                                <span className="sr-only">查看</span>
-                              </Link>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>查看</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button variant="outline" size="icon" asChild className="ml-2">
-                              <Link href={`/dashboard/requests/responses?request=${request.id}`}>
-                                <MessageSquare className="h-4 w-4" />
-                                <span className="sr-only">查看回應</span>
-                              </Link>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>查看回應</p>
-                          </TooltipContent>
-                        </Tooltip>
+                      <TableCell className="flex space-x-2">
+                        <Button variant="outline" size="sm" onClick={() => handleNavigate(`/dashboard/requests/${request.id}`)}>
+                          <Eye className="h-4 w-4 mr-1" />
+                          {t('view')}
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => handleNavigate(`/dashboard/requests/responses?request=${request.id}`)}>
+                          <MessageSquare className="h-4 w-4 mr-1" />
+                          {t('view_response')}
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))
@@ -178,3 +167,6 @@ export default function RequestsPage() {
     </TooltipProvider>
   )
 }
+
+// 在檔案最後添加預設導出
+export default RequestsPage;

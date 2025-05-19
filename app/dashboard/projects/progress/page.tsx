@@ -84,7 +84,7 @@ const initialColumns: Columns = {
   },
 }
 
-export default function ProjectProgressPage() {
+export function ProjectProgressPage() {
   const [columns, setColumns] = useState<Columns>(initialColumns)
 
   const onDragEnd = (result: DropResult) => {
@@ -142,7 +142,7 @@ export default function ProjectProgressPage() {
     <div className="flex-1 space-y-4  ">
       <div className="flex items-center justify-between space-y-2">
       <div className="flex items-center space-x-2">
-          <Button>
+          <Button variant="css-primary">
             <Plus className="mr-2 h-4 w-4" />
             新增任務
           </Button>
@@ -235,4 +235,7 @@ export default function ProjectProgressPage() {
       </DragDropContext>
     </div>
   )
-} 
+}
+
+// 提供默認導出
+export default ProjectProgressPage 

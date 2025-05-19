@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react"
 import { 
   BarChart3, ChevronDown, Download, Filter, Search, PieChart, Clock, Calendar,
   TrendingUp, Target, BarChart, AlertTriangle, Truck, Factory, Shield, Users,
-  MapPin, ArrowUpDown, ArrowDown, BarChart2
+  MapPin, ArrowUpDown, ArrowDown, BarChart2, Eye
 } from "lucide-react"
 import { format } from "date-fns"
 import dynamic from 'next/dynamic'
@@ -133,10 +133,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "5200.000 tCO2e",
-        "類別1排放量": "1250.000 tCO2e",
-        "類別2排放量": "3500.000 tCO2e",
-        "類別3排放量": "450.000 tCO2e"
+        "總排放量": "5200.000",
+        "類別1排放量": "1250.000",
+        "類別2排放量": "3500.000",
+        "類別3排放量": "450.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -159,10 +159,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "股權比例法"
       },
       "排放量資料": {
-        "總排放量": "3200.000 tCO2e",
-        "類別1排放量": "850.000 tCO2e",
-        "類別2排放量": "2100.000 tCO2e",
-        "類別3排放量": "250.000 tCO2e"
+        "總排放量": "3200.000",
+        "類別1排放量": "850.000",
+        "類別2排放量": "2100.000",
+        "類別3排放量": "250.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -185,10 +185,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "4800.000 tCO2e",
-        "類別1排放量": "1500.000 tCO2e",
-        "類別2排放量": "2800.000 tCO2e",
-        "類別3排放量": "500.000 tCO2e"
+        "總排放量": "4800.000",
+        "類別1排放量": "1500.000",
+        "類別2排放量": "2800.000",
+        "類別3排放量": "500.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -211,10 +211,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "7600.000 tCO2e",
-        "類別1排放量": "2300.000 tCO2e",
-        "類別2排放量": "4500.000 tCO2e",
-        "類別3排放量": "800.000 tCO2e"
+        "總排放量": "7600.000",
+        "類別1排放量": "2300.000",
+        "類別2排放量": "4500.000",
+        "類別3排放量": "800.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -237,10 +237,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "6800.000 tCO2e",
-        "類別1排放量": "2100.000 tCO2e",
-        "類別2排放量": "3900.000 tCO2e",
-        "類別3排放量": "800.000 tCO2e"
+        "總排放量": "6800.000",
+        "類別1排放量": "2100.000",
+        "類別2排放量": "3900.000",
+        "類別3排放量": "800.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -263,10 +263,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "股權比例法"
       },
       "排放量資料": {
-        "總排放量": "2800.000 tCO2e",
-        "類別1排放量": "950.000 tCO2e",
-        "類別2排放量": "1650.000 tCO2e",
-        "類別3排放量": "200.000 tCO2e"
+        "總排放量": "2800.000",
+        "類別1排放量": "950.000",
+        "類別2排放量": "1650.000",
+        "類別3排放量": "200.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -289,10 +289,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "2200.000 tCO2e",
-        "類別1排放量": "650.000 tCO2e",
-        "類別2排放量": "1350.000 tCO2e",
-        "類別3排放量": "200.000 tCO2e"
+        "總排放量": "2200.000",
+        "類別1排放量": "650.000",
+        "類別2排放量": "1350.000",
+        "類別3排放量": "200.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -315,10 +315,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "2400.000 tCO2e",
-        "類別1排放量": "780.000 tCO2e",
-        "類別2排放量": "1400.000 tCO2e",
-        "類別3排放量": "220.000 tCO2e"
+        "總排放量": "2400.000",
+        "類別1排放量": "780.000",
+        "類別2排放量": "1400.000",
+        "類別3排放量": "220.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -341,10 +341,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "1950.000 tCO2e",
-        "類別1排放量": "520.000 tCO2e",
-        "類別2排放量": "1250.000 tCO2e",
-        "類別3排放量": "180.000 tCO2e"
+        "總排放量": "1950.000",
+        "類別1排放量": "520.000",
+        "類別2排放量": "1250.000",
+        "類別3排放量": "180.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -367,10 +367,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "股權比例法"
       },
       "排放量資料": {
-        "總排放量": "9200.000 tCO2e",
-        "類別1排放量": "3100.000 tCO2e",
-        "類別2排放量": "5200.000 tCO2e",
-        "類別3排放量": "900.000 tCO2e"
+        "總排放量": "9200.000",
+        "類別1排放量": "3100.000",
+        "類別2排放量": "5200.000",
+        "類別3排放量": "900.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -393,10 +393,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "3100.000 tCO2e",
-        "類別1排放量": "950.000 tCO2e",
-        "類別2排放量": "1950.000 tCO2e",
-        "類別3排放量": "200.000 tCO2e"
+        "總排放量": "3100.000",
+        "類別1排放量": "950.000",
+        "類別2排放量": "1950.000",
+        "類別3排放量": "200.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -419,10 +419,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "4900.000 tCO2e",
-        "類別1排放量": "1800.000 tCO2e",
-        "類別2排放量": "2700.000 tCO2e",
-        "類別3排放量": "400.000 tCO2e"
+        "總排放量": "4900.000",
+        "類別1排放量": "1800.000",
+        "類別2排放量": "2700.000",
+        "類別3排放量": "400.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -445,10 +445,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "股權比例法"
       },
       "排放量資料": {
-        "總排放量": "5500.000 tCO2e",
-        "類別1排放量": "1700.000 tCO2e",
-        "類別2排放量": "3100.000 tCO2e",
-        "類別3排放量": "700.000 tCO2e"
+        "總排放量": "5500.000",
+        "類別1排放量": "1700.000",
+        "類別2排放量": "3100.000",
+        "類別3排放量": "700.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -471,10 +471,10 @@ const organizationResponses: SurveyResponse[] = [
         "邊界": "營運控制權法"
       },
       "排放量資料": {
-        "總排放量": "3700.000 tCO2e",
-        "類別1排放量": "1100.000 tCO2e",
-        "類別2排放量": "2200.000 tCO2e",
-        "類別3排放量": "400.000 tCO2e"
+        "總排放量": "3700.000",
+        "類別1排放量": "1100.000",
+        "類別2排放量": "2200.000",
+        "類別3排放量": "400.000"
       },
       "驗證資訊": {
         "查證": "是",
@@ -722,7 +722,15 @@ const taiwanRegions = [
   { id: "international", name: "國際", suppliers: ["長榮國際儲運", "中國貨櫃運輸"], lat: 25.077760, lng: 121.233561 }
 ];
 
-export default function WarRoomPage() {
+export default function WarRoomPage({ 
+  tDashboard, 
+  tWarRoom, 
+  tCommon 
+}: { 
+  tDashboard?: any, 
+  tWarRoom?: any, 
+  tCommon?: any 
+}) {
   // 狀態管理
   const [searchText, setSearchText] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
@@ -975,7 +983,7 @@ export default function WarRoomPage() {
           colors: ['#333']
         },
         formatter: function(val: number, opt: any) {
-          return val.toFixed(2) + ' tCO2e';
+          return val.toFixed(2) + '';
         }
       },
       colors: ['#0284c7', '#0369a1', '#075985', '#0c4a6e', '#082f49'],
@@ -1000,7 +1008,7 @@ export default function WarRoomPage() {
       yaxis: {
         labels: {
           formatter: function(val: number) {
-            return val.toFixed(0) + ' tCO2e';
+            return val.toFixed(0) + '';
           },
           style: {
             fontSize: '12px'
@@ -1015,7 +1023,7 @@ export default function WarRoomPage() {
         }
       },
       title: {
-        text: '組織溫室氣體排放量 (tCO2e)',
+        text: tWarRoom?.('tags.organization_emission') || '組織溫室氣體排放量 (tCO2e)',
         align: 'center',
         style: {
           fontSize: '14px',
@@ -1025,7 +1033,7 @@ export default function WarRoomPage() {
         offsetY: 10
       },
       subtitle: {
-        text: selectedYear ? `${selectedYear}年度數據` : '所有年度數據',
+        text: selectedYear ? (tWarRoom?.('tags.data_year', {year: selectedYear}) || `${selectedYear}年度數據`) : (tWarRoom?.('tags.all_years') || '所有年度'),
         align: 'center',
         style: {
           fontSize: '12px',
@@ -1036,7 +1044,7 @@ export default function WarRoomPage() {
       tooltip: {
         y: {
           formatter: function(val: number) {
-            return val.toFixed(2) + ' tCO2e';
+            return val.toFixed(2) + '';
           }
         },
         theme: 'light',
@@ -1053,7 +1061,7 @@ export default function WarRoomPage() {
         show: false
       }
     };
-  }, [topEmitters.organization, selectedYear]);
+  }, [topEmitters.organization, selectedYear, tWarRoom]);
   
   // 生成產品碳足跡圖表配置
   const productChartOptions = useMemo<ApexOptions>(() => {
@@ -1139,7 +1147,7 @@ export default function WarRoomPage() {
         }
       },
       title: {
-        text: '貨運服務碳足跡',
+        text: tWarRoom?.('tags.product_footprint') || '產品碳足跡 (kgCO2e)',
         align: 'center',
         style: {
           fontSize: '14px',
@@ -1149,7 +1157,7 @@ export default function WarRoomPage() {
         offsetY: 10
       },
       subtitle: {
-        text: selectedYear ? `${selectedYear}年度數據` : '所有年度數據',
+        text: selectedYear ? (tWarRoom?.('tags.data_year', {year: selectedYear}) || `${selectedYear}年度數據`) : (tWarRoom?.('tags.all_years') || '所有年度'),
         align: 'center',
         style: {
           fontSize: '12px',
@@ -1178,15 +1186,15 @@ export default function WarRoomPage() {
         show: false
       }
     };
-  }, [topEmitters.product, selectedYear]);
+  }, [topEmitters.product, selectedYear, tWarRoom]);
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">碳排放戰情室</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{tWarRoom?.('title') || '戰情室'}</h1>
           <p className="text-sm text-muted-foreground">
-            監控供應鏈碳排放狀況，追蹤減碳進度
+            {tWarRoom?.('subtitle') || '監控供應鏈碳排放狀況，追蹤減碳進度'}
           </p>
         </div>
         
@@ -1201,7 +1209,7 @@ export default function WarRoomPage() {
               <SelectValue placeholder="選擇年份" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">所有年份</SelectItem>
+              <SelectItem value="all">{tWarRoom?.('tags.all_years') || '所有年份'}</SelectItem>
               {availableYears.map(year => (
                 <SelectItem key={year} value={year}>{year}年</SelectItem>
               ))}
@@ -1211,112 +1219,113 @@ export default function WarRoomPage() {
       </div>
       
       {/* 數據儀表板 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-white">
-          <CardHeader className="pb-2">
-            <div className="flex items-center space-x-2">
-              <Truck className="h-5 w-5 text-blue-500" />
-              <CardTitle className="text-sm font-medium text-muted-foreground">貨運服務碳足跡總量</CardTitle>
-            </div>
-            <CardDescription>
-              {selectedYear ? `${selectedYear}年` : '所有年份'}
-            </CardDescription>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {tWarRoom?.('statistics.total_responses') || '總回覆數'}
+            </CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {stats.productTotalFootprint} <span className="text-sm font-normal">kgCO2e/噸公里</span>
-                </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              來自 {stats.productCount} 家供應商
+            <div className="text-2xl font-bold">{stats.totalResponses}</div>
+            <p className="text-xs text-muted-foreground">
+              {selectedYear ? `${selectedYear}${tWarRoom?.('tags.data_year', {year: selectedYear}) || '年度數據'}` : tWarRoom?.('tags.all_years') || '所有年度'}
             </p>
           </CardContent>
         </Card>
-        
-        <Card className="bg-white">
-          <CardHeader className="pb-2">
-            <div className="flex items-center space-x-2">
-              <Factory className="h-5 w-5 text-slate-500" />
-              <CardTitle className="text-sm font-medium text-muted-foreground">組織總排放量</CardTitle>
-              </div>
-            <CardDescription>
-              {selectedYear ? `${selectedYear}年` : '所有年份'}
-            </CardDescription>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {tWarRoom?.('statistics.carbon_footprint') || '產品總碳足跡'}
+            </CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {stats.orgTotalEmission} <span className="text-sm font-normal">tCO2e</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              來自 {stats.orgCount} 家供應商
+            <div className="text-2xl font-bold">{stats.productTotalFootprint} kgCO2e</div>
+            <p className="text-xs text-muted-foreground">
+              {tWarRoom?.('summary.product_suppliers') || '產品碳足跡供應商'}: {stats.productCount}
             </p>
           </CardContent>
         </Card>
-        
-        <Card className="bg-white">
-          <CardHeader className="pb-2">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-5 w-5 text-green-500" />
-              <CardTitle className="text-sm font-medium text-muted-foreground">類別1排放量</CardTitle>
-            </div>
-            <CardDescription>直接排放</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {stats.scope1Emission} <span className="text-sm font-normal">tCO2e</span>
-                </div>
-            <Progress 
-              value={scopePercentages.scope1} 
-              className="h-2 mt-2 bg-muted"
-            />
+      <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {tWarRoom?.('statistics.total_emission') || '組織總排放量'}
+          </CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+            <div className="text-2xl font-bold">{stats.orgTotalEmission} tCO2e</div>
+            <p className="text-xs text-muted-foreground">
+              {tWarRoom?.('summary.org_suppliers') || '組織排放供應商'}: {stats.orgCount}
+            </p>
           </CardContent>
         </Card>
-        
-        <Card className="bg-white">
-          <CardHeader className="pb-2">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-5 w-5 text-blue-500" />
-              <CardTitle className="text-sm font-medium text-muted-foreground">類別2排放量</CardTitle>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {tWarRoom?.('scope_distribution') || '排放類別分佈'}
+            </CardTitle>
+            <PieChart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between gap-1">
+              <div className="flex-1">
+                <div className="mb-1 flex items-center">
+                  <div className="h-2 w-2 rounded-full bg-blue-500 mr-1"></div>
+                  <span className="text-xs">{tWarRoom?.('scope1') || '範疇 1'}</span>
+                  <span className="ml-auto text-xs">{scopePercentages.scope1.toFixed(1)}%</span>
               </div>
-            <CardDescription>能源間接排放</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {stats.scope2Emission} <span className="text-sm font-normal">tCO2e</span>
-            </div>
-            <Progress 
-              value={scopePercentages.scope2} 
-              className="h-2 mt-2 bg-muted"
-            />
+                <Progress value={scopePercentages.scope1} className="h-1 bg-slate-200" />
+                      </div>
+              <div className="flex-1">
+                <div className="mb-1 flex items-center">
+                  <div className="h-2 w-2 rounded-full bg-indigo-500 mr-1"></div>
+                  <span className="text-xs">{tWarRoom?.('scope2') || '範疇 2'}</span>
+                  <span className="ml-auto text-xs">{scopePercentages.scope2.toFixed(1)}%</span>
+                    </div>
+                <Progress value={scopePercentages.scope2} className="h-1 bg-slate-200" />
+                        </div>
+              <div className="flex-1">
+                <div className="mb-1 flex items-center">
+                  <div className="h-2 w-2 rounded-full bg-slate-500 mr-1"></div>
+                  <span className="text-xs">{tWarRoom?.('scope3') || '範疇 3'}</span>
+                  <span className="ml-auto text-xs">{scopePercentages.scope3.toFixed(1)}%</span>
+                        </div>
+                <Progress value={scopePercentages.scope3} className="h-1 bg-slate-200" />
+                        </div>
+                        </div>
           </CardContent>
         </Card>
-      </div>
-      
+                    </div>
+                    
       {/* 數據可視化圖表 */}
       <Card>
         <CardHeader>
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <CardTitle>供應商碳排放視覺化</CardTitle>
+            <CardTitle>{tWarRoom?.('supplier_carbon_data') || '供應商碳排放視覺化'}</CardTitle>
             <div className="flex items-center space-x-2 mt-2 md:mt-0">
-              <Button 
+                          <Button 
                 variant={activeChart === "suppliers" ? "default" : "outline"} 
-                size="sm"
+                            size="sm" 
                 onClick={() => setActiveChart("suppliers")}
                 className="flex items-center gap-1"
-              >
+                          >
                 <BarChart2 className="h-4 w-4" />
-                排放量排名
-              </Button>
-              <Button 
+                {tWarRoom?.('chart_options.suppliers') || '排放量排名'}
+                          </Button>
+                          <Button 
                 variant={activeChart === "map" ? "default" : "outline"} 
-                size="sm"
+                            size="sm" 
                 onClick={() => setActiveChart("map")}
                 className="flex items-center gap-1"
-              >
+                          >
                 <MapPin className="h-4 w-4" />
-                供應商分佈
-              </Button>
-            </div>
-          </div>
+                {tWarRoom?.('chart_options.map') || '供應商分佈'}
+                          </Button>
+                        </div>
+                      </div>
         </CardHeader>
         <CardContent>
           {activeChart === "suppliers" ? (
@@ -1339,22 +1348,22 @@ export default function WarRoomPage() {
                     ) : (
                       <div className="flex items-center justify-center h-full">
                         <p className="text-muted-foreground">沒有可用數據</p>
-              </div>
+                                  </div>
                     )}
-                      </div>
+                            </div>
                   
                   {/* 前五大組織排放量列表 */}
                   <Card className="mt-4">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium">前五大組織碳排放供應商</CardTitle>
+                      <CardTitle className="text-sm font-medium">{tWarRoom?.('top_emitters.organization_title') || '前五大組織碳排放供應商'}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-0">
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead className="w-[50px]">排名</TableHead>
-                            <TableHead>供應商名稱</TableHead>
-                            <TableHead className="text-right">排放量</TableHead>
+                            <TableHead className="w-[50px]">{tWarRoom?.('top_emitters.rank') || '排名'}</TableHead>
+                            <TableHead>{tWarRoom?.('top_emitters.supplier_name') || '供應商名稱'}</TableHead>
+                            <TableHead className="text-right">{tWarRoom?.('top_emitters.emission') || '排放量'}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -1369,7 +1378,7 @@ export default function WarRoomPage() {
                       </Table>
                     </CardContent>
                   </Card>
-                    </div>
+              </div>
                 
                 {/* 使用 ApexCharts 的產品碳足跡排名 */}
                 <div className="space-y-3">
@@ -1389,20 +1398,20 @@ export default function WarRoomPage() {
                         <p className="text-muted-foreground">沒有可用數據</p>
                         </div>
                     )}
-                        </div>
-                  
+            </div>
+            
                   {/* 前五大產品碳足跡列表 */}
                   <Card className="mt-4">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium">前五大產品碳足跡供應商</CardTitle>
+                      <CardTitle className="text-sm font-medium">{tWarRoom?.('top_emitters.product_title') || '前五大產品碳足跡供應商'}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-0">
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead className="w-[50px]">排名</TableHead>
-                            <TableHead>供應商名稱</TableHead>
-                            <TableHead className="text-right">碳足跡</TableHead>
+                            <TableHead className="w-[50px]">{tWarRoom?.('top_emitters.rank') || '排名'}</TableHead>
+                            <TableHead>{tWarRoom?.('top_emitters.supplier_name') || '供應商名稱'}</TableHead>
+                            <TableHead className="text-right">{tWarRoom?.('top_emitters.carbon_footprint') || '碳足跡'}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -1424,7 +1433,7 @@ export default function WarRoomPage() {
             <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center">
                 <MapPin className="h-5 w-5 text-green-500 mr-2" />
-                供應商區域分佈
+                {tWarRoom?.('regional_distribution.title') || '供應商區域分佈'}
               </h3>
               
               {/* 台灣地圖模擬 */}
@@ -1508,12 +1517,12 @@ export default function WarRoomPage() {
                       <CardContent>
                         <div className="space-y-1">
                           <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">供應商數量:</span>
+                            <span className="text-sm text-muted-foreground">{tWarRoom?.('regional_distribution.supplier_count') || '供應商數量'}:</span>
                             <span className="font-medium">{region.count}</span>
                                   </div>
                           <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">排放總量:</span>
-                            <span className="font-medium">{region.totalEmission} tCO2e</span>
+                            <span className="text-sm text-muted-foreground">{tWarRoom?.('regional_distribution.total_emission') || '排放總量'}:</span>
+                            <span className="font-medium">{region.totalEmission}</span>
                             </div>
                         </div>
                       </CardContent>
@@ -1529,13 +1538,13 @@ export default function WarRoomPage() {
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle>供應商碳排放資料</CardTitle>
+            <CardTitle>{tWarRoom?.('supplier_carbon_data') || '供應商碳排放資料'}</CardTitle>
             <div className="flex items-center gap-2">
               <div className="relative w-60">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder="搜尋供應商..."
+                  placeholder={tWarRoom?.('filters.search') || '搜尋供應商...'}
                   className="pl-8"
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
@@ -1543,11 +1552,11 @@ export default function WarRoomPage() {
               </div>
               <Button variant="outline" size="sm" onClick={() => setShowDate(!showDate)}>
                 <Clock className="h-4 w-4 mr-1" />
-                {showDate ? "隱藏日期" : "顯示日期"}
+                {showDate ? (tWarRoom?.('filters.hide_date') || '隱藏日期') : (tWarRoom?.('filters.toggle_date') || '顯示日期')}
               </Button>
               <Button variant="outline" size="sm">
                 <Download className="h-4 w-4 mr-1" />
-                匯出
+                {tWarRoom?.('filters.export') || '匯出'}
               </Button>
             </div>
           </div>
@@ -1557,11 +1566,11 @@ export default function WarRoomPage() {
             <Tabs value={tabValue} onValueChange={handleTabChange}>
               <TabsList>
                 <TabsTrigger value="product" className="relative">
-                  產品碳足跡
+                  {tWarRoom?.('data_table.product_carbon_footprint') || '產品碳足跡'}
                   <Badge className="ml-2 bg-blue-500">{filteredResponses.filter(r => r.type === "product").length}</Badge>
                     </TabsTrigger>
                 <TabsTrigger value="organization">
-                  組織溫室氣體排放
+                  {tWarRoom?.('data_table.org_ghg_emission') || '組織溫室氣體排放'}
                   <Badge className="ml-2 bg-slate-500">{filteredResponses.filter(r => r.type === "organization").length}</Badge>
                 </TabsTrigger>
                 </TabsList>
@@ -1574,11 +1583,11 @@ export default function WarRoomPage() {
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" size="sm" className="flex items-center gap-1">
                           <Filter className="h-4 w-4" />
-                          顯示欄位
+                          {tWarRoom?.('filters.display_fields') || '顯示欄位'}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuLabel>選擇要顯示的欄位</DropdownMenuLabel>
+                        <DropdownMenuLabel>{tWarRoom?.('filters.select_fields') || '選擇要顯示的欄位'}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {(tabValue === "organization" ? organizationFields : productFields).map((field) => (
                           <DropdownMenuCheckboxItem
@@ -1616,7 +1625,7 @@ export default function WarRoomPage() {
                             <Table>
                               <TableHeader>
                                 <TableRow>
-                            <TableHead className="w-[180px]">供應商</TableHead>
+                            <TableHead className="w-[180px]">{tWarRoom?.('data_table.supplier') || '供應商'}</TableHead>
                             
                             {selectedFields.map((fieldInfo) => (
                                     <TableHead key={fieldInfo.id} className="whitespace-nowrap">
@@ -1625,10 +1634,10 @@ export default function WarRoomPage() {
                                   ))}
                                   
                             {showDate && (
-                              <TableHead className="whitespace-nowrap">完成日期</TableHead>
+                              <TableHead className="whitespace-nowrap">{tWarRoom?.('data_table.completion_date') || '完成日期'}</TableHead>
                             )}
                             
-                            <TableHead className="text-right">操作</TableHead>
+                            <TableHead className="text-right">{tWarRoom?.('data_table.actions') || '操作'}</TableHead>
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
@@ -1638,7 +1647,7 @@ export default function WarRoomPage() {
                                 colSpan={selectedFields.length + 3} 
                                 className="h-24 text-center"
                               >
-                                沒有符合條件的數據
+                                {tWarRoom?.('data_table.no_data') || '沒有符合條件的數據'}
                                     </TableCell>
                                   </TableRow>
                                 ) : (
@@ -1670,7 +1679,7 @@ export default function WarRoomPage() {
                                           onClick={() => viewOriginalSurvey(response.id)}
                                         >
                                           <BarChart3 className="h-4 w-4 mr-1" />
-                                    查看詳情
+                                    {tWarRoom?.('data_table.view_survey') || '查看詳情'}
                                         </Button>
                                       </TableCell>
                                     </TableRow>

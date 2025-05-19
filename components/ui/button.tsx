@@ -18,12 +18,16 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        "css-primary": "bg-[#3A81C5] text-white hover:bg-[#2E679E] rounded-[8px] focus:outline-2 focus:outline-transparent focus:shadow-[0_0_0_2px_rgba(58,129,197,0.3)] text-xs",
+        "css-secondary": "bg-transparent text-[#3A81C5] border border-[#3A81C5] hover:bg-[#3A81C5]/10 rounded-[8px] focus:outline-2 focus:outline-transparent focus:shadow-[0_0_0_2px_rgba(58,129,197,0.3)] text-xs",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        "css-primary": "h-[31px] px-3 py-1.5",
+        "css-secondary": "h-[32px] px-3 py-0",
       },
     },
     defaultVariants: {
@@ -41,14 +45,49 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+    const isCssPrimary = className?.includes("css-primary");
+    const isCssSecondary = className?.includes("css-secondary");
+    
+    let variantToUse = variant;
+    if (isCssPrimary) variantToUse = "css-primary";
+    if (isCssSecondary) variantToUse = "css-secondary";
+    
+    // 根據變體自動選擇對應的size
+    let sizeToUse = size;
+    if (variantToUse === "css-primary") sizeToUse = "css-primary";
+    if (variantToUse === "css-secondary") sizeToUse = "css-secondary";
+    
+    const finalClassName = className
+      ?.replace("css-primary", "")
+      ?.replace("css-secondary", "")
+      ?.trim() || "";
+
+    // 計算最終的 className
+    const combinedClassName = cn(
+      buttonVariants({ 
+        variant: variantToUse, 
+        size: sizeToUse, 
+        className: finalClassName 
+      })
+    );
+    
+    if (asChild) {
+      return (
+        <Slot 
+          className={combinedClassName} 
+          ref={ref} 
+          {...props} 
+        />
+      );
+    }
+    
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+      <button
+        className={combinedClassName}
         ref={ref}
         {...props}
       />
-    )
+    );
   }
 )
 Button.displayName = "Button"

@@ -201,7 +201,7 @@ const questionnaires: Questionnaire[] = [
   },
 ]
 
-export default function QuestionnairePage() {
+export function QuestionnairePage() {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
@@ -527,4 +527,7 @@ export default function QuestionnairePage() {
       )}
     </div>
   )
-} 
+}
+
+// 提供默認導出
+export default QuestionnairePage 

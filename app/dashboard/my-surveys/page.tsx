@@ -134,8 +134,10 @@ export default function MySurveysPage() {
             <TooltipTrigger asChild>
               <Button variant="outline" size="icon" asChild>
                 <Link href={`/dashboard/my-surveys/${survey.id}`}>
-                  <PenSquare className="h-4 w-4" />
-                  <span className="sr-only">開始填寫</span>
+                  <div className="flex items-center justify-center">
+                    <PenSquare className="h-4 w-4" />
+                    <span className="sr-only">開始填寫</span>
+                  </div>
                 </Link>
               </Button>
             </TooltipTrigger>
@@ -150,8 +152,10 @@ export default function MySurveysPage() {
             <TooltipTrigger asChild>
               <Button variant="outline" size="icon" asChild>
                 <Link href={`/dashboard/my-surveys/${survey.id}`}>
-                  <PenSquare className="h-4 w-4" />
-                  <span className="sr-only">繼續填寫</span>
+                  <div className="flex items-center justify-center">
+                    <PenSquare className="h-4 w-4" />
+                    <span className="sr-only">繼續填寫</span>
+                  </div>
                 </Link>
               </Button>
             </TooltipTrigger>
@@ -167,8 +171,10 @@ export default function MySurveysPage() {
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" asChild>
                   <Link href={`/dashboard/my-surveys/${survey.id}`}>
-                    <Eye className="h-4 w-4" />
-                    <span className="sr-only">查看</span>
+                    <div className="flex items-center justify-center">
+                      <Eye className="h-4 w-4" />
+                      <span className="sr-only">查看</span>
+                    </div>
                   </Link>
                 </Button>
               </TooltipTrigger>
@@ -181,8 +187,10 @@ export default function MySurveysPage() {
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" asChild>
                   <Link href={`/dashboard/my-surveys/${survey.id}/edit`}>
-                    <PenSquare className="h-4 w-4" />
-                    <span className="sr-only">編輯</span>
+                    <div className="flex items-center justify-center">
+                      <PenSquare className="h-4 w-4" />
+                      <span className="sr-only">編輯</span>
+                    </div>
                   </Link>
                 </Button>
               </TooltipTrigger>
@@ -196,8 +204,10 @@ export default function MySurveysPage() {
                 <TooltipTrigger asChild>
                   <Button variant="outline" size="icon" asChild>
                     <Link href={`/dashboard/my-surveys/${survey.id}/history`}>
-                      <History className="h-4 w-4" />
-                      <span className="sr-only">歷史版本</span>
+                      <div className="flex items-center justify-center">
+                        <History className="h-4 w-4" />
+                        <span className="sr-only">歷史版本</span>
+                      </div>
                     </Link>
                   </Button>
                 </TooltipTrigger>
@@ -215,8 +225,10 @@ export default function MySurveysPage() {
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" asChild>
                   <Link href={`/dashboard/my-surveys/${survey.id}`}>
-                    <Eye className="h-4 w-4" />
-                    <span className="sr-only">查看</span>
+                    <div className="flex items-center justify-center">
+                      <Eye className="h-4 w-4" />
+                      <span className="sr-only">查看</span>
+                    </div>
                   </Link>
                 </Button>
               </TooltipTrigger>

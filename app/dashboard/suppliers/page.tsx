@@ -580,14 +580,20 @@ const mockOrgSuppliers: OrganizationSupplier[] = [
   }
 ];
 
-export default function SuppliersPage() {
-  const [suppliers, setSuppliers] = useState<Supplier[]>(initialSuppliers)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [supplierToDelete, setSupplierToDelete] = useState<Supplier | null>(null)
-  const [showAddDialog, setShowAddDialog] = useState(false)
-  const [showEditDialog, setShowEditDialog] = useState(false)
-  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null)
+// 添加一個接口用於翻譯文本
+interface TranslationProps {
+  t?: (key: string, params?: Record<string, string | number>) => string;
+}
+
+// 修改 SuppliersPage 組件，接受翻譯參數
+export function SuppliersPage({ t }: TranslationProps = {}) {
+  const [suppliers, setSuppliers] = useState<Supplier[]>(initialSuppliers);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [currentSupplier, setCurrentSupplier] = useState<Supplier | null>(null);
   const [newSupplier, setNewSupplier] = useState<Supplier>({
     id: "",
     name: "",
@@ -597,23 +603,21 @@ export default function SuppliersPage() {
     phone: "",
     address: "",
     country: "",
-  })
-  
-  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false)
-  const [externalSearchTerm, setExternalSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [selectedExternalSuppliers, setSelectedExternalSuppliers] = useState<ExternalSupplier[]>([])
+  });
+
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedExternalSuppliers, setSelectedExternalSuppliers] = useState<ExternalSupplier[]>([]);
   
   // 添加新的狀態變量
-  const [importStep, setImportStep] = useState(1)
-  const [selectedBoundary, setSelectedBoundary] = useState("all")
-  const [selectedOrgSuppliers, setSelectedOrgSuppliers] = useState<OrganizationSupplier[]>([])
-  const [orgSupplierSearchTerm, setOrgSupplierSearchTerm] = useState("")
-  const [supplierMergeMap, setSupplierMergeMap] = useState<Record<string, string>>({})
+  const [importStep, setImportStep] = useState(1);
+  const [selectedBoundary, setSelectedBoundary] = useState("all");
+  const [selectedOrgSuppliers, setSelectedOrgSuppliers] = useState<OrganizationSupplier[]>([]);
+  const [orgSupplierSearchTerm, setOrgSupplierSearchTerm] = useState("");
+  const [supplierMergeMap, setSupplierMergeMap] = useState<Record<string, string>>({});
   
   // 批次合併相關狀態
-  const [selectedSuppliersForBatch, setSelectedSuppliersForBatch] = useState<string[]>([])
-  const [batchMergeTarget, setBatchMergeTarget] = useState<string>("")
+  const [selectedSuppliersForBatch, setSelectedSuppliersForBatch] = useState<string[]>([]);
+  const [batchMergeTarget, setBatchMergeTarget] = useState<string>("");
 
   // 在這裡使用 mockOrgSuppliers 作為可用數據來源
   const allOrganizationSuppliers = mockOrgSuppliers;
@@ -629,9 +633,9 @@ export default function SuppliersPage() {
   // 過濾外部供應商
   const filteredExternalSuppliers = externalSuppliers.filter((supplier) => {
     const matchesSearch =
-      supplier.name.toLowerCase().includes(externalSearchTerm.toLowerCase()) ||
-      supplier.email.toLowerCase().includes(externalSearchTerm.toLowerCase()) ||
-      supplier.contact.toLowerCase().includes(externalSearchTerm.toLowerCase())
+      supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      supplier.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      supplier.contact.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesCategory = selectedCategory === "全部" || supplier.category === selectedCategory
 
@@ -651,10 +655,32 @@ export default function SuppliersPage() {
     return matchesSearch && matchesBoundary && matchesCategory
   })
 
-  // 添加供應商
+  // 處理文本翻譯的函數
+  const translate = (key: string, defaultText: string, params?: Record<string, string | number>) => {
+    if (t) {
+      try {
+        return t(key, params);
+      } catch (error) {
+        console.warn(`Missing translation for key: ${key}`);
+        return defaultText;
+      }
+    }
+    return defaultText;
+  };
+
+  // 處理添加供應商
   const handleAddSupplier = () => {
-    const id = (suppliers.length + 1).toString()
-    setSuppliers([...suppliers, { ...newSupplier, id }])
+    // 實現添加供應商的邏輯
+    console.log("添加供應商:", newSupplier);
+    
+    // 創建一個新的供應商物件，自動生成ID
+    const id = (suppliers.length + 1).toString();
+    const supplierToAdd = { ...newSupplier, id };
+    
+    // 更新供應商列表
+    setSuppliers([...suppliers, supplierToAdd]);
+    
+    // 重置表單和關閉對話框
     setNewSupplier({
       id: "",
       name: "",
@@ -664,22 +690,35 @@ export default function SuppliersPage() {
       phone: "",
       address: "",
       country: "",
-    })
-    setShowAddDialog(false)
-  }
+    });
+    setIsAddDialogOpen(false);
+  };
 
-  // 編輯供應商
+  // 處理編輯供應商
   const handleEditSupplier = () => {
-    if (editingSupplier) {
-    setSuppliers(suppliers.map((supplier) => (supplier.id === editingSupplier.id ? editingSupplier : supplier)))
-      setShowEditDialog(false)
+    if (currentSupplier) {
+      // 找到要更新的供應商索引
+      const index = suppliers.findIndex(s => s.id === currentSupplier.id);
+      
+      if (index !== -1) {
+        // 創建新的供應商列表，替換編輯的供應商
+        const updatedSuppliers = [...suppliers];
+        updatedSuppliers[index] = currentSupplier;
+        
+        // 更新狀態
+        setSuppliers(updatedSuppliers);
+        setIsEditDialogOpen(false);
+        setCurrentSupplier(null);
+      }
     }
-  }
+  };
 
-  // 刪除供應商
+  // 處理刪除供應商
   const handleDeleteSupplier = (id: string) => {
-    setSuppliers(suppliers.filter((supplier) => supplier.id !== id))
-  }
+    // 過濾掉要刪除的供應商
+    setSuppliers(suppliers.filter(supplier => supplier.id !== id));
+    setIsDeleteDialogOpen(false);
+  };
 
   // 選擇或取消選擇外部供應商
   const toggleExternalSupplier = (supplier: ExternalSupplier) => {
@@ -962,560 +1001,28 @@ export default function SuppliersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          {/* <h1 className="text-2xl font-bold tracking-tight">供應商管理</h1> */}
-          <p className=" text-sm text-muted-foreground">管理您的供應商信息，包括添加、編輯和刪除供應商</p>
+            <p className="text-muted-foreground">
+              {translate('manageSuppliersDescription', '管理您的供應商信息和數據收集流程')}
+            </p>
         </div>
         <div className="flex gap-2">
-          <Dialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <Download className="mr-2 h-4 w-4" />
-                導入供應商
-              </Button>
-            </DialogTrigger>
-              <DialogContent className="max-w-5xl">
-              <DialogHeader>
-                <DialogTitle>導入供應商</DialogTitle>
-                  <DialogDescription>
-                    從外部邊界導入供應商資料。
-                  </DialogDescription>
-              </DialogHeader>
-
-                {/* 步驟指示器 */}
-                <div className="mb-6 mt-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center">
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${
-                        importStep === 1 ? 'bg-blue-500 text-white' : 'bg-blue-100 text-blue-500'
-                      }`}>
-                        1
-                      </div>
-                      <div className="ml-2">
-                        <p className={`font-medium ${importStep === 1 ? 'text-blue-500' : 'text-muted-foreground'}`}>
-                          選擇邊界供應商
-                        </p>
-                      </div>
-                </div>
-
-                    <div className="flex-grow mx-4 h-0.5 bg-gray-200">
-                      <div className={`h-0.5 bg-blue-500 transition-all ${
-                        importStep === 2 ? 'w-full' : 'w-0'
-                      }`}></div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center  ${
-                        importStep === 2 ? 'bg-blue-500 text-white ' : 'bg-blue-100 text-blue-500 text-sm'
-                      }`}>
-                        2
-                      </div>
-                      <div className="ml-2">
-                        <p className={`font-medium ${importStep === 2 ? 'text-blue-500' : 'text-muted-foreground'}`}>
-                          合併供應商
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <ScrollArea className="h-[500px]">
-                  {/* 第一步：選擇供應商 */}
-                  {importStep === 1 && (
-                    <>
-                      <div className="mb-4 flex gap-4">
-                        <div className="flex-1">
-                          <Label htmlFor="selectedBoundary">選擇組織邊界</Label>
-                          <Select 
-                            value={selectedBoundary} 
-                            onValueChange={setSelectedBoundary}
-                          >
-                            <SelectTrigger id="selectedBoundary">
-                              <SelectValue placeholder="請選擇組織邊界" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">所有邊界</SelectItem>
-                              {organizationBoundaries.map(boundary => (
-                                <SelectItem key={boundary.id} value={boundary.id}>
-                                  {boundary.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        
-                        <div className="flex-1">
-                          <Label htmlFor="selectedCategory">選擇分類</Label>
-                          <Select 
-                            value={selectedCategory} 
-                            onValueChange={setSelectedCategory}
-                          >
-                            <SelectTrigger id="selectedCategory">
-                              <SelectValue placeholder="請選擇供應商分類" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">所有分類</SelectItem>
-                              {['製造商', '原料供應商', '物流服務', '包裝商'].map(category => (
-                                <SelectItem key={category} value={category}>
-                        {category}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      
-                      <div className="mb-4 relative">
-                        <Input
-                          placeholder="搜尋組織邊界供應商..."
-                          className="pl-8"
-                          value={orgSupplierSearchTerm}
-                          onChange={(e) => setOrgSupplierSearchTerm(e.target.value)}
-                        />
-                        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                      </div>
-                      
-                      {/* 選擇數量統計信息 */}
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="text-sm">
-                          <Badge variant="outline" className="bg-blue-50 border-blue-200 text-blue-700">
-                            已選擇: {selectedOrgSuppliers.length} / {allOrganizationSuppliers.length} 個供應商
-                          </Badge>
-                          {filteredOrgSuppliers.length < allOrganizationSuppliers.length && (
-                            <span className="ml-2 text-muted-foreground">
-                              (已篩選: {filteredOrgSuppliers.length} 個)
-                            </span>
-                          )}
-                        </div>
-                        {filteredOrgSuppliers.length > 0 && (
-                          <div className="flex gap-2">
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              onClick={() => {
-                                setSelectedOrgSuppliers(filteredOrgSuppliers)
-                              }}
-                              disabled={filteredOrgSuppliers.length === selectedOrgSuppliers.length}
-                            >
-                              全選
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              onClick={() => setSelectedOrgSuppliers([])}
-                              disabled={selectedOrgSuppliers.length === 0}
-                            >
-                              清除選擇
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                            <TableHead className="w-10"></TableHead>
-                            <TableHead>名稱</TableHead>
-                        <TableHead>聯絡人</TableHead>
-                        <TableHead>電子郵件</TableHead>
-                            <TableHead>邊界</TableHead>
-                            <TableHead>分類</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                          {filteredOrgSuppliers.length === 0 ? (
-                        <TableRow>
-                              <TableCell colSpan={6} className="text-center py-4">
-                                無符合條件的供應商
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                            filteredOrgSuppliers.map((supplier) => (
-                          <TableRow
-                            key={supplier.id}
-                                className={selectedOrgSuppliers.some(s => s.id === supplier.id) 
-                                  ? "bg-muted/50" 
-                                  : ""
-                                }
-                          >
-                            <TableCell>
-                              <Checkbox
-                                    checked={selectedOrgSuppliers.some(s => s.id === supplier.id)}
-                                    onCheckedChange={() => toggleOrgSupplier(supplier)}
-                              />
-                            </TableCell>
-                                <TableCell>
-                                  <div>
-                                    <div className="font-medium">{supplier.name}</div>
-                                    {supplier.originalName && (
-                                      <div className="text-xs text-muted-foreground mt-1">{supplier.originalName}</div>
-                                    )}
-                                  </div>
-                                </TableCell>
-                            <TableCell>{supplier.contact}</TableCell>
-                            <TableCell>{supplier.email}</TableCell>
-                                <TableCell>
-                                  {organizationBoundaries.find(b => b.id === supplier.boundary)?.name}
-                                </TableCell>
-                            <TableCell>{supplier.category}</TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
-                    </>
-                  )}
-
-                  {/* 第二步：整併供應商 */}
-                  {importStep === 2 && (
-                    <>
-                      <div className="mb-4">
-                        <h3 className="text-lg font-medium mb-2">整併供應商</h3>
-                </div>
-
-                      {/* 分成左右兩個區塊的佈局 */}
-                      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-                        {/* 左側：待處理的供應商清單 (佔4份) */}
-                        <div className="md:col-span-4 border rounded-md overflow-hidden">
-                          <div className="bg-slate-50 p-3 border-b flex justify-between items-center">
-                            <div className="flex items-center">
-                              <h4 className="font-medium">待處理供應商清單</h4>
-                              <Badge variant="outline" className="ml-3">
-                                共 {selectedOrgSuppliers.length} 個供應商
-                              </Badge>
-                            </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                                size="sm" 
-                                onClick={() => setSelectedSuppliersForBatch(selectedOrgSuppliers.map(s => s.id))}
-                                disabled={selectedOrgSuppliers.length === 0 || selectedSuppliersForBatch.length === selectedOrgSuppliers.length}
-                              >
-                                全選
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                onClick={() => setSelectedSuppliersForBatch([])}
-                                disabled={selectedSuppliersForBatch.length === 0}
-                    >
-                      清除選擇
-                    </Button>
-                            </div>
-                          </div>
-                          
-                          {/* 供應商列表 */}
-                          <ScrollArea className="h-[450px]">
-                            <div className="space-y-2 p-3">
-                              {selectedOrgSuppliers.map(orgSupplier => {
-                                const mergeTarget = supplierMergeMap[orgSupplier.id] || "new"
-                                const similarSuppliers = findSimilarSuppliers(orgSupplier)
-                                const isSelectedForBatch = selectedSuppliersForBatch.includes(orgSupplier.id)
-                                const boundaryName = organizationBoundaries.find(b => b.id === orgSupplier.boundary)?.name || orgSupplier.boundary
-                                
-                                // 根據合併目標決定邊框顏色
-                                const borderColorClass = (() => {
-                                  if (!isSelectedForBatch) return "border-gray-200";
-                                  if (mergeTarget === "new") return "border-emerald-200";
-                                  return "border-amber-200";
-                                })();
-                                
-                                return (
-                                  <div 
-                                    key={orgSupplier.id} 
-                                    className={`border ${borderColorClass} rounded-md p-3 relative transition-all ${
-                                      isSelectedForBatch ? 'bg-slate-50' : ''
-                                    }`}
-                                  >
-                                    <div className="flex items-center mb-2">
-                                      <div className="flex items-center">
-                                        <Checkbox 
-                                          checked={isSelectedForBatch}
-                                          onCheckedChange={() => toggleSupplierForBatch(orgSupplier.id)}
-                                          id={`batch-${orgSupplier.id}`}
-                                          className="mr-2"
-                                        />
-                                        <Label 
-                                          htmlFor={`batch-${orgSupplier.id}`} 
-                                          className={`text-sm cursor-pointer ${isSelectedForBatch ? 'text-blue-600 font-medium' : 'text-muted-foreground'}`}
-                                        >
-                                          選擇
-                                        </Label>
-                                      </div>
-                                      
-                                      {/* 顯示邊界名稱與當前設定 */}
-                                      <div className="ml-auto flex items-center gap-2">
-                                        {mergeTarget !== "new" && (
-                                          <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-                                            合併至: {suppliers.find(s => s.id === mergeTarget)?.name}
-                                          </Badge>
-                                        )}
-                                        {mergeTarget === "new" && (
-                                          <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
-                                            創建新供應商
-                                          </Badge>
-                                        )}
-                                      </div>
-                                    </div>
-
-                                    <div className="flex justify-between items-start">
-                                      <div>
-                                        <h4 className="font-medium">{orgSupplier.name}</h4>
-                                        <p className="text-xs text-muted-foreground mb-1">邊界: {boundaryName}</p>
-                                        <p className="text-xs text-muted-foreground">
-                                          {orgSupplier.email} | {orgSupplier.phone}
-                                        </p>
-                                      </div>
-                                      
-                                      <div className="flex-1 max-w-[220px] ml-4">
-                                        <Select 
-                                          value={mergeTarget} 
-                                          onValueChange={(value) => updateSupplierMerge(orgSupplier.id, value)}
-                                        >
-                                          <SelectTrigger id={`merge-${orgSupplier.id}`} className="h-8 text-xs">
-                                            <SelectValue placeholder="選擇操作" />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                            <SelectItem value="new">創建新供應商</SelectItem>
-                                            <SelectGroup>
-                                              <SelectLabel>合併到現有供應商</SelectLabel>
-                                              {similarSuppliers.map(sim => (
-                                                <SelectItem key={sim.id} value={sim.id}>
-                                                  {sim.name} ({calculateSimilarity(orgSupplier.name, sim.name).toFixed(2)})
-                                                </SelectItem>
-                                              ))}
-                                              {/* 添加所有供應商選項 */}
-                                              {suppliers
-                                                .filter(s => !similarSuppliers.some(sim => sim.id === s.id))
-                                                .map(s => (
-                                                  <SelectItem key={`all-${s.id}`} value={s.id}>
-                                                    {s.name}
-                                                  </SelectItem>
-                                                ))
-                                              }
-                                            </SelectGroup>
-                                          </SelectContent>
-                                        </Select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )
-                              })}
-                            </div>
-                          </ScrollArea>
-                        </div>
-                        
-                        {/* 右側：批次操作區 (佔3份) */}
-                        <div className="md:col-span-3">
-                          <div className="border rounded-md h-full">
-                            <div className="bg-slate-50 p-3 border-b">
-                              <h4 className="font-medium">批次操作區</h4>
-                            </div>
-                            
-                            <div className="p-4">
-                              {selectedSuppliersForBatch.length > 0 ? (
-                                <div className="space-y-4">
-                                  <div className="flex items-center gap-2">
-                                    <Badge className="bg-blue-500">
-                                      已選擇 {selectedSuppliersForBatch.length} 個供應商
-                                    </Badge>
-                                    <span className="text-sm text-muted-foreground">
-                                      ({((selectedSuppliersForBatch.length / selectedOrgSuppliers.length) * 100).toFixed(0)}%)
-                                    </span>
-                                  </div>
-                                  
-                                  <div className="border-t border-b py-4 my-4">
-                                    <h5 className="font-medium text-sm mb-3">批次設置</h5>
-                                    <div className="space-y-3">
-                                      <div>
-                                        <Select 
-                                          value={batchMergeTarget} 
-                                          onValueChange={setBatchMergeTarget}
-                                        >
-                                          <SelectTrigger id="batch-merge-target" className="w-full">
-                                            <SelectValue placeholder="選擇合併目標" />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                            <SelectItem value="new">創建為新供應商</SelectItem>
-                                            <SelectGroup>
-                                              <SelectLabel>合併到現有供應商</SelectLabel>
-                                              {suppliers.map(supplier => (
-                                                <SelectItem key={supplier.id} value={supplier.id}>
-                                                  {supplier.name} ({supplier.companyId})
-                                                </SelectItem>
-                                              ))}
-                                            </SelectGroup>
-                                          </SelectContent>
-                                        </Select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="flex justify-end">
-                                    <Button 
-                                      onClick={applyBatchMerge} 
-                                      disabled={!batchMergeTarget}
-                                      variant="default"
-                                      className="w-full"
-                                    >
-                                      應用批次操作
-                    </Button>
-                  </div>
-                                  
-                                  <div className="mt-4 pt-4 border-t">
-                                    <h5 className="font-medium text-sm mb-2">操作結果</h5>
-                                    <div className="text-sm space-y-2">
-                                      {batchMergeTarget && (
-                                        <>
-                                          {batchMergeTarget === "new" ? (
-                                            <div className="p-3 bg-emerald-50 rounded-md border border-emerald-100">
-                                              <p>將創建 <strong>{selectedSuppliersForBatch.length}</strong> 個新供應商</p>
-                </div>
-                                          ) : (
-                                            <div className="p-3 bg-amber-50 rounded-md border border-amber-100">
-                                              <p>將合併至：</p>
-                                              <p className="font-medium mt-1">{suppliers.find(s => s.id === batchMergeTarget)?.name}</p>
-                                              <p className="text-xs text-muted-foreground mt-1">{suppliers.find(s => s.id === batchMergeTarget)?.companyId}</p>
-              </div>
-                                          )}
-                                        </>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="flex flex-col items-center justify-center h-[400px] text-center">
-                                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                  </div>
-                                  <h5 className="font-medium">尚未選擇供應商</h5>
-                                  <p className="text-sm text-muted-foreground mt-1 max-w-[220px]">
-                                    請在左側清單選擇供應商
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </ScrollArea>
-
-                <DialogFooter className="mt-4">
-                  {importStep === 1 ? (
-                    <>
-                <Button variant="outline" onClick={() => setIsImportDialogOpen(false)}>
-                  取消
-                </Button>
-                      <Button onClick={handleNextStep} disabled={selectedOrgSuppliers.length === 0}>
-                        下一步: 整併供應商
-                </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button variant="outline" onClick={handlePreviousStep}>
-                        返回上一步
-                      </Button>
-                      <Button onClick={handleNextStep}>
-                        完成導入
-                      </Button>
-                    </>
-                  )}
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-
-            <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-            <DialogTrigger asChild>
-              <Button>
+            <Button variant="css-primary" onClick={() => setIsAddDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
-                添加供應商
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>添加新供應商</DialogTitle>
-                <DialogDescription>填寫以下信息以添加新供應商</DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="name">公司名稱</Label>
-                  <Input
-                    id="name"
-                    value={newSupplier.name}
-                    onChange={(e) => setNewSupplier({ ...newSupplier, name: e.target.value })}
-                  />
-                </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="companyId">公司ID</Label>
-                    <Input
-                      id="companyId"
-                      value={newSupplier.companyId}
-                      onChange={(e) => setNewSupplier({ ...newSupplier, companyId: e.target.value })}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="country">國家</Label>
-                    <Input
-                      id="country"
-                      value={newSupplier.country}
-                      onChange={(e) => setNewSupplier({ ...newSupplier, country: e.target.value })}
-                    />
-                  </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="contact">聯絡人</Label>
-                  <Input
-                    id="contact"
-                    value={newSupplier.contact}
-                    onChange={(e) => setNewSupplier({ ...newSupplier, contact: e.target.value })}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="email">電子郵件</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={newSupplier.email}
-                    onChange={(e) => setNewSupplier({ ...newSupplier, email: e.target.value })}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="phone">電話</Label>
-                  <Input
-                    id="phone"
-                    value={newSupplier.phone}
-                    onChange={(e) => setNewSupplier({ ...newSupplier, phone: e.target.value })}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="address">地址</Label>
-                  <Input
-                    id="address"
-                    value={newSupplier.address}
-                    onChange={(e) => setNewSupplier({ ...newSupplier, address: e.target.value })}
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                  <Button variant="outline" onClick={() => setShowAddDialog(false)}>
-                  取消
-                </Button>
-                <Button onClick={handleAddSupplier}>保存</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              {translate('addSupplier', '添加供應商')}
+            </Button>
+            <Button variant="css-secondary" onClick={() => setIsImportDialogOpen(true)}>
+                <Download className="mr-2 h-4 w-4" />
+              {translate('importSuppliers', '導入供應商')}
+            </Button>
         </div>
       </div>
+
       <Card>
-        {/* <CardHeader>
-          <CardTitle>供應商列表</CardTitle>
-          <CardDescription>查看和管理您的所有供應商</CardDescription>
-        </CardHeader> */}
         <CardContent>
           <div className="m-4 flex items-center gap-2">
             <Search className="h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="搜索供應商..."
+                placeholder={translate('searchSuppliers', '搜索供應商...')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="max-w-sm"
@@ -1559,8 +1066,10 @@ export default function SuppliersPage() {
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <Button variant="outline" size="icon" className="bg-blue-50 hover:bg-blue-100 border-blue-200">
+                                    <div className="flex items-center justify-center">
                                     <Search className="h-4 w-4 text-blue-500" />
                                     <span className="sr-only">查看</span>
+                                    </div>
                                   </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -1679,13 +1188,15 @@ export default function SuppliersPage() {
                             </Dialog>
                           )}
 
-                          <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+                          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                             <DialogTrigger asChild>
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                            <Button variant="outline" size="icon" onClick={() => setEditingSupplier(supplier)}>
+                                  <Button variant="outline" size="icon" onClick={() => setCurrentSupplier(supplier)}>
+                                    <div className="flex items-center justify-center">
                               <Edit className="h-4 w-4" />
                               <span className="sr-only">編輯</span>
+                                    </div>
                             </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -1693,7 +1204,7 @@ export default function SuppliersPage() {
                                 </TooltipContent>
                               </Tooltip>
                           </DialogTrigger>
-                          {editingSupplier && (
+                            {currentSupplier && (
                             <DialogContent>
                               <DialogHeader>
                                 <DialogTitle>編輯供應商</DialogTitle>
@@ -1704,10 +1215,10 @@ export default function SuppliersPage() {
                                   <Label htmlFor="edit-name">公司名稱</Label>
                                   <Input
                                     id="edit-name"
-                                    value={editingSupplier.name}
+                                      value={currentSupplier.name}
                                     onChange={(e) =>
-                                      setEditingSupplier({
-                                        ...editingSupplier,
+                                        setCurrentSupplier({
+                                          ...currentSupplier,
                                         name: e.target.value,
                                       })
                                     }
@@ -1717,10 +1228,10 @@ export default function SuppliersPage() {
                                     <Label htmlFor="edit-companyId">公司ID</Label>
                                     <Input
                                       id="edit-companyId"
-                                      value={editingSupplier.companyId}
+                                      value={currentSupplier.companyId}
                                       onChange={(e) =>
-                                        setEditingSupplier({
-                                          ...editingSupplier,
+                                        setCurrentSupplier({
+                                          ...currentSupplier,
                                           companyId: e.target.value,
                                         })
                                       }
@@ -1730,10 +1241,10 @@ export default function SuppliersPage() {
                                     <Label htmlFor="edit-country">國家</Label>
                                     <Input
                                       id="edit-country"
-                                      value={editingSupplier.country}
+                                      value={currentSupplier.country}
                                       onChange={(e) =>
-                                        setEditingSupplier({
-                                          ...editingSupplier,
+                                        setCurrentSupplier({
+                                          ...currentSupplier,
                                           country: e.target.value,
                                         })
                                       }
@@ -1743,10 +1254,10 @@ export default function SuppliersPage() {
                                   <Label htmlFor="edit-contact">聯絡人</Label>
                                   <Input
                                     id="edit-contact"
-                                    value={editingSupplier.contact}
+                                      value={currentSupplier.contact}
                                     onChange={(e) =>
-                                      setEditingSupplier({
-                                        ...editingSupplier,
+                                        setCurrentSupplier({
+                                          ...currentSupplier,
                                         contact: e.target.value,
                                       })
                                     }
@@ -1757,10 +1268,10 @@ export default function SuppliersPage() {
                                   <Input
                                     id="edit-email"
                                     type="email"
-                                    value={editingSupplier.email}
+                                      value={currentSupplier.email}
                                     onChange={(e) =>
-                                      setEditingSupplier({
-                                        ...editingSupplier,
+                                        setCurrentSupplier({
+                                          ...currentSupplier,
                                         email: e.target.value,
                                       })
                                     }
@@ -1770,10 +1281,10 @@ export default function SuppliersPage() {
                                   <Label htmlFor="edit-phone">電話</Label>
                                   <Input
                                     id="edit-phone"
-                                    value={editingSupplier.phone}
+                                      value={currentSupplier.phone}
                                     onChange={(e) =>
-                                      setEditingSupplier({
-                                        ...editingSupplier,
+                                        setCurrentSupplier({
+                                          ...currentSupplier,
                                         phone: e.target.value,
                                       })
                                     }
@@ -1783,10 +1294,10 @@ export default function SuppliersPage() {
                                   <Label htmlFor="edit-address">地址</Label>
                                   <Input
                                     id="edit-address"
-                                    value={editingSupplier.address}
+                                      value={currentSupplier.address}
                                     onChange={(e) =>
-                                      setEditingSupplier({
-                                        ...editingSupplier,
+                                        setCurrentSupplier({
+                                          ...currentSupplier,
                                         address: e.target.value,
                                       })
                                     }
@@ -1794,7 +1305,7 @@ export default function SuppliersPage() {
                                 </div>
                               </div>
                               <DialogFooter>
-                                  <Button variant="outline" onClick={() => setShowEditDialog(false)}>
+                                  <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
                                   取消
                                 </Button>
                                 <Button onClick={handleEditSupplier}>保存</Button>
@@ -1844,3 +1355,6 @@ export default function SuppliersPage() {
     </TooltipProvider>
   )
 }
+
+// 在檔案最後添加預設導出
+export default SuppliersPage;

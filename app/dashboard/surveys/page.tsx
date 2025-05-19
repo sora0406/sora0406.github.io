@@ -161,8 +161,10 @@ export default function SurveysPage() {
                           <TooltipTrigger asChild>
                             <Button variant="outline" size="icon" asChild>
                               <Link href={`/dashboard/surveys/${survey.id}`}>
-                                <Eye className="h-4 w-4" />
-                                <span className="sr-only">查看</span>
+                                <div className="flex items-center justify-center">
+                                  <Eye className="h-4 w-4" />
+                                  <span className="sr-only">查看</span>
+                                </div>
                               </Link>
                             </Button>
                           </TooltipTrigger>
