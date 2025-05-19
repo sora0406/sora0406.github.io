@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "./vercel-build.sh",
-  "installCommand": "npm install --legacy-peer-deps",
+  "installCommand": "pnpm install --frozen-lockfile=false",
   "cleanUrls": true,
   "headers": [
     {
@@ -30,7 +30,6 @@
   "outputDirectory": ".next",
   "env": {
     "NODEJS_VERSION": "18.20.3",
-    "NPM_FLAGS": "--legacy-peer-deps",
-    "SKIP_PNPM": "1"
+    "NPM_FLAGS": "--legacy-peer-deps"
   }
 } 

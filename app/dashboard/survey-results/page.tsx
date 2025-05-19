@@ -1225,7 +1225,7 @@ export default function WarRoomPage() {
           <CardContent>
             <div className="text-2xl font-bold">
               {stats.productTotalFootprint} <span className="text-sm font-normal">kgCO2e/噸公里</span>
-            </div>
+                </div>
             <p className="text-xs text-muted-foreground mt-1">
               來自 {stats.productCount} 家供應商
             </p>
@@ -1237,7 +1237,7 @@ export default function WarRoomPage() {
             <div className="flex items-center space-x-2">
               <Factory className="h-5 w-5 text-slate-500" />
               <CardTitle className="text-sm font-medium text-muted-foreground">組織總排放量</CardTitle>
-            </div>
+              </div>
             <CardDescription>
               {selectedYear ? `${selectedYear}年` : '所有年份'}
             </CardDescription>
@@ -1263,7 +1263,7 @@ export default function WarRoomPage() {
           <CardContent>
             <div className="text-2xl font-bold">
               {stats.scope1Emission} <span className="text-sm font-normal">tCO2e</span>
-            </div>
+                </div>
             <Progress 
               value={scopePercentages.scope1} 
               className="h-2 mt-2 bg-muted"
@@ -1276,7 +1276,7 @@ export default function WarRoomPage() {
             <div className="flex items-center space-x-2">
               <TrendingUp className="h-5 w-5 text-blue-500" />
               <CardTitle className="text-sm font-medium text-muted-foreground">類別2排放量</CardTitle>
-            </div>
+              </div>
             <CardDescription>能源間接排放</CardDescription>
           </CardHeader>
           <CardContent>
@@ -1559,13 +1559,13 @@ export default function WarRoomPage() {
                 <TabsTrigger value="product" className="relative">
                   產品碳足跡
                   <Badge className="ml-2 bg-blue-500">{filteredResponses.filter(r => r.type === "product").length}</Badge>
-                </TabsTrigger>
+                    </TabsTrigger>
                 <TabsTrigger value="organization">
                   組織溫室氣體排放
                   <Badge className="ml-2 bg-slate-500">{filteredResponses.filter(r => r.type === "organization").length}</Badge>
                 </TabsTrigger>
-              </TabsList>
-              
+                </TabsList>
+                
               <div className="mt-4">
                 {/* 無論產品或組織都使用單一整合表格 */}
                 <TabsContent value={tabValue}>
@@ -1610,79 +1610,79 @@ export default function WarRoomPage() {
                         ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </div>
+                        </div>
                   <div className="rounded-md border">
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
+                          <div className="overflow-x-auto">
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
                             <TableHead className="w-[180px]">供應商</TableHead>
                             
                             {selectedFields.map((fieldInfo) => (
-                              <TableHead key={fieldInfo.id} className="whitespace-nowrap">
+                                    <TableHead key={fieldInfo.id} className="whitespace-nowrap">
                                 {fieldInfo.field}
-                              </TableHead>
-                            ))}
-                            
+                                    </TableHead>
+                                  ))}
+                                  
                             {showDate && (
                               <TableHead className="whitespace-nowrap">完成日期</TableHead>
                             )}
                             
                             <TableHead className="text-right">操作</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {filteredResponses.length === 0 ? (
-                            <TableRow>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {filteredResponses.length === 0 ? (
+                                  <TableRow>
                               <TableCell 
                                 colSpan={selectedFields.length + 3} 
                                 className="h-24 text-center"
                               >
                                 沒有符合條件的數據
-                              </TableCell>
-                            </TableRow>
-                          ) : (
-                            filteredResponses.map((response) => (
-                              <TableRow key={response.id}>
+                                    </TableCell>
+                                  </TableRow>
+                                ) : (
+                                  filteredResponses.map((response) => (
+                                    <TableRow key={response.id}>
                                 <TableCell className="font-medium">
-                                  {response.supplierName}
+                                        {response.supplierName}
                                   <div className="text-xs text-muted-foreground">
-                                    {response.respondentName}
+                                            {response.respondentName}
                                   </div>
-                                </TableCell>
-                                
+                                          </TableCell>
+                                      
                                 {selectedFields.map((fieldInfo) => (
-                                  <TableCell key={fieldInfo.id} className="whitespace-nowrap">
-                                    {response.answers[fieldInfo.category]?.[fieldInfo.field] || "-"}
-                                  </TableCell>
-                                ))}
-                                
-                                {showDate && (
-                                  <TableCell className="whitespace-nowrap">
+                                        <TableCell key={fieldInfo.id} className="whitespace-nowrap">
+                                          {response.answers[fieldInfo.category]?.[fieldInfo.field] || "-"}
+                                        </TableCell>
+                                      ))}
+                                      
+                                      {showDate && (
+                                        <TableCell className="whitespace-nowrap">
                                     {format(response.completedDate, "yyyy-MM-dd")}
-                                  </TableCell>
-                                )}
-                                
+                                        </TableCell>
+                                      )}
+                                      
                                 <TableCell className="text-right">
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm"
-                                    onClick={() => viewOriginalSurvey(response.id)}
-                                  >
-                                    <BarChart3 className="h-4 w-4 mr-1" />
+                                        <Button 
+                                          variant="ghost" 
+                                          size="sm"
+                                          onClick={() => viewOriginalSurvey(response.id)}
+                                        >
+                                          <BarChart3 className="h-4 w-4 mr-1" />
                                     查看詳情
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            ))
-                          )}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </div>
-                </TabsContent>
+                                        </Button>
+                                      </TableCell>
+                                    </TableRow>
+                                  ))
+                                )}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        </div>
+                    </TabsContent>
               </div>
-            </Tabs>
+              </Tabs>
           </div>
         </CardContent>
       </Card>

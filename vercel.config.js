@@ -4,17 +4,16 @@ module.exports = {
       src: 'package.json',
       use: '@vercel/next',
       config: {
-        installCommand: 'npm install --legacy-peer-deps',
+        installCommand: 'pnpm install --frozen-lockfile=false',
         buildCommand: './vercel-build.sh',
         nodeVersion: '18.20.3',
-        skipAutoInstall: true,
-        devCommand: 'npm run dev',
+        skipAutoInstall: false,
+        devCommand: 'pnpm dev',
       }
     }
   ],
   env: {
     NODEJS_VERSION: '18.20.3',
-    NPM_FLAGS: '--legacy-peer-deps',
-    SKIP_PNPM: '1'
+    NPM_FLAGS: '--legacy-peer-deps'
   }
 } 
