@@ -304,15 +304,15 @@ export default function ResponsesPage({ t }: { t?: any }) {
   const getStatusBadge = (status: ResponseStatus): React.ReactNode => {
     switch (status) {
       case "pending_review":
-        return <Badge className="bg-amber-500">待審核</Badge>;
+        return <Badge className="bg-amber-500">{t?.('status_pending_review') || '待審核'}</Badge>;
       case "approved":
-        return <Badge className="bg-green-500">已通過</Badge>;
+        return <Badge className="bg-green-500">{t?.('status_approved') || '已通過'}</Badge>;
       case "rejected":
-        return <Badge className="bg-red-500">已拒絕</Badge>;
+        return <Badge className="bg-red-500">{t?.('status_rejected') || '已拒絕'}</Badge>;
       case "needs_revision":
-        return <Badge className="bg-blue-500">需修改</Badge>;
+        return <Badge className="bg-blue-500">{t?.('status_needs_revision') || '需修改'}</Badge>;
       default:
-        return <Badge className="bg-slate-500">未知狀態</Badge>;
+        return <Badge className="bg-slate-500">{t?.('status_unknown') || '未知狀態'}</Badge>;
     }
   };
 
@@ -384,17 +384,9 @@ export default function ResponsesPage({ t }: { t?: any }) {
   }, [requestParam]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t?.('responses_title') || '回應列表'}</h1>
-          <p className="text-sm text-muted-foreground">
-            {requestParam 
-              ? t?.('responses_for_specific_request') || `查看特定數據要求的回應` 
-              : t?.('responses_for_all_requests') || `所有要求的回應`}
-          </p>
-        </div>
-        <div className="flex gap-2">
+    <div className="space-y-6 ">
+      <div className="flex items-center gap-4 ">
+      <div className="flex gap-2">
           <Button 
             variant="outline" 
             onClick={() => router.back()}
@@ -403,13 +395,22 @@ export default function ResponsesPage({ t }: { t?: any }) {
             {t?.('back') || '返回'}
           </Button>
         </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">{t?.('responses_title') || '回應列表'}</h1>
+          <p className="text-sm text-muted-foreground">
+            {requestParam 
+              ? t?.('responses_for_specific_request') || `查看特定數據要求的回應` 
+              : t?.('responses_for_all_requests') || `所有要求的回應`}
+          </p>
+        </div>
+  
       </div>
       
       {/* 狀態統計卡片 */}
       <div className="grid gap-4 md:grid-cols-5">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">全部回應</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.('all_responses') || '全部回應'}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{counts.all}</div>
@@ -417,7 +418,7 @@ export default function ResponsesPage({ t }: { t?: any }) {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">待審核</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.('pending_review') || '待審核'}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-amber-500">{counts.pending_review}</div>
@@ -426,7 +427,7 @@ export default function ResponsesPage({ t }: { t?: any }) {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">已通過</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.('approved') || '已通過'}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-500">{counts.approved}</div>
@@ -435,7 +436,7 @@ export default function ResponsesPage({ t }: { t?: any }) {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">已拒絕</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.('rejected') || '已拒絕'}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-500">{counts.rejected}</div>
@@ -444,7 +445,7 @@ export default function ResponsesPage({ t }: { t?: any }) {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">需修改</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.('needs_revision') || '需修改'}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-500">{counts.needs_revision}</div>
@@ -488,10 +489,10 @@ export default function ResponsesPage({ t }: { t?: any }) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t?.('view_all') || "所有狀態"}</SelectItem>
-              <SelectItem value="pending_review">待審核</SelectItem>
-              <SelectItem value="approved">已通過</SelectItem>
-              <SelectItem value="rejected">已拒絕</SelectItem>
-              <SelectItem value="needs_revision">需修改</SelectItem>
+              <SelectItem value="pending_review">{t?.('status_pending_review') || "待審核"}</SelectItem>
+              <SelectItem value="approved">{t?.('status_approved') || "已通過"}</SelectItem>
+              <SelectItem value="rejected">{t?.('status_rejected') || "已拒絕"}</SelectItem>
+              <SelectItem value="needs_revision">{t?.('status_needs_revision') || "需修改"}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -505,8 +506,8 @@ export default function ResponsesPage({ t }: { t?: any }) {
               <TableHead className="w-[250px]">{t?.('request_name') || "要求名稱"}</TableHead>
               <TableHead className="w-[200px]">{t?.('supplier') || "供應商"}</TableHead>
               <TableHead className="w-[120px]">{t?.('submission_date') || "提交日期"}</TableHead>
-              <TableHead className="w-[120px]">狀態</TableHead>
-              <TableHead>檔案</TableHead>
+              <TableHead className="w-[120px]">{t?.('status') || "狀態"}</TableHead>
+              <TableHead>{t?.('files') || "檔案"}</TableHead>
               <TableHead className="text-right">{t?.('action') || "操作"}</TableHead>
             </TableRow>
           </TableHeader>
@@ -568,11 +569,11 @@ export default function ResponsesPage({ t }: { t?: any }) {
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleStartReview(response)}>
                           <CheckCircle2 className="h-4 w-4 mr-2" />
-                          審核
+                          {t?.('review') || "審核"}
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Download className="h-4 w-4 mr-2" />
-                          下載所有檔案
+                          {t?.('download_all_files') || "下載所有檔案"}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -671,46 +672,47 @@ export default function ResponsesPage({ t }: { t?: any }) {
         <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>審核回應</DialogTitle>
+              <DialogTitle>{t?.('review_response') || "審核回應"}</DialogTitle>
               <DialogDescription>
-                審核 {selectedResponse.supplier.name} 對於 {selectedResponse.request.title} 的回應
+                {t?.('review_description', { supplier: selectedResponse.supplier.name, request: selectedResponse.request.title }) || 
+                  `審核 ${selectedResponse.supplier.name} 對於 ${selectedResponse.request.title} 的回應`}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4 mb-2">
                 <div>
-                  <Label className="text-sm text-muted-foreground">供應商</Label>
+                  <Label className="text-sm text-muted-foreground">{t?.('supplier') || "供應商"}</Label>
                   <div className="text-sm font-medium">{selectedResponse.supplier.name}</div>
                 </div>
                 <div>
-                  <Label className="text-sm text-muted-foreground">提交時間</Label>
+                  <Label className="text-sm text-muted-foreground">{t?.('submission_date') || "提交時間"}</Label>
                   <div className="text-sm">{selectedResponse.submittedAt}</div>
                 </div>
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="review-status">審核結果</Label>
+                <Label htmlFor="review-status">{t?.('review_result') || "審核結果"}</Label>
                 <Select value={reviewStatus} onValueChange={setReviewStatus as (value: string) => void}>
                   <SelectTrigger id="review-status">
-                    <SelectValue placeholder="選擇審核結果" />
+                    <SelectValue placeholder={t?.('select_review_result') || "選擇審核結果"} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="approved">
                       <div className="flex items-center">
                         <ThumbsUp className="h-4 w-4 mr-2 text-green-500" />
-                        通過
+                        {t?.('status_approved') || "通過"}
                       </div>
                     </SelectItem>
                     <SelectItem value="rejected">
                       <div className="flex items-center">
                         <ThumbsDown className="h-4 w-4 mr-2 text-red-500" />
-                        拒絕
+                        {t?.('status_rejected') || "拒絕"}
                       </div>
                     </SelectItem>
                     <SelectItem value="needs_revision">
                       <div className="flex items-center">
                         <XCircle className="h-4 w-4 mr-2 text-blue-500" />
-                        需要修改
+                        {t?.('status_needs_revision') || "需要修改"}
                       </div>
                     </SelectItem>
                   </SelectContent>

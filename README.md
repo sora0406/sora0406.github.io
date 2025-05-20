@@ -7,7 +7,7 @@
 ### 主要路由
 
 - `/dashboard/supply-chain` - 供應鏈管理模組主頁
-  - `/dashboard/suppliers` - 供應商管理
+  - `/dashboard/ ` - 供應商管理
   - `/dashboard/requests` - 數據要求
   - `/dashboard/projects/questionnaires` - 問卷追蹤
   - `/dashboard/survey-results` - 碳排放戰情室

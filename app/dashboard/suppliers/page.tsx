@@ -110,7 +110,7 @@ const initialSuppliers = [
     email: "contact@hct.com.tw",
     phone: "02-2216-5589",
     address: "新北市新莊區新北大道三段7號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 3800
   },
   {
@@ -121,7 +121,7 @@ const initialSuppliers = [
     email: "info@t-cat.com.tw",
     phone: "02-2552-5525",
     address: "台北市大同區承德路三段210號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 2500
   },
   {
@@ -132,7 +132,7 @@ const initialSuppliers = [
     email: "contact@pelican.com.tw",
     phone: "02-2659-5511",
     address: "台北市南港區三重路66號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 2000
   },
   {
@@ -143,7 +143,7 @@ const initialSuppliers = [
     email: "service@evergreen.com.tw",
     phone: "02-2500-1800",
     address: "台北市松山區民生東路三段135號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 1500
   },
   {
@@ -154,7 +154,7 @@ const initialSuppliers = [
     email: "info@fpcc-logistics.com.tw",
     phone: "02-2718-6168",
     address: "台北市松山區敦化北路201號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 1200
   },
   {
@@ -165,7 +165,7 @@ const initialSuppliers = [
     email: "contact@js-transport.com.tw",
     phone: "03-3868-1288",
     address: "桃園市蘆竹區南崁路二段337號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 1000
   },
   {
@@ -176,7 +176,7 @@ const initialSuppliers = [
     email: "service@tonchang.com.tw",
     phone: "02-2269-5803",
     address: "新北市土城區中央路三段240號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 900
   },
   {
@@ -187,7 +187,7 @@ const initialSuppliers = [
     email: "info@jme.com.tw",
     phone: "02-2999-6788",
     address: "新北市新店區中正路516號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 800
   },
   {
@@ -198,7 +198,7 @@ const initialSuppliers = [
     email: "contact@dachi.com.tw",
     phone: "02-2531-3000",
     address: "台北市中山區建國北路二段258號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 700
   },
   {
@@ -209,7 +209,7 @@ const initialSuppliers = [
     email: "info@cmtlogistics.com.tw",
     phone: "02-2381-3456",
     address: "台北市中正區忠孝西路一段66號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 600
   },
   {
@@ -220,7 +220,7 @@ const initialSuppliers = [
     email: "contact@jet-speed.com.tw",
     phone: "03-3932-333",
     address: "桃園市大園區三民路二段75號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 500
   },
   {
@@ -231,7 +231,7 @@ const initialSuppliers = [
     email: "service@yukogroup.com.tw",
     phone: "02-2500-5500",
     address: "台北市南港區三重路19-3號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 400
   },
   {
@@ -242,7 +242,7 @@ const initialSuppliers = [
     email: "info@taiwanair-freight.com.tw",
     phone: "03-3931-3931",
     address: "桃園市大園區航勤北路3號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 300
   },
   {
@@ -253,7 +253,7 @@ const initialSuppliers = [
     email: "contact@goodgood-logistics.com.tw",
     phone: "02-2658-5858",
     address: "台北市大安區復興南路一段137號",
-    country: "Taiwan",
+    country: "台灣",
     vehicleCount: 200
   },
 ]
@@ -268,7 +268,7 @@ const externalSuppliers = [
     email: "contact@hitechelectronics.com",
     phone: "02-8765-4321",
     address: "台北市內湖區內湖路一段123號",
-    country: "Taiwan",
+    country: "台灣",
     category: "電子製造",
   },
   {
@@ -279,7 +279,7 @@ const externalSuppliers = [
     email: "info@ecomaterials.com",
     phone: "03-5555-6666",
     address: "桃園市中壢區中央西路300號",
-    country: "Taiwan",
+    country: "台灣",
     category: "材料製造",
   },
   {
@@ -290,7 +290,7 @@ const externalSuppliers = [
     email: "contact@smarttechindustry.com",
     phone: "04-7777-8888",
     address: "台中市南屯區工業區二路456號",
-    country: "Taiwan",
+    country: "台灣",
     category: "智慧製造",
   },
   {
@@ -301,7 +301,7 @@ const externalSuppliers = [
     email: "info@newenergytech.com",
     phone: "07-9999-0000",
     address: "高雄市前鎮區前鎮路789號",
-    country: "Taiwan",
+    country: "台灣",
     category: "能源科技",
   },
   {
@@ -312,7 +312,7 @@ const externalSuppliers = [
     email: "contact@clouddatasystems.com",
     phone: "02-2222-1111",
     address: "台北市松山區松山路567號",
-    country: "Taiwan",
+    country: "台灣",
     category: "資訊科技",
   },
   {
@@ -323,7 +323,7 @@ const externalSuppliers = [
     email: "info@biotechrd.com",
     phone: "06-3333-4444",
     address: "台南市安南區安南路234號",
-    country: "Taiwan",
+    country: "台灣",
     category: "生物科技",
   },
   {
@@ -334,7 +334,7 @@ const externalSuppliers = [
     email: "contact@precisionmachinery.com",
     phone: "04-5555-6666",
     address: "台中市大里區大里路345號",
-    country: "Taiwan",
+    country: "台灣",
     category: "機械製造",
   },
   {
@@ -345,7 +345,7 @@ const externalSuppliers = [
     email: "info@innovativemedical.com",
     phone: "03-7777-8888",
     address: "新竹市東區光復路一段678號",
-    country: "Taiwan",
+    country: "台灣",
     category: "醫療器材",
   },
 ]
@@ -377,7 +377,7 @@ const allOrganizationSuppliers = [
   {
     id: "org1",
     name: "台灣電子股份有限公司",
-    originalName: "Taiwan Electronics Co., Ltd.",
+    originalName: "台灣 Electronics Co., Ltd.",
     contact: "陳志明",
     email: "contact@taiwanelectronics.com",
     phone: "02-8765-4321",
@@ -502,7 +502,7 @@ const allOrganizationSuppliers = [
   {
     id: "org11",
     name: "台灣電子科技",
-    originalName: "Taiwan Electronics Technology",
+    originalName: "台灣 Electronics Technology",
     contact: "林大明",
     email: "contact@taiwanelectronics-tech.com",
     phone: "02-2222-3333",
@@ -531,7 +531,7 @@ const mockOrgSuppliers: OrganizationSupplier[] = [
     id: "org1",
     name: "台灣電子科技股份有限公司",
     contact: "王小明",
-    email: "wang@taiwan-tech.com",
+    email: "wang@台灣-tech.com",
     phone: "02-1234-5678",
     address: "台北市內湖區科技路100號",
     boundary: "boundary1",
@@ -586,7 +586,7 @@ const mockOrgSuppliers: OrganizationSupplier[] = [
     id: "org6",
     name: "台灣電子科技（OEM部門）",
     contact: "王小明",
-    email: "wang.oem@taiwan-tech.com",
+    email: "wang.oem@台灣-tech.com",
     phone: "02-1234-5679",
     address: "台北市內湖區科技路100號",
     boundary: "boundary1",
@@ -962,7 +962,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
           email: orgSupplier.email,
           phone: orgSupplier.phone,
           address: orgSupplier.address,
-          country: "Taiwan", // 默認值
+          country: "台灣", // 默認值
           vehicleCount: 0,
           mergeRecords: [], // 新供應商沒有合併記錄
         }
@@ -1036,342 +1036,342 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
         </div>
       </div>
 
-      <Card>
-        <CardContent>
-          <div className="m-4 flex items-center gap-2">
-            <Search className="h-4 w-4 text-muted-foreground" />
-            <Input
-                placeholder={translate('searchSuppliers', '搜索供應商...')}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-sm"
-            />
-          </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{translate('company_name', '公司名稱')}</TableHead>
-                <TableHead>{translate('country', '國家')}</TableHead>
-                <TableHead>{translate('contact', '聯絡人')}</TableHead>
-                <TableHead>{translate('email', '電子郵件')}</TableHead>
-                <TableHead>{translate('phone', '電話')}</TableHead>
-                <TableHead>{translate('vehicle_count', '車輛數量')}</TableHead>
-                <TableHead className="text-right">{translate('action', '操作')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredSuppliers.length === 0 ? (
+      <div className="mb-2 mx-2 mt-4 flex items-center ">
+          <Search className="h-4 w-4 mr-2 text-muted-foreground" />
+          <Input
+            placeholder={translate('searchSuppliers', '搜索供應商...')}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-sm"
+          />
+        </div>
+ 
+          <div className="border border-[#C4C4C4] rounded-lg overflow-hidden">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center">
-                    {translate('no_supplier', '沒有找到供應商')}
-                  </TableCell>
+                  <TableHead>{translate('company_name', '公司名稱')}</TableHead>
+                  <TableHead>{translate('country', '國家')}</TableHead>
+                  <TableHead>{translate('contact', '聯絡人')}</TableHead>
+                  <TableHead>{translate('email', '電子郵件')}</TableHead>
+                  <TableHead>{translate('phone', '電話')}</TableHead>
+                  <TableHead>{translate('vehicle_count', '車輛數量')}</TableHead>
+                  <TableHead className="text-right">{translate('action', '操作')}</TableHead>
                 </TableRow>
-              ) : (
-                filteredSuppliers.map((supplier) => (
-                  <TableRow key={supplier.id}>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{supplier.name}</div>
-                          <div className="text-xs text-muted-foreground mt-1">{supplier.companyId}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{supplier.country}</TableCell>
-                    <TableCell>{supplier.contact}</TableCell>
-                    <TableCell>{supplier.email}</TableCell>
-                    <TableCell>{supplier.phone}</TableCell>
-                    <TableCell>{supplier.vehicleCount}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                          <Dialog>
-                          <DialogTrigger asChild>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button variant="outline" size="icon" className="bg-blue-50 hover:bg-blue-100 border-blue-200">
-                                    <div className="flex items-center justify-center">
-                                    <Search className="h-4 w-4 text-blue-500" />
-                                    <span className="sr-only">查看</span>
-                                    </div>
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>查看詳情</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-3xl">
-                              <DialogHeader>
-                                <DialogTitle>供應商詳情</DialogTitle>
-                                <DialogDescription>查看供應商的詳細資訊和合併記錄</DialogDescription>
-                              </DialogHeader>
-                              <div className="grid grid-cols-2 gap-4 py-4">
-                                <div>
-                                  <h3 className="text-lg font-medium mb-4">基本資訊</h3>
-                                  <div className="space-y-3">
-                                    <div>
-                                      <p className="text-sm text-muted-foreground">公司名稱</p>
-                                      <div>
-                                        <p className="font-medium">{supplier.name}</p>
-                                        <p className="text-xs text-muted-foreground mt-1">{supplier.companyId}</p>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm text-muted-foreground">國家</p>
-                                      <p>{supplier.country}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm text-muted-foreground">聯絡人</p>
-                                      <p>{supplier.contact}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm text-muted-foreground">電子郵件</p>
-                                      <p>{supplier.email}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm text-muted-foreground">電話</p>
-                                      <p>{supplier.phone}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm text-muted-foreground">地址</p>
-                                      <p>{supplier.address}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                                
-                                <div>
-                                  <h3 className="text-lg font-medium mb-4">合併記錄</h3>
-                                  {!supplier.mergeRecords || supplier.mergeRecords.length === 0 ? (
-                                    <p className="text-sm text-muted-foreground py-4">
-                                      此供應商沒有合併記錄。
-                                    </p>
-                                  ) : (
-                                    <ScrollArea className="h-[300px] border rounded-md">
-                                      <div className="p-4 space-y-4">
-                                        {supplier.mergeRecords.map((record, index) => (
-                                          <div key={index} className="border-b pb-3 last:border-none">
-                                            <div className="flex items-center justify-between">
-                                              <h4 className="font-medium">{record.sourceName}</h4>
-                                              <span className="text-xs text-muted-foreground">{record.importDate}</span>
-                                            </div>
-                                            <p className="text-sm mt-1">
-                                              <span className="text-muted-foreground">來源 ID:</span> {record.sourceId}
-                                            </p>
-                                            <p className="text-sm mt-1">
-                                              <span className="text-muted-foreground">來源邊界:</span> {record.boundary}
-                                            </p>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </ScrollArea>
-                                  )}
-                                </div>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-
-                          {/* 合併記錄按鈕 */}
-                          {supplier.mergeRecords && supplier.mergeRecords.length > 0 && (
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="outline" className="text-xs bg-amber-50 hover:bg-amber-100 border-amber-200 text-amber-700">
-                                  合併記錄 ({supplier.mergeRecords.length})
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <DialogHeader>
-                                  <DialogTitle>{supplier.name} 的合併記錄</DialogTitle>
-                                  <DialogDescription>此供應商的所有合併記錄</DialogDescription>
-                                </DialogHeader>
-                                <ScrollArea className="h-[400px] border rounded-md mt-4">
-                                  <div className="p-4 space-y-4">
-                                    {supplier.mergeRecords.map((record, index) => (
-                                      <div key={index} className="border p-3 rounded-md">
-                                        <div className="flex items-center justify-between mb-2">
-                                          <h4 className="font-medium text-lg">{record.sourceName}</h4>
-                                          <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-                                            {record.importDate}
-                                          </Badge>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-2 text-sm">
-                                          <div>
-                                            <span className="text-muted-foreground">來源 ID:</span>
-                                            <p className="font-medium">{record.sourceId}</p>
-                                          </div>
-                                          <div>
-                                            <span className="text-muted-foreground">來源邊界:</span>
-                                            <p className="font-medium">{record.boundary}</p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </ScrollArea>
-                              </DialogContent>
-                            </Dialog>
-                          )}
-
-                          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                            <DialogTrigger asChild>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button variant="outline" size="icon" onClick={() => setCurrentSupplier(supplier)}>
-                                    <div className="flex items-center justify-center">
-                              <Edit className="h-4 w-4" />
-                              <span className="sr-only">編輯</span>
-                                    </div>
-                            </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>編輯</p>
-                                </TooltipContent>
-                              </Tooltip>
-                          </DialogTrigger>
-                            {currentSupplier && (
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>編輯供應商</DialogTitle>
-                                <DialogDescription>更新供應商信息</DialogDescription>
-                              </DialogHeader>
-                              <div className="grid gap-4 py-4">
-                                <div className="grid gap-2">
-                                  <Label htmlFor="edit-name">公司名稱</Label>
-                                  <Input
-                                    id="edit-name"
-                                      value={currentSupplier.name}
-                                    onChange={(e) =>
-                                        setCurrentSupplier({
-                                          ...currentSupplier,
-                                        name: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                                  <div className="grid gap-2">
-                                    <Label htmlFor="edit-companyId">公司ID</Label>
-                                    <Input
-                                      id="edit-companyId"
-                                      value={currentSupplier.companyId}
-                                      onChange={(e) =>
-                                        setCurrentSupplier({
-                                          ...currentSupplier,
-                                          companyId: e.target.value,
-                                        })
-                                      }
-                                    />
-                                  </div>
-                                  <div className="grid gap-2">
-                                    <Label htmlFor="edit-country">國家</Label>
-                                    <Input
-                                      id="edit-country"
-                                      value={currentSupplier.country}
-                                      onChange={(e) =>
-                                        setCurrentSupplier({
-                                          ...currentSupplier,
-                                          country: e.target.value,
-                                        })
-                                      }
-                                    />
-                                  </div>
-                                <div className="grid gap-2">
-                                  <Label htmlFor="edit-contact">聯絡人</Label>
-                                  <Input
-                                    id="edit-contact"
-                                      value={currentSupplier.contact}
-                                    onChange={(e) =>
-                                        setCurrentSupplier({
-                                          ...currentSupplier,
-                                        contact: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                                <div className="grid gap-2">
-                                  <Label htmlFor="edit-email">電子郵件</Label>
-                                  <Input
-                                    id="edit-email"
-                                    type="email"
-                                      value={currentSupplier.email}
-                                    onChange={(e) =>
-                                        setCurrentSupplier({
-                                          ...currentSupplier,
-                                        email: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                                <div className="grid gap-2">
-                                  <Label htmlFor="edit-phone">電話</Label>
-                                  <Input
-                                    id="edit-phone"
-                                      value={currentSupplier.phone}
-                                    onChange={(e) =>
-                                        setCurrentSupplier({
-                                          ...currentSupplier,
-                                        phone: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                                <div className="grid gap-2">
-                                  <Label htmlFor="edit-address">地址</Label>
-                                  <Input
-                                    id="edit-address"
-                                      value={currentSupplier.address}
-                                    onChange={(e) =>
-                                        setCurrentSupplier({
-                                          ...currentSupplier,
-                                        address: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <DialogFooter>
-                                  <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                                  取消
-                                </Button>
-                                <Button onClick={handleEditSupplier}>保存</Button>
-                              </DialogFooter>
-                            </DialogContent>
-                          )}
-                        </Dialog>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                            <Button variant="outline" size="icon">
-                              <Trash2 className="h-4 w-4" />
-                              <span className="sr-only">刪除</span>
-                            </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>刪除</p>
-                                </TooltipContent>
-                              </Tooltip>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>確認刪除</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                您確定要刪除供應商 "{supplier.name}" 嗎？此操作無法撤銷。
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>取消</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDeleteSupplier(supplier.id)}>
-                                刪除
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {filteredSuppliers.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center">
+                      {translate('no_supplier', '沒有找到供應商')}
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                ) : (
+                  filteredSuppliers.map((supplier) => (
+                    <TableRow key={supplier.id}>
+                        <TableCell>
+                          <div>
+                            <div className="font-medium">{supplier.name}</div>
+                            <div className="text-xs text-muted-foreground mt-1">{supplier.companyId}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>{supplier.country}</TableCell>
+                      <TableCell>{supplier.contact}</TableCell>
+                      <TableCell>{supplier.email}</TableCell>
+                      <TableCell>{supplier.phone}</TableCell>
+                      <TableCell>{supplier.vehicleCount}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                            <Dialog>
+                            <DialogTrigger asChild>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button variant="outline" size="sm" className="h-8 w-8 p-1 border-[#3A81C5]/30">
+                                      <div className="flex items-center justify-center">
+                                      <Search className="h-3.5 w-3.5 text-[#3A81C5]" />
+                                      <span className="sr-only">查看</span>
+                                      </div>
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>查看詳情</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </DialogTrigger>
+                              <DialogContent className="max-w-3xl">
+                                <DialogHeader>
+                                  <DialogTitle>供應商詳情</DialogTitle>
+                                  <DialogDescription>查看供應商的詳細資訊和合併記錄</DialogDescription>
+                                </DialogHeader>
+                                <div className="grid grid-cols-2 gap-4 py-4">
+                                  <div>
+                                    <h3 className="text-lg font-medium mb-4">基本資訊</h3>
+                                    <div className="space-y-3">
+                                      <div>
+                                        <p className="text-sm text-muted-foreground">公司名稱</p>
+                                        <div>
+                                          <p className="font-medium">{supplier.name}</p>
+                                          <p className="text-xs text-muted-foreground mt-1">{supplier.companyId}</p>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm text-muted-foreground">國家</p>
+                                        <p>{supplier.country}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm text-muted-foreground">聯絡人</p>
+                                        <p>{supplier.contact}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm text-muted-foreground">電子郵件</p>
+                                        <p>{supplier.email}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm text-muted-foreground">電話</p>
+                                        <p>{supplier.phone}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm text-muted-foreground">地址</p>
+                                        <p>{supplier.address}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <div>
+                                    <h3 className="text-lg font-medium mb-4">合併記錄</h3>
+                                    {!supplier.mergeRecords || supplier.mergeRecords.length === 0 ? (
+                                      <p className="text-sm text-muted-foreground py-4">
+                                        此供應商沒有合併記錄。
+                                      </p>
+                                    ) : (
+                                      <ScrollArea className="h-[300px] border rounded-md">
+                                        <div className="p-4 space-y-4">
+                                          {supplier.mergeRecords.map((record, index) => (
+                                            <div key={index} className="border-b pb-3 last:border-none">
+                                              <div className="flex items-center justify-between">
+                                                <h4 className="font-medium">{record.sourceName}</h4>
+                                                <span className="text-xs text-muted-foreground">{record.importDate}</span>
+                                              </div>
+                                              <p className="text-sm mt-1">
+                                                <span className="text-muted-foreground">來源 ID:</span> {record.sourceId}
+                                              </p>
+                                              <p className="text-sm mt-1">
+                                                <span className="text-muted-foreground">來源邊界:</span> {record.boundary}
+                                              </p>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </ScrollArea>
+                                    )}
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+
+                            {/* 合併記錄按鈕 */}
+                            {supplier.mergeRecords && supplier.mergeRecords.length > 0 && (
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button variant="outline" className="text-xs bg-amber-50 hover:bg-amber-100 border-amber-200 text-amber-700">
+                                    合併記錄 ({supplier.mergeRecords.length})
+                                  </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle>{supplier.name} 的合併記錄</DialogTitle>
+                                    <DialogDescription>此供應商的所有合併記錄</DialogDescription>
+                                  </DialogHeader>
+                                  <ScrollArea className="h-[400px] border rounded-md mt-4">
+                                    <div className="p-4 space-y-4">
+                                      {supplier.mergeRecords.map((record, index) => (
+                                        <div key={index} className="border p-3 rounded-md">
+                                          <div className="flex items-center justify-between mb-2">
+                                            <h4 className="font-medium text-lg">{record.sourceName}</h4>
+                                            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
+                                              {record.importDate}
+                                            </Badge>
+                                          </div>
+                                          <div className="grid grid-cols-2 gap-2 text-sm">
+                                            <div>
+                                              <span className="text-muted-foreground">來源 ID:</span>
+                                              <p className="font-medium">{record.sourceId}</p>
+                                            </div>
+                                            <div>
+                                              <span className="text-muted-foreground">來源邊界:</span>
+                                              <p className="font-medium">{record.boundary}</p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </ScrollArea>
+                                </DialogContent>
+                              </Dialog>
+                            )}
+
+                            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                              <DialogTrigger asChild>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button variant="outline" size="sm" className="h-8 w-8 p-1 border-[#3A81C5]/30" onClick={() => setCurrentSupplier(supplier)}>
+                                      <div className="flex items-center justify-center">
+                                <Edit className="h-3.5 w-3.5 text-[#3A81C5]" />
+                                <span className="sr-only">編輯</span>
+                                      </div>
+                              </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>編輯</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                            </DialogTrigger>
+                              {currentSupplier && (
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>編輯供應商</DialogTitle>
+                                  <DialogDescription>更新供應商信息</DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                  <div className="grid gap-2">
+                                    <Label htmlFor="edit-name">公司名稱</Label>
+                                    <Input
+                                      id="edit-name"
+                                        value={currentSupplier.name}
+                                      onChange={(e) =>
+                                          setCurrentSupplier({
+                                            ...currentSupplier,
+                                          name: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                    <div className="grid gap-2">
+                                      <Label htmlFor="edit-companyId">公司ID</Label>
+                                      <Input
+                                        id="edit-companyId"
+                                        value={currentSupplier.companyId}
+                                        onChange={(e) =>
+                                          setCurrentSupplier({
+                                            ...currentSupplier,
+                                            companyId: e.target.value,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                    <div className="grid gap-2">
+                                      <Label htmlFor="edit-country">國家</Label>
+                                      <Input
+                                        id="edit-country"
+                                        value={currentSupplier.country}
+                                        onChange={(e) =>
+                                          setCurrentSupplier({
+                                            ...currentSupplier,
+                                            country: e.target.value,
+                                          })
+                                        }
+                                      />
+                                    </div>
+                                  <div className="grid gap-2">
+                                    <Label htmlFor="edit-contact">聯絡人</Label>
+                                    <Input
+                                      id="edit-contact"
+                                        value={currentSupplier.contact}
+                                      onChange={(e) =>
+                                          setCurrentSupplier({
+                                            ...currentSupplier,
+                                          contact: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                  <div className="grid gap-2">
+                                    <Label htmlFor="edit-email">電子郵件</Label>
+                                    <Input
+                                      id="edit-email"
+                                      type="email"
+                                        value={currentSupplier.email}
+                                      onChange={(e) =>
+                                          setCurrentSupplier({
+                                            ...currentSupplier,
+                                          email: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                  <div className="grid gap-2">
+                                    <Label htmlFor="edit-phone">電話</Label>
+                                    <Input
+                                      id="edit-phone"
+                                        value={currentSupplier.phone}
+                                      onChange={(e) =>
+                                          setCurrentSupplier({
+                                            ...currentSupplier,
+                                          phone: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                  <div className="grid gap-2">
+                                    <Label htmlFor="edit-address">地址</Label>
+                                    <Input
+                                      id="edit-address"
+                                        value={currentSupplier.address}
+                                      onChange={(e) =>
+                                          setCurrentSupplier({
+                                            ...currentSupplier,
+                                          address: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                                <DialogFooter>
+                                    <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                                    取消
+                                  </Button>
+                                  <Button onClick={handleEditSupplier}>保存</Button>
+                                </DialogFooter>
+                              </DialogContent>
+                            )}
+                          </Dialog>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                <Button variant="outline" size="sm" className="h-8 w-8 p-1 border-[#A32929]/30">
+                                  <Trash2 className="h-3.5 w-3.5 text-[#A32929]" />
+                                  <span className="sr-only">刪除</span>
+                                </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>刪除</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>確認刪除</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  您確定要刪除供應商 "{supplier.name}" 嗎？此操作無法撤銷。
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>取消</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDeleteSupplier(supplier.id)}>
+                                  刪除
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+ 
     </div>
     </TooltipProvider>
   )

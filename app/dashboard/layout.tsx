@@ -626,7 +626,7 @@ export default function DashboardLayout({
               </div>
 
               {/* 右側帳號信息和地球圖標 */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 {/* 地球圖標 - 語言切換 */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -654,7 +654,7 @@ export default function DashboardLayout({
                 </DropdownMenu>
                 
                 {/* 帳號信息 */}
-                <div className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 px-3 py-1 rounded-md">
+                <div className="flex items-center gap-2 cursor-pointer   px-2 py-1 rounded-md">
                   {/* <div className="h-6 w-6 rounded-full bg-[#F2A900] flex items-center justify-center text-white font-semibold">
                     LC
                   </div> */}

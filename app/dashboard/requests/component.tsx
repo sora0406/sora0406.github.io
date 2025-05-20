@@ -108,76 +108,91 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
             </Link>
           </div>
         </div>
-        <Card>
-          {/* <CardHeader>
-            <CardTitle>數據要求列表</CardTitle>
-            <CardDescription>查看和管理您的所有數據要求</CardDescription>
-          </CardHeader> */}
-          <CardContent>
-            <div className="m-4 flex items-center gap-2">
-              <Search className="h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder={t('search')}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-sm"
-              />
-            </div>
-            <Table>
-              <TableHeader>
+        
+        <div className="mb-2 mx-2 mt-4 flex items-center">
+          <Search className="h-4 w-4 mr-2 text-muted-foreground" />
+          <Input
+            placeholder={t('search')}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-sm"
+          />
+        </div>
+
+        <div className="border border-[#C4C4C4] rounded-lg overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('request_name')}</TableHead>
+                <TableHead>{t('suppliers')}</TableHead>
+                <TableHead>{t('deadline')}</TableHead>
+                <TableHead>{t('status')}</TableHead>
+                <TableHead className="text-right">{t('action')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredRequests.length === 0 ? (
                 <TableRow>
-                  <TableHead>{t('request_name')}</TableHead>
-                  <TableHead>{t('suppliers')}</TableHead>
-                  <TableHead>{t('deadline')}</TableHead>
-                  <TableHead>{t('status')}</TableHead>
-                  <TableHead className="text-right">{t('action')}</TableHead>
+                  <TableCell colSpan={7} className="text-center">
+                    {t('no_requests_found')}
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredRequests.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center">
-                      {t('no_requests_found')}
+              ) : (
+                filteredRequests.map((request) => (
+                  <TableRow key={request.id}>
+                    <TableCell className="font-medium">
+                      <div className="text-base font-medium">{request.title}</div>
+                      <div className="text-sm text-muted-foreground">{request.description}</div>
+                    </TableCell>
+                    <TableCell>
+                      {request.suppliers.map((supplier: any, idx: number) => (
+                        <div className="flex items-center gap-2" key={idx}>
+                          <CircleIcon className="h-2 w-2" />
+                          <span className="text-sm">{supplier}</span>
+                        </div>
+                      ))}
+                    </TableCell>
+                    <TableCell>{format(request.deadline, "yyyy-MM-dd")}</TableCell>
+                    <TableCell>{getStatusBadge(request.status)}</TableCell>
+                    <TableCell className="flex space-x-2">
+                      <Link href={`/dashboard/requests/${request.id}`} passHref>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button variant="outline" size="sm" className="h-8 w-8 p-1 border-[#3A81C5]/30">
+                              <div className="flex items-center justify-center">
+                                <Eye className="h-3.5 w-3.5 text-[#3A81C5]" />
+                                <span className="sr-only">{t('view')}</span>
+                              </div>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{t('view')}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </Link>
+
+                      <Link href={`/dashboard/requests/responses?request=${request.id}`} passHref>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button variant="outline" size="sm" className="h-8 w-8 p-1 border-[#3A81C5]/30">
+                              <div className="flex items-center justify-center">
+                                <MessageSquare className="h-3.5 w-3.5 text-[#3A81C5]" />
+                                <span className="sr-only">{t('view_response')}</span>
+                              </div>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{t('view_response')}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </Link>
                     </TableCell>
                   </TableRow>
-                ) : (
-                  filteredRequests.map((request) => (
-                    <TableRow key={request.id}>
-                      <TableCell className="font-medium">
-                        <div className="text-base font-medium">{request.title}</div>
-                        <div className="text-sm text-muted-foreground">{request.description}</div>
-                      </TableCell>
-                      <TableCell>
-                        {request.suppliers.map((supplier: any, idx: number) => (
-                          <div className="flex items-center gap-2" key={idx}>
-                            <CircleIcon className="h-2 w-2" />
-                            <span className="text-sm">{supplier}</span>
-                          </div>
-                        ))}
-                      </TableCell>
-                      <TableCell>{format(request.deadline, "yyyy-MM-dd")}</TableCell>
-                      <TableCell>{getStatusBadge(request.status)}</TableCell>
-                      <TableCell className="flex space-x-2">
-                        <Link href={`/dashboard/requests/${request.id}`} passHref>
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-1" />
-                            {t('view')}
-                          </Button>
-                        </Link>
-                        <Link href={`/dashboard/requests/responses?request=${request.id}`} passHref>
-                          <Button variant="outline" size="sm">
-                            <MessageSquare className="h-4 w-4 mr-1" />
-                            {t('view_response')}
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </TooltipProvider>
   )
