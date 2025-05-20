@@ -15,10 +15,16 @@ export default function LocalizedSurveyResultsPage() {
   const tDashboard = useTranslations('dashboard');
   const tWarRoom = useTranslations('war_room');
   const tCommon = useTranslations('common');
+
+  // 建立一個函數來處理特殊格式的翻譯，例如包含變量的翻譯
+  const getYearTranslation = (year: number) => {
+    return tCommon('year_data', { year });
+  };
   
   return <DynamicSurveyResultsPage 
     tDashboard={tDashboard} 
     tWarRoom={tWarRoom} 
-    tCommon={tCommon} 
+    tCommon={tCommon}
+    getYearTranslation={getYearTranslation}
   />;
 } 

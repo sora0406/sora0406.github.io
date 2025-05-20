@@ -3,6 +3,7 @@
 import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslations } from '@/lib/i18n/use-translations';
+import { useTranslations as useNextIntlTranslations } from 'next-intl';
 
 // 動態導入原始組件，避免循環依賴
 const DynamicProjectProgressPage = dynamic(
@@ -12,7 +13,18 @@ const DynamicProjectProgressPage = dynamic(
 
 export default function LocalizedProjectProgressPage() {
   // 使用儀表板相關的翻譯
-  const { t } = useTranslations('dashboard');
+  const { t } = useTranslations('nav');
+  // 獲取 projects 的翻譯
+  const tProjects = useNextIntlTranslations('nav');
+  // 獲取按鈕和UI相關的翻譯
+  const tButtons = useNextIntlTranslations('buttons');
   
-  return <DynamicProjectProgressPage />;
+  return (
+    <div>
+      <h2 className="text-3xl font-bold tracking-tight mb-6">
+        {tProjects('projects')}
+      </h2>
+      <DynamicProjectProgressPage t={(key: string) => tButtons(key)} />
+    </div>
+  );
 } 

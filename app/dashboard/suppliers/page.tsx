@@ -53,7 +53,7 @@ interface Supplier {
   phone: string;
   address: string;
   country: string;
-  vehicles?: number;
+  vehicleCount?: number;
   mergeRecords?: {
     sourceId: string;
     sourceName: string;
@@ -111,7 +111,7 @@ const initialSuppliers = [
     phone: "02-2216-5589",
     address: "新北市新莊區新北大道三段7號",
     country: "Taiwan",
-    vehicles: 3800,
+    vehicleCount: 3800
   },
   {
     id: "2",
@@ -122,7 +122,7 @@ const initialSuppliers = [
     phone: "02-2552-5525",
     address: "台北市大同區承德路三段210號",
     country: "Taiwan",
-    vehicles: 2500,
+    vehicleCount: 2500
   },
   {
     id: "3",
@@ -133,7 +133,7 @@ const initialSuppliers = [
     phone: "02-2659-5511",
     address: "台北市南港區三重路66號",
     country: "Taiwan",
-    vehicles: 2000,
+    vehicleCount: 2000
   },
   {
     id: "4",
@@ -144,7 +144,7 @@ const initialSuppliers = [
     phone: "02-2500-1800",
     address: "台北市松山區民生東路三段135號",
     country: "Taiwan",
-    vehicles: 1500,
+    vehicleCount: 1500
   },
   {
     id: "5",
@@ -155,7 +155,7 @@ const initialSuppliers = [
     phone: "02-2718-6168",
     address: "台北市松山區敦化北路201號",
     country: "Taiwan",
-    vehicles: 1200,
+    vehicleCount: 1200
   },
   {
     id: "6",
@@ -166,7 +166,7 @@ const initialSuppliers = [
     phone: "03-3868-1288",
     address: "桃園市蘆竹區南崁路二段337號",
     country: "Taiwan",
-    vehicles: 1000,
+    vehicleCount: 1000
   },
   {
     id: "7",
@@ -177,7 +177,7 @@ const initialSuppliers = [
     phone: "02-2269-5803",
     address: "新北市土城區中央路三段240號",
     country: "Taiwan",
-    vehicles: 900,
+    vehicleCount: 900
   },
   {
     id: "8",
@@ -188,7 +188,7 @@ const initialSuppliers = [
     phone: "02-2999-6788",
     address: "新北市新店區中正路516號",
     country: "Taiwan",
-    vehicles: 800,
+    vehicleCount: 800
   },
   {
     id: "9",
@@ -199,7 +199,7 @@ const initialSuppliers = [
     phone: "02-2531-3000",
     address: "台北市中山區建國北路二段258號",
     country: "Taiwan",
-    vehicles: 700,
+    vehicleCount: 700
   },
   {
     id: "10",
@@ -210,7 +210,7 @@ const initialSuppliers = [
     phone: "02-2381-3456",
     address: "台北市中正區忠孝西路一段66號",
     country: "Taiwan",
-    vehicles: 600,
+    vehicleCount: 600
   },
   {
     id: "11",
@@ -221,7 +221,7 @@ const initialSuppliers = [
     phone: "03-3932-333",
     address: "桃園市大園區三民路二段75號",
     country: "Taiwan",
-    vehicles: 500,
+    vehicleCount: 500
   },
   {
     id: "12",
@@ -232,7 +232,7 @@ const initialSuppliers = [
     phone: "02-2500-5500",
     address: "台北市南港區三重路19-3號",
     country: "Taiwan",
-    vehicles: 400,
+    vehicleCount: 400
   },
   {
     id: "13",
@@ -243,7 +243,7 @@ const initialSuppliers = [
     phone: "03-3931-3931",
     address: "桃園市大園區航勤北路3號",
     country: "Taiwan",
-    vehicles: 300,
+    vehicleCount: 300
   },
   {
     id: "14",
@@ -254,7 +254,7 @@ const initialSuppliers = [
     phone: "02-2658-5858",
     address: "台北市大安區復興南路一段137號",
     country: "Taiwan",
-    vehicles: 200,
+    vehicleCount: 200
   },
 ]
 
@@ -618,6 +618,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
     phone: "",
     address: "",
     country: "",
+    vehicleCount: 0
   });
 
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -705,6 +706,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
       phone: "",
       address: "",
       country: "",
+      vehicleCount: 0
     });
     setIsAddDialogOpen(false);
   };
@@ -961,6 +963,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
           phone: orgSupplier.phone,
           address: orgSupplier.address,
           country: "Taiwan", // 默認值
+          vehicleCount: 0,
           mergeRecords: [], // 新供應商沒有合併記錄
         }
         
@@ -1016,20 +1019,20 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-            <h1 className="text-xl font-bold mb-2">{translate('title', '供應商管理')}</h1>
+            <h2 className="text-3xl font-bold tracking-tight">{translate('title', '供應商管理')}</h2>
             <p className="text-muted-foreground">
               {translate('manageSuppliersDescription', '管理您的供應商信息和數據收集流程')}
-            </p>
-        </div>
-        <div className="flex gap-2">
+                        </p>
+                      </div>
+                          <div className="flex gap-2">
             <Button variant="css-primary" onClick={() => setIsAddDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
               {translate('addSupplier', '添加供應商')}
-            </Button>
+              </Button>
             <Button variant="css-secondary" onClick={() => setIsImportDialogOpen(true)}>
                 <Download className="mr-2 h-4 w-4" />
               {translate('importSuppliers', '導入供應商')}
-            </Button>
+                </Button>
         </div>
       </div>
 
@@ -1052,7 +1055,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
                 <TableHead>{translate('contact', '聯絡人')}</TableHead>
                 <TableHead>{translate('email', '電子郵件')}</TableHead>
                 <TableHead>{translate('phone', '電話')}</TableHead>
-                <TableHead>{translate('vehicles', '車輛數量')}</TableHead>
+                <TableHead>{translate('vehicle_count', '車輛數量')}</TableHead>
                 <TableHead className="text-right">{translate('action', '操作')}</TableHead>
               </TableRow>
             </TableHeader>
@@ -1076,7 +1079,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
                     <TableCell>{supplier.contact}</TableCell>
                     <TableCell>{supplier.email}</TableCell>
                     <TableCell>{supplier.phone}</TableCell>
-                    <TableCell>{supplier.vehicles?.toLocaleString() || '-'}</TableCell>
+                    <TableCell>{supplier.vehicleCount}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                           <Dialog>

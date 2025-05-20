@@ -1,4 +1,27 @@
 {
+  "common": {
+    "view": "查看",
+    "edit": "编辑",
+    "delete": "删除",
+    "add": "添加",
+    "save": "保存",
+    "cancel": "取消",
+    "back": "返回",
+    "next": "下一步",
+    "search": "搜索...",
+    "select": "选择",
+    "submit": "提交",
+    "loading": "加载中...",
+    "error": "发生错误",
+    "success": "操作成功",
+    "confirm": "确认",
+    "actions": "操作",
+    "status": "状态",
+    "details": "详细信息",
+    "date": "日期",
+    "name": "名称",
+    "description": "描述"
+  },
   "app": {
     "name": "碳管家系统",
     "dashboard": "仪表板"
@@ -7,7 +30,7 @@
     "organization": "组织架构管理",
     "roles": "角色",
     "projects": "组织计划",
-    "supply_chain": "供应链管理系统",
+    "supply_chain": "供应链管理",
     "suppliers": "供应商管理",
     "data_requests": "数据要求",
     "questionnaires": "问卷跟踪",
@@ -18,22 +41,7 @@
     "suppliers_short": "供应商",
     "data_requests_short": "数据",
     "questionnaires_short": "问卷",
-    "war_room_short": "战情",
-    "surveys": "问卷模板管理",
-    "my_surveys": "我的问卷",
-    "data_export": "数据导出",
-    "suppliers_add_new": "创建供应商",
-    "suppliers_edit": "编辑供应商",
-    "suppliers_details": "供应商详情",
-    "requests_create_new": "创建数据要求",
-    "requests_edit": "编辑数据要求",
-    "requests_details": "数据要求详情",
-    "surveys_create_new": "创建问卷",
-    "surveys_edit": "编辑问卷",
-    "surveys_details": "问卷详情",
-    "my_surveys_history": "问卷版本历史",
-    "my_surveys_edit": "编辑问卷",
-    "my_surveys_details": "问卷详情"
+    "war_room_short": "战情"
   },
   "buttons": {
     "create": "创建",
@@ -51,7 +59,8 @@
     "add_supplier": "添加供应商",
     "import_supplier": "导入供应商",
     "create_request": "创建问卷",
-    "view_response": "查看回应"
+    "view_response": "查看回应",
+    "add_task": "新增任务"
   },
   "form": {
     "required": "必填",
@@ -100,7 +109,6 @@
     "email": "电子邮件",
     "phone": "电话",
     "address": "地址",
-    "vehicles": "车辆数量",
     "action": "操作",
     "edit": "编辑",
     "delete": "删除",
@@ -114,16 +122,17 @@
     "manageSuppliersDescription": "管理您的供应商信息和数据收集流程",
     "addSupplier": "添加供应商",
     "importSuppliers": "导入供应商",
-    "searchSuppliers": "搜索供应商..."
+    "searchSuppliers": "搜索供应商...",
+    "vehicle_count": "车辆数量"
   },
   "requests": {
     "title": "数据要求",
-    "titleDscription": "建立并管理供应商需要回应的数据要求。",
+    "description2": "建立并管理供应商需要回应的数据要求。",
     "create_new": "创建要求",
     "view_all": "查看所有要求",
-    "view_responses": "查看回应",
-    "view_response": "查看回应",
-    "import_responses": "导入回应",
+    "view_responses": "查看所有响应",
+    "view_response": "查看响应",
+    "import_responses": "导入响应",
     "filter": "筛选要求",
     "search": "搜索要求...",
     "active": "进行中",

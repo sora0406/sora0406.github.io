@@ -1,4 +1,27 @@
 {
+  "common": {
+    "view": "查看",
+    "edit": "編輯",
+    "delete": "刪除",
+    "add": "添加",
+    "save": "保存",
+    "cancel": "取消",
+    "back": "返回",
+    "next": "下一步",
+    "search": "搜尋...",
+    "select": "選擇",
+    "submit": "提交",
+    "loading": "載入中...",
+    "error": "發生錯誤",
+    "success": "操作成功",
+    "confirm": "確認",
+    "actions": "操作",
+    "status": "狀態",
+    "details": "詳細資訊",
+    "date": "日期",
+    "name": "名稱",
+    "description": "描述"
+  },
   "app": {
     "name": "碳管家系統",
     "dashboard": "儀表板"
@@ -7,7 +30,7 @@
     "organization": "組織架構管理",
     "roles": "角色",
     "projects": "組織計畫",
-    "supply_chain": "供應鏈管理系統",
+    "supply_chain": "供應鏈管理",
     "suppliers": "供應商管理",
     "data_requests": "數據要求",
     "questionnaires": "問卷追蹤",
@@ -18,22 +41,7 @@
     "suppliers_short": "供應商",
     "data_requests_short": "數據",
     "questionnaires_short": "問卷",
-    "war_room_short": "戰情",
-    "surveys": "問卷模板管理",
-    "my_surveys": "我的問卷",
-    "data_export": "數據匯出",
-    "suppliers_add_new": "創建供應商",
-    "suppliers_edit": "編輯供應商",
-    "suppliers_details": "供應商詳情",
-    "requests_create_new": "創建數據要求",
-    "requests_edit": "編輯數據要求",
-    "requests_details": "數據要求詳情",
-    "surveys_create_new": "創建問卷",
-    "surveys_edit": "編輯問卷",
-    "surveys_details": "問卷詳情",
-    "my_surveys_history": "問卷版本歷史",
-    "my_surveys_edit": "編輯問卷",
-    "my_surveys_details": "問卷詳情"
+    "war_room_short": "戰情"
   },
   "buttons": {
     "create": "創建",
@@ -51,7 +59,8 @@
     "add_supplier": "添加供應商",
     "import_supplier": "導入供應商",
     "create_request": "創建問卷",
-    "view_response": "查看回應"
+    "view_response": "查看回應",
+    "add_task": "新增任務"
   },
   "form": {
     "required": "必填",
@@ -90,7 +99,7 @@
   },
   "suppliers": {
     "title": "供應商管理",
-    "description": "管理您的供應商信息，包括添加、編輯和刪除供應商",
+    "titledescription": "管理您的供應商信息，包括添加、編輯和刪除供應商",
     "add_new": "添加新供應商",
     "import": "導入供應商",
     "company_name": "公司名稱",
@@ -100,7 +109,6 @@
     "email": "電子郵件",
     "phone": "電話",
     "address": "地址",
-    "vehicles": "車輛數量",
     "action": "操作",
     "edit": "編輯",
     "delete": "刪除",
@@ -114,14 +122,15 @@
     "manageSuppliersDescription": "管理您的供應商信息和數據收集流程",
     "addSupplier": "添加供應商",
     "importSuppliers": "導入供應商",
-    "searchSuppliers": "搜索供應商..."
+    "searchSuppliers": "搜索供應商...",
+    "vehicle_count": "車輛數量"
   },
   "requests": {
     "title": "數據要求",
-    "titleDscription": "建立並管理供應商需要回應的數據要求。",
+    "description2": "建立並管理供應商需要回應的數據要求。",
     "create_new": "創建要求",
     "view_all": "查看所有要求",
-    "view_responses": "查看回應",
+    "view_responses": "查看所有回應",
     "view_response": "查看回應",
     "import_responses": "匯入回應",
     "filter": "篩選要求",

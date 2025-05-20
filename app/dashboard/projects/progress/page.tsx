@@ -11,6 +11,7 @@ interface Task {
   id: string
   title: string
   description: string
+
   dueDate: string
   assignee: string
   priority: string
@@ -84,8 +85,26 @@ const initialColumns: Columns = {
   },
 }
 
-export function ProjectProgressPage() {
+// 添加 props 接口
+interface ProjectProgressPageProps {
+  t?: (key: string) => string;
+}
+
+export function ProjectProgressPage({ t }: ProjectProgressPageProps = {}) {
   const [columns, setColumns] = useState<Columns>(initialColumns)
+
+  // 翻譯函數
+  const translate = (key: string, defaultText: string) => {
+    if (t) {
+      try {
+        return t(key);
+      } catch (error) {
+        console.warn(`Missing translation for key: ${key}`);
+        return defaultText;
+      }
+    }
+    return defaultText;
+  };
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return
@@ -137,20 +156,20 @@ export function ProjectProgressPage() {
         return "bg-gray-500/10 text-gray-500"
     }
   }
-
+  
   return (
-    <div className="flex-1 space-y-4  ">
+    <div className="flex-1 space-y-4">
       <div className="flex items-center justify-between space-y-2">
       <div className="flex items-center space-x-2">
           <Button variant="css-primary">
             <Plus className="mr-2 h-4 w-4" />
-            新增任務
+            {translate('add_task', '新增任務')}
           </Button>
         </div>
         {/* <h2 className="text-3xl font-bold tracking-tight">專案進度</h2> */}
      
       </div>
-
+      
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Object.entries(columns).map(([columnId, column]) => (
@@ -163,12 +182,12 @@ export function ProjectProgressPage() {
                   <span className="text-sm text-gray-500">
                     {column.items.length}
                   </span>
-                </div>
+        </div>
                 <Button variant="ghost" size="icon">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
-              </div>
-
+      </div>
+      
               <Droppable droppableId={columnId}>
                 {(provided: DroppableProvided) => (
                   <div
@@ -201,41 +220,41 @@ export function ProjectProgressPage() {
                                 </div>
                                 <Button variant="ghost" size="icon">
                                   <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </CardHeader>
+                      </Button>
+                  </div>
+                </CardHeader>
                             <CardContent className="p-4 pt-0">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
                                   <div className="flex items-center gap-1 text-sm text-gray-500">
                                     <Clock className="h-4 w-4" />
                                     <span>{item.dueDate}</span>
-                                  </div>
+                      </div>
                                   <div className="flex items-center gap-1 text-sm text-gray-500">
                                     <Users className="h-4 w-4" />
                                     <span>{item.assignee}</span>
-                                  </div>
+                  </div>
                                 </div>
                                 <Badge className={getPriorityColor(item.priority)}>
                                   {item.priority}
                                 </Badge>
                               </div>
-                            </CardContent>
-                          </Card>
+                </CardContent>
+              </Card>
                         )}
                       </Draggable>
-                    ))}
+            ))}
                     {provided.placeholder}
-                  </div>
-                )}
+          </div>
+        )}
               </Droppable>
             </div>
           ))}
-        </div>
+      </div>
       </DragDropContext>
     </div>
   )
-}
+} 
 
 // 提供默認導出
 export default ProjectProgressPage 
