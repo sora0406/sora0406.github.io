@@ -69,9 +69,9 @@ const routes = [
   
   {
     path: "/dashboard/projects/progress",
-    name: "組織計畫",
+    name: "專案管理",
     navKey: "projects",
-    shortName: "計畫",
+    shortName: "專案",
     icon: Briefcase,
   },
   {
@@ -211,6 +211,25 @@ const exactPathMap: Record<string, string> = {
   "/dashboard/projects/progress": "組織計畫",
 };
 
+// 添加路徑到導航鍵的映射
+const pathToNavKeyMap: Record<string, string> = {
+  "/dashboard": "dashboard.title",
+  "/dashboard/supply-chain": "supply_chain",
+  "/dashboard/suppliers": "suppliers.title",
+  "/dashboard/suppliers/new": "suppliers.add_new",
+  "/dashboard/requests": "requests.title",
+  "/dashboard/requests/new": "requests.create_new",
+  "/dashboard/surveys": "surveys.title",
+  "/dashboard/surveys/new": "surveys.create_new",
+  "/dashboard/my-surveys": "my_surveys.title",
+  "/dashboard/my-surveys/history": "my_surveys.history",
+  "/dashboard/survey-results": "war_room.title",
+  "/dashboard/survey-results/export": "war_room.export",
+  "/dashboard/projects": "projects",
+  "/dashboard/projects/questionnaires": "questionnaires",
+  "/dashboard/projects/progress": "projects",
+};
+
 // 獲取縮寫名稱的函數
 const getShortName = (name: string): string => {
   // 根據全名獲取縮寫
@@ -218,7 +237,7 @@ const getShortName = (name: string): string => {
   if (name === "供應商管理") return "供應商";
   if (name === "數據要求") return "數據";
   if (name === "問卷追蹤") return "問卷";
-  if (name === "組織計畫") return "計畫";
+  if (name === "專案管理") return "專案";
   if (name === "戰情室") return "戰情";
   // 如果沒有特定規則，返回原名
   return name;
@@ -279,34 +298,61 @@ export default function DashboardLayout({
   const pathname = usePathname()
   const router = useRouter()
 
-  // 使用直接的路徑映射表獲取頁面標題
-  let pageName = exactPathMap[pathname] || "供應鏈管理系統";
+  // 使用直接的路徑映射表獲取頁面標題，並支援i18n
+  let pageName = exactPathMap[pathname] || "CarbonM";
+  
+  // 嘗試獲取i18n鍵
+  const navKey = pathToNavKeyMap[pathname];
+  if (navKey && tNav) {
+    pageName = tNav(navKey, { fallback: pageName });
+  }
   
   // 處理動態路徑
-  if (!pageName || pageName === "供應鏈管理系統") {
+  if (!pageName || pageName === "CarbonM") {
+    let dynamicPathKey = "";
+    let defaultTitle = "";
+    
     if (pathname.match(/^\/dashboard\/suppliers\/\d+\/edit/)) {
-      pageName = "編輯供應商";
+      dynamicPathKey = "suppliers.edit";
+      defaultTitle = "編輯供應商";
     } else if (pathname.match(/^\/dashboard\/suppliers\/\d+/)) {
-      pageName = "供應商詳情";
+      dynamicPathKey = "suppliers.details";
+      defaultTitle = "供應商詳情";
     } else if (pathname.match(/^\/dashboard\/requests\/\d+\/edit/)) {
-      pageName = "編輯數據要求";
+      dynamicPathKey = "requests.edit";
+      defaultTitle = "編輯數據要求";
     } else if (pathname.match(/^\/dashboard\/requests\/\d+/)) {
-      pageName = "數據要求詳情";
+      dynamicPathKey = "requests.details";
+      defaultTitle = "數據要求詳情";
     } else if (pathname.match(/^\/dashboard\/surveys\/\d+\/edit/)) {
-      pageName = "編輯問卷";
+      dynamicPathKey = "surveys.edit";
+      defaultTitle = "編輯問卷";
     } else if (pathname.match(/^\/dashboard\/surveys\/\d+/)) {
-      pageName = "問卷詳情";
+      dynamicPathKey = "surveys.details";
+      defaultTitle = "問卷詳情";
     } else if (pathname.match(/^\/dashboard\/my-surveys\/\d+\/history/)) {
-      pageName = "問卷版本歷史";
+      dynamicPathKey = "my_surveys.history";
+      defaultTitle = "問卷版本歷史";
     } else if (pathname.match(/^\/dashboard\/my-surveys\/\d+\/edit/)) {
-      pageName = "編輯問卷";
+      dynamicPathKey = "my_surveys.edit";
+      defaultTitle = "編輯問卷";
     } else if (pathname.match(/^\/dashboard\/my-surveys\/\d+/)) {
-      pageName = "問卷詳情";
+      dynamicPathKey = "my_surveys.details";
+      defaultTitle = "問卷詳情";
+    } 
+    
+    // 如果找到動態路徑鍵值，嘗試翻譯
+    if (dynamicPathKey && tNav) {
+      pageName = tNav(dynamicPathKey, { fallback: defaultTitle });
     } else {
       // 如果都沒匹配到，嘗試從主路由獲取名稱
       const mainRoute = routes.find(route => pathname.startsWith(route.path));
       if (mainRoute) {
-        pageName = mainRoute.name;
+        if (mainRoute.navKey && tNav) {
+          pageName = tNav(mainRoute.navKey, { fallback: mainRoute.name });
+        } else {
+          pageName = mainRoute.name;
+        }
       }
     }
   }
@@ -571,7 +617,9 @@ export default function DashboardLayout({
 
                 {/* 功能標題 */}
                 <div className="hidden lg:block">
-                  <h1 className="text-xl font-semibold">{pageName}</h1>
+                  {/* <h1 className="text-xl font-semibold">{pageName}</h1> */}
+                  <h1 className="text-xl font-semibold">CarbonM</h1>
+
                 </div>
 
             

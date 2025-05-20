@@ -29,7 +29,7 @@
   "nav": {
     "organization": "組織架構管理",
     "roles": "角色",
-    "projects": "組織計畫",
+    "projects": "專案管理",
     "supply_chain": "供應鏈管理",
     "suppliers": "供應商管理",
     "data_requests": "數據要求",
@@ -37,11 +37,11 @@
     "war_room": "戰情室",
     "organization_short": "組織",
     "roles_short": "角色",
-    "projects_short": "計畫",
+    "projects_short": "專案",
     "suppliers_short": "供應商",
     "data_requests_short": "數據",
     "questionnaires_short": "問卷",
-    "war_room_short": "戰情"
+    "war_room_short": "戰情室"
   },
   "buttons": {
     "create": "創建",
@@ -60,7 +60,7 @@
     "import_supplier": "導入供應商",
     "create_request": "創建問卷",
     "view_response": "查看回應",
-    "add_task": "新增任務"
+    "add_task": "新增專案"
   },
   "form": {
     "required": "必填",
@@ -99,8 +99,11 @@
   },
   "suppliers": {
     "title": "供應商管理",
-    "titledescription": "管理您的供應商信息，包括添加、編輯和刪除供應商",
+    "description": "管理您的供應商信息，包括添加、編輯和刪除供應商",
     "add_new": "添加新供應商",
+    "edit": "編輯供應商",
+    "details": "供應商詳情",
+    "basic_info": "基本資訊",
     "import": "導入供應商",
     "company_name": "公司名稱",
     "company_id": "公司ID",
@@ -110,14 +113,10 @@
     "phone": "電話",
     "address": "地址",
     "action": "操作",
-    "edit": "編輯",
-    "delete": "刪除",
     "view": "查看",
     "search": "搜索供應商...",
     "no_supplier": "沒有找到供應商",
     "merge_records": "合併記錄",
-    "details": "供應商詳情",
-    "basic_info": "基本資訊",
     "no_records": "此供應商沒有合併記錄",
     "manageSuppliersDescription": "管理您的供應商信息和數據收集流程",
     "addSupplier": "添加供應商",
@@ -129,6 +128,8 @@
     "title": "數據要求",
     "description2": "建立並管理供應商需要回應的數據要求。",
     "create_new": "創建要求",
+    "edit": "編輯數據要求",
+    "details": "數據要求詳情",
     "view_all": "查看所有要求",
     "view_responses": "查看所有回應",
     "view_response": "查看回應",
@@ -152,14 +153,12 @@
     "new_request": "新增要求",
     "back": "返回",
     "delete": "刪除",
-    "edit": "編輯",
     "send_reminder": "發送提醒",
     "request_not_found": "找不到該數據要求",
     "back_to_requests": "返回數據要求列表",
     "suppliers_count": "家供應商",
     "response_rate": "回應率",
     "responded": "已回應",
-    "details": "詳細資訊",
     "responses": "回應",
     "responses_title": "回應列表",
     "responses_for_all_requests": "所有要求的回應",
@@ -195,6 +194,7 @@
   },
   "war_room": {
     "title": "戰情室",
+    "export": "數據匯出",
     "subtitle": "碳排放數據總覽",
     "supplier_carbon_data": "供應商碳排放資料",
     "overview": "數據總覽",
@@ -254,5 +254,17 @@
       "organization_emission": "組織溫室氣體排放量 (tCO2e)",
       "product_footprint": "產品碳足跡 (kgCO2e)"
     }
+  },
+  "surveys": {
+    "title": "問卷模板管理",
+    "create_new": "創建問卷",
+    "edit": "編輯問卷",
+    "details": "問卷詳情"
+  },
+  "my_surveys": {
+    "title": "我的問卷",
+    "history": "問卷歷史",
+    "edit": "編輯問卷",
+    "details": "問卷詳情"
   }
 } 

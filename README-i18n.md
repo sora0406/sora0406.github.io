@@ -138,9 +138,9 @@ export function DateDisplay({ date }: { date: Date }) {
     "dashboard": "儀表板"
   },
   "nav": {
-    "organization": "組織架構管理",
+    "organization": "組織架構",
     "roles": "角色",
-    "projects": "組織計畫"
+    "projects": "專案"
   },
   "buttons": {
     "create": "創建",

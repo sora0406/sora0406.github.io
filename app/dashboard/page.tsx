@@ -211,7 +211,7 @@ export default function DashboardPage() {
                 <Button  variant="css-secondary" asChild>
                   <div className="flex items-center">
                     <Download className="mr-2 h-4 w-4" />
-                    導入供應商111
+                    導入供應商
                   </div>
                 </Button>
               </DialogTrigger>

@@ -120,7 +120,7 @@ export default function RequestDetailPage({ t }: { t?: any }) {
           {t?.('back') || '返回'}
         </Button>
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold tracking-tight">{request.title}</h1>
+          <h2 className="text-xl font-bold tracking-tight">{request.title}</h2>
           <div className="flex gap-2">
             <Button variant="destructive" size="sm">
               <Trash className="h-4 w-4 mr-2" />

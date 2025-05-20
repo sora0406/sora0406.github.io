@@ -90,7 +90,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            {/* <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1> */}
+            <h2 className="text-xl font-bold tracking-tight">{t('title')}</h2>
             <p className="text-sm text-muted-foreground">{t('description2')}</p>
           </div>
           <div className="flex gap-2">

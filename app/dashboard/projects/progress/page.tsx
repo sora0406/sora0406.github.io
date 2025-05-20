@@ -159,14 +159,13 @@ export function ProjectProgressPage({ t }: ProjectProgressPageProps = {}) {
   
   return (
     <div className="flex-1 space-y-4">
-      <div className="flex items-center justify-between space-y-2">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center ">
+  
           <Button variant="css-primary">
             <Plus className="mr-2 h-4 w-4" />
-            {translate('add_task', '新增任務')}
+            {translate('add_task', '新增專案')}
           </Button>
-        </div>
-        {/* <h2 className="text-3xl font-bold tracking-tight">專案進度</h2> */}
+     
      
       </div>
       

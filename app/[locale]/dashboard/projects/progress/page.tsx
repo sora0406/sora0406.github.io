@@ -21,7 +21,7 @@ export default function LocalizedProjectProgressPage() {
   
   return (
     <div>
-      <h2 className="text-3xl font-bold tracking-tight mb-6">
+      <h2 className="text-xl font-bold tracking-tight mb-6">
         {tProjects('projects')}
       </h2>
       <DynamicProjectProgressPage t={(key: string) => tButtons(key)} />

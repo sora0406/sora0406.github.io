@@ -60,7 +60,7 @@
     "import_supplier": "导入供应商",
     "create_request": "创建问卷",
     "view_response": "查看回应",
-    "add_task": "新增任务"
+    "add_task": "新增項目"
   },
   "form": {
     "required": "必填",
@@ -101,6 +101,9 @@
     "title": "供应商管理",
     "description": "管理您的供应商信息，包括添加、编辑和删除供应商",
     "add_new": "添加新供应商",
+    "edit": "编辑供应商",
+    "details": "供应商详情",
+    "basic_info": "基本信息",
     "import": "导入供应商",
     "company_name": "公司名称",
     "company_id": "公司ID",
@@ -110,14 +113,10 @@
     "phone": "电话",
     "address": "地址",
     "action": "操作",
-    "edit": "编辑",
-    "delete": "删除",
     "view": "查看",
     "search": "搜索供应商...",
     "no_supplier": "没有找到供应商",
     "merge_records": "合并记录",
-    "details": "供应商详情",
-    "basic_info": "基本信息",
     "no_records": "此供应商没有合并记录",
     "manageSuppliersDescription": "管理您的供应商信息和数据收集流程",
     "addSupplier": "添加供应商",
@@ -129,6 +128,8 @@
     "title": "数据要求",
     "description2": "建立并管理供应商需要回应的数据要求。",
     "create_new": "创建要求",
+    "edit": "编辑数据要求",
+    "details": "数据要求详情",
     "view_all": "查看所有要求",
     "view_responses": "查看所有响应",
     "view_response": "查看响应",
@@ -152,14 +153,12 @@
     "new_request": "新增要求",
     "back": "返回",
     "delete": "删除",
-    "edit": "编辑",
     "send_reminder": "发送提醒",
     "request_not_found": "找不到该数据要求",
     "back_to_requests": "返回数据要求列表",
     "suppliers_count": "家供应商",
     "response_rate": "回应率",
     "responded": "已回应",
-    "details": "详细信息",
     "responses": "回应",
     "responses_title": "回应列表",
     "responses_for_all_requests": "所有要求的回应",
@@ -195,6 +194,7 @@
   },
   "war_room": {
     "title": "战情室",
+    "export": "数据导出",
     "subtitle": "碳排放数据总览",
     "supplier_carbon_data": "供应商碳排放数据",
     "overview": "数据总览",
@@ -254,5 +254,17 @@
       "organization_emission": "组织温室气体排放量 (tCO2e)",
       "product_footprint": "产品碳足迹 (kgCO2e)"
     }
+  },
+  "surveys": {
+    "title": "问卷模板管理",
+    "create_new": "创建问卷",
+    "edit": "编辑问卷",
+    "details": "问卷详情"
+  },
+  "my_surveys": {
+    "title": "我的问卷",
+    "history": "问卷历史",
+    "edit": "编辑问卷",
+    "details": "问卷详情"
   }
 } 

@@ -1019,8 +1019,8 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-            <h2 className="text-3xl font-bold tracking-tight">{translate('title', '供應商管理')}</h2>
-            <p className="text-muted-foreground">
+            <h2 className="text-xl font-bold tracking-tight">{translate('title', '供應商管理')}</h2>
+            <p className="text-sm text-muted-foreground">
               {translate('manageSuppliersDescription', '管理您的供應商信息和數據收集流程')}
                         </p>
                       </div>
