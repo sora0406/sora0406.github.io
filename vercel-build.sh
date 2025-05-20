@@ -13,12 +13,12 @@ export NPM_FLAGS="--legacy-peer-deps"
 if [ -f ".npmrc" ]; then
   echo "Updating .npmrc"
   cat > .npmrc << EOL
-use-node-version=18.20.3
 node-linker=hoisted
 prefer-frozen-lockfile=false
 strict-peer-dependencies=false
 auto-install-peers=true
 shamefully-hoist=true
+legacy-peer-deps=true
 EOL
 fi
 
