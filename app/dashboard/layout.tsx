@@ -223,7 +223,7 @@ const pathToNavKeyMap: Record<string, string> = {
   "/dashboard/surveys/new": "surveys.create_new",
   "/dashboard/my-surveys": "my_surveys.title",
   "/dashboard/my-surveys/history": "my_surveys.history",
-  "/dashboard/survey-results": "war_room.title",
+  "/dashboard/survey-results": "war_room",
   "/dashboard/survey-results/export": "war_room.export",
   "/dashboard/projects": "projects",
   "/dashboard/projects/questionnaires": "questionnaires",
@@ -304,7 +304,11 @@ export default function DashboardLayout({
   // 嘗試獲取i18n鍵
   const navKey = pathToNavKeyMap[pathname];
   if (navKey && tNav) {
-    pageName = tNav(navKey, { fallback: pageName });
+    if (navKey === 'war_room') {
+      pageName = tNav('war_room.title', { fallback: pageName });
+    } else {
+      pageName = tNav(navKey, { fallback: pageName });
+    }
   }
   
   // 處理動態路徑
@@ -349,7 +353,12 @@ export default function DashboardLayout({
       const mainRoute = routes.find(route => pathname.startsWith(route.path));
       if (mainRoute) {
         if (mainRoute.navKey && tNav) {
-          pageName = tNav(mainRoute.navKey, { fallback: mainRoute.name });
+          // 特別處理戰情室的翻譯
+          if (mainRoute.navKey === 'war_room') {
+            pageName = tNav('war_room.title', { fallback: mainRoute.name });
+          } else {
+            pageName = tNav(mainRoute.navKey, { fallback: mainRoute.name });
+          }
         } else {
           pageName = mainRoute.name;
         }
@@ -451,7 +460,9 @@ export default function DashboardLayout({
                           )}
                           <span className="text-xs">
                             {(route.navKey && tNav) 
-                              ? tNav(`${route.navKey}_short`, {fallback: route.shortName || tNav(route.navKey)}) 
+                              ? (route.navKey === 'war_room' 
+                                  ? tNav('war_room_short', {fallback: route.shortName || route.name})
+                                  : tNav(`${route.navKey}_short`, {fallback: route.shortName || route.name})) 
                               : route.shortName || route.name}
                           </span>
                         </div>
@@ -503,14 +514,18 @@ export default function DashboardLayout({
                           )}
                           <span className="text-xs">
                             {route.navKey && tNav 
-                              ? tNav(`${route.navKey}_short`, {fallback: getShortName(route.name)}) 
+                              ? (route.navKey === 'war_room' 
+                                  ? tNav('war_room_short', {fallback: getShortName(route.name)})
+                                  : tNav(`${route.navKey}_short`, {fallback: getShortName(route.name)})) 
                               : getShortName(route.name)}
                           </span>
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side="right">
                         {route.navKey && tNav 
-                          ? tNav(route.navKey, {fallback: route.name}) 
+                          ? (route.navKey === 'war_room' 
+                              ? tNav('war_room.title', {fallback: route.name})
+                              : tNav(route.navKey, {fallback: route.name})) 
                           : route.name}
                       </TooltipContent>
                     </Tooltip>
@@ -586,7 +601,13 @@ export default function DashboardLayout({
                               ) : (
                                 <route.icon className="h-5 w-5" />
                               )}
-                              <span>{route.navKey && tNav ? tNav(route.navKey, {fallback: route.name}) : route.name}</span>
+                              <span>
+                                {route.navKey && tNav 
+                                  ? (route.navKey === 'war_room' 
+                                      ? tNav('war_room.title', {fallback: route.name})
+                                      : tNav(route.navKey, {fallback: route.name})) 
+                                  : route.name}
+                              </span>
                     </div>
                           ) : (
                             <div
@@ -606,7 +627,13 @@ export default function DashboardLayout({
                               ) : (
                                 <route.icon className="h-5 w-5" />
                               )}
-                              <span>{route.navKey && tNav ? tNav(route.navKey, {fallback: route.name}) : route.name}</span>
+                              <span>
+                                {route.navKey && tNav 
+                                  ? (route.navKey === 'war_room' 
+                                      ? tNav('war_room.title', {fallback: route.name})
+                                      : tNav(route.navKey, {fallback: route.name})) 
+                                  : route.name}
+                              </span>
                             </div>
                           );
                         })}

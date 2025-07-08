@@ -1,7 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Download, Edit, Plus, Search, Trash2 } from "lucide-react"
+import { useSupplierData } from "@/hooks/useSupplierData"
+import { dataSourceOptions } from "@/lib/mocks/suppliers"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -29,7 +31,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { toast } from "@/components/ui/use-toast"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
 import {
@@ -44,6 +46,16 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 
+interface CarbonEmissionData {
+  organizationalGHG: number;
+  productCarbonFootprint: number;
+  scope1Emissions: number;
+  scope2Emissions: number;
+  scope4Emissions?: number;
+  scope5Emissions?: number;
+  scope6Emissions?: number;
+}
+
 interface Supplier {
   id: string;
   name: string;
@@ -54,6 +66,7 @@ interface Supplier {
   address: string;
   country: string;
   vehicleCount?: number;
+  carbonData?: CarbonEmissionData;
   mergeRecords?: {
     sourceId: string;
     sourceName: string;
@@ -602,7 +615,8 @@ interface TranslationProps {
 
 // 修改 SuppliersPage 組件，接受翻譯參數
 export function SuppliersPage({ t }: TranslationProps = {}) {
-  const [suppliers, setSuppliers] = useState<Supplier[]>(initialSuppliers);
+  const { suppliers: mockSuppliers, dataSource, switchDataSource, getDataSourceLabel, isLoading } = useSupplierData();
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
@@ -634,6 +648,13 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
   // 批次合併相關狀態
   const [selectedSuppliersForBatch, setSelectedSuppliersForBatch] = useState<string[]>([]);
   const [batchMergeTarget, setBatchMergeTarget] = useState<string>("");
+
+  // 同步 mock data 到本地狀態
+  useEffect(() => {
+    if (!isLoading && mockSuppliers.length > 0) {
+      setSuppliers(mockSuppliers);
+    }
+  }, [mockSuppliers, isLoading]);
 
   // 在這裡使用 mockOrgSuppliers 作為可用數據來源
   const allOrganizationSuppliers = mockOrgSuppliers;
@@ -691,7 +712,12 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
     
     // 創建一個新的供應商物件，自動生成ID
     const id = (suppliers.length + 1).toString();
-    const supplierToAdd = { ...newSupplier, id };
+    const supplierToAdd = { 
+      ...newSupplier, 
+      id,
+      // 如果是 TSMC 數據源，不設置車輛數量
+      vehicleCount: dataSource === 'default' ? newSupplier.vehicleCount : undefined
+    };
     
     // 更新供應商列表
     setSuppliers([...suppliers, supplierToAdd]);
@@ -706,7 +732,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
       phone: "",
       address: "",
       country: "",
-      vehicleCount: 0
+      vehicleCount: dataSource === 'default' ? 0 : undefined
     });
     setIsAddDialogOpen(false);
   };
@@ -1014,29 +1040,425 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
     })
   }
 
+  // 添加供應商對話框
+  const renderAddSupplierDialog = () => (
+    <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{translate('addSupplier', '添加供應商')}</DialogTitle>
+          <DialogDescription>
+            {translate('addSupplierDescription', '請填寫供應商的詳細信息')}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">{translate('company_name', '公司名稱')}</Label>
+              <Input
+                id="name"
+                value={newSupplier.name}
+                onChange={(e) => setNewSupplier({ ...newSupplier, name: e.target.value })}
+                placeholder={translate('enterCompanyName', '請輸入公司名稱')}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="companyId">{translate('company_id', '統一編號')}</Label>
+              <Input
+                id="companyId"
+                value={newSupplier.companyId}
+                onChange={(e) => setNewSupplier({ ...newSupplier, companyId: e.target.value })}
+                placeholder={translate('enterCompanyId', '請輸入統一編號')}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="contact">{translate('contact', '聯絡人')}</Label>
+              <Input
+                id="contact"
+                value={newSupplier.contact}
+                onChange={(e) => setNewSupplier({ ...newSupplier, contact: e.target.value })}
+                placeholder={translate('enterContact', '請輸入聯絡人姓名')}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="email">{translate('email', '電子郵件')}</Label>
+              <Input
+                id="email"
+                type="email"
+                value={newSupplier.email}
+                onChange={(e) => setNewSupplier({ ...newSupplier, email: e.target.value })}
+                placeholder={translate('enterEmail', '請輸入電子郵件')}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="phone">{translate('phone', '電話')}</Label>
+              <Input
+                id="phone"
+                value={newSupplier.phone}
+                onChange={(e) => setNewSupplier({ ...newSupplier, phone: e.target.value })}
+                placeholder={translate('enterPhone', '請輸入電話號碼')}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="country">{translate('country', '國家')}</Label>
+              <Input
+                id="country"
+                value={newSupplier.country}
+                onChange={(e) => setNewSupplier({ ...newSupplier, country: e.target.value })}
+                placeholder={translate('enterCountry', '請輸入國家')}
+              />
+            </div>
+            {dataSource === 'default' && (
+              <div className="grid gap-2">
+                <Label htmlFor="vehicleCount">{translate('vehicle_count', '車輛數量')}</Label>
+                <Input
+                  id="vehicleCount"
+                  type="number"
+                  value={newSupplier.vehicleCount?.toString() || "0"}
+                  onChange={(e) => setNewSupplier({ ...newSupplier, vehicleCount: parseInt(e.target.value) || 0 })}
+                  placeholder={translate('enterVehicleCount', '請輸入車輛數量')}
+                />
+              </div>
+            )}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="address">{translate('address', '地址')}</Label>
+            <Input
+              id="address"
+              value={newSupplier.address}
+              onChange={(e) => setNewSupplier({ ...newSupplier, address: e.target.value })}
+              placeholder={translate('enterAddress', '請輸入詳細地址')}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => {
+            setIsAddDialogOpen(false);
+            setNewSupplier({
+              id: "",
+              name: "",
+              companyId: "",
+              contact: "",
+              email: "",
+              phone: "",
+              address: "",
+              country: "",
+              vehicleCount: dataSource === 'default' ? 0 : undefined
+            });
+          }}>
+            {translate('cancel', '取消')}
+          </Button>
+          <Button onClick={handleAddSupplier}>
+            {translate('add', '添加')}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+
+  // 導入供應商對話框
+  const renderImportDialog = () => (
+    <Dialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{translate('importSuppliers', '導入供應商')}</DialogTitle>
+          <DialogDescription>
+            {translate('importSuppliersDescription', '請選擇要導入的供應商資料，您可以從外部供應商或組織邊界供應商中選擇')}
+          </DialogDescription>
+        </DialogHeader>
+
+        <Tabs defaultValue="external" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="external">
+              {translate('externalSuppliers', '外部供應商')}
+            </TabsTrigger>
+            <TabsTrigger value="organization">
+              {translate('organizationSuppliers', '組織邊界供應商')}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="external" className="mt-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 flex-1 max-w-sm">
+                  <Search className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder={translate('searchSuppliersPlaceholder', '搜尋供應商名稱、聯絡人或電子郵件...')}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+                <Select
+                  value={selectedCategory}
+                  onValueChange={setSelectedCategory}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={translate('selectCategory', '選擇類別')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {supplierCategories.map((category) => (
+                      <SelectItem key={category} value={category.toLowerCase()}>
+                        {translate(`category.${category.toLowerCase()}`, category)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="border rounded-md">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[30px]">
+                        <Checkbox
+                          checked={
+                            filteredExternalSuppliers.length > 0 &&
+                            filteredExternalSuppliers.every(supplier =>
+                              selectedExternalSuppliers.some(s => s.id === supplier.id)
+                            )
+                          }
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setSelectedExternalSuppliers([...selectedExternalSuppliers, ...filteredExternalSuppliers]);
+                            } else {
+                              setSelectedExternalSuppliers(
+                                selectedExternalSuppliers.filter(
+                                  s => !filteredExternalSuppliers.some(fs => fs.id === s.id)
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      </TableHead>
+                      <TableHead>{translate('company_name', '公司名稱')}</TableHead>
+                      <TableHead>{translate('company_id', '統一編號')}</TableHead>
+                      <TableHead>{translate('categoryLabel', '類別')}</TableHead>
+                      <TableHead>{translate('contact', '聯絡人')}</TableHead>
+                      <TableHead>{translate('email', '電子郵件')}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredExternalSuppliers.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8">
+                          {translate('noSuppliersFound', '沒有找到符合條件的供應商')}
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredExternalSuppliers.map((supplier) => (
+                        <TableRow key={supplier.id}>
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedExternalSuppliers.some(s => s.id === supplier.id)}
+                              onCheckedChange={() => toggleExternalSupplier(supplier)}
+                            />
+                          </TableCell>
+                          <TableCell>{supplier.name}</TableCell>
+                          <TableCell>{supplier.companyId}</TableCell>
+                          <TableCell>
+                            {translate(`category.${supplier.category.toLowerCase()}`, supplier.category)}
+                          </TableCell>
+                          <TableCell>{supplier.contact}</TableCell>
+                          <TableCell>{supplier.email}</TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="organization" className="mt-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 flex-1 max-w-sm">
+                  <Search className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder={translate('searchSuppliersPlaceholder', '搜尋供應商名稱、聯絡人或電子郵件...')}
+                    value={orgSupplierSearchTerm}
+                    onChange={(e) => setOrgSupplierSearchTerm(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+                <Select
+                  value={selectedBoundary}
+                  onValueChange={setSelectedBoundary}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={translate('selectBoundary', '選擇邊界')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{translate('allBoundaries', '所有邊界')}</SelectItem>
+                    {organizationBoundaries.map((boundary) => (
+                      <SelectItem key={boundary.id} value={boundary.id}>
+                        {translate(`boundary.${boundary.id}`, boundary.name)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="border rounded-md">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[30px]">
+                        <Checkbox
+                          checked={
+                            filteredOrgSuppliers.length > 0 &&
+                            filteredOrgSuppliers.every(supplier =>
+                              selectedOrgSuppliers.some(s => s.id === supplier.id)
+                            )
+                          }
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setSelectedOrgSuppliers([...selectedOrgSuppliers, ...filteredOrgSuppliers]);
+                            } else {
+                              setSelectedOrgSuppliers(
+                                selectedOrgSuppliers.filter(
+                                  s => !filteredOrgSuppliers.some(fs => fs.id === s.id)
+                                )
+                              );
+                            }
+                          }}
+                        />
+                      </TableHead>
+                      <TableHead>{translate('company_name', '公司名稱')}</TableHead>
+                      <TableHead>{translate('original_name', '原始名稱')}</TableHead>
+                      <TableHead>{translate('boundaryLabel', '邊界')}</TableHead>
+                      <TableHead>{translate('contact', '聯絡人')}</TableHead>
+                      <TableHead>{translate('email', '電子郵件')}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredOrgSuppliers.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8">
+                          {translate('noSuppliersFound', '沒有找到符合條件的供應商')}
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredOrgSuppliers.map((supplier) => (
+                        <TableRow key={supplier.id}>
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedOrgSuppliers.some(s => s.id === supplier.id)}
+                              onCheckedChange={() => toggleOrgSupplier(supplier)}
+                            />
+                          </TableCell>
+                          <TableCell>{supplier.name}</TableCell>
+                          <TableCell>{supplier.originalName}</TableCell>
+                          <TableCell>
+                            {translate(`boundary.${supplier.boundary}`, 
+                              organizationBoundaries.find(b => b.id === supplier.boundary)?.name || supplier.boundary
+                            )}
+                          </TableCell>
+                          <TableCell>{supplier.contact}</TableCell>
+                          <TableCell>{supplier.email}</TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <DialogFooter className="mt-6">
+          <div className="flex justify-between w-full items-center">
+            <p className="text-sm text-muted-foreground">
+              {translate('selectedSuppliersCount', '已選擇：{count} 個', {
+                count: selectedExternalSuppliers.length + selectedOrgSuppliers.length
+              })}
+            </p>
+            {(selectedExternalSuppliers.length > 0 || selectedOrgSuppliers.length > 0) && (
+              <Button
+                variant="ghost"
+                className="h-7 px-2 text-muted-foreground"
+                onClick={() => {
+                  setSelectedExternalSuppliers([]);
+                  setSelectedOrgSuppliers([]);
+                }}
+              >
+                {translate('clearSelection', '清除選擇')}
+              </Button>
+            )}
+          </div>
+          <div className="space-x-2">
+            <Button variant="outline" onClick={() => {
+              setIsImportDialogOpen(false);
+              setSelectedExternalSuppliers([]);
+              setSelectedOrgSuppliers([]);
+              setSearchTerm("");
+              setOrgSupplierSearchTerm("");
+              setSelectedCategory("all");
+              setSelectedBoundary("all");
+            }}>
+              {translate('cancel', '取消')}
+            </Button>
+            <Button
+              onClick={handleImportOrgSuppliers}
+              disabled={selectedExternalSuppliers.length + selectedOrgSuppliers.length === 0}
+            >
+              {translate('startImport', '開始導入')}
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+
   return (
     <TooltipProvider>
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
             <h2 className="text-xl font-bold tracking-tight">{translate('title', '供應商管理')}</h2>
             <p className="text-sm text-muted-foreground">
               {translate('manageSuppliersDescription', '管理您的供應商信息和數據收集流程')}
-                        </p>
-                      </div>
-                          <div className="flex gap-2">
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+         
+            
             <Button variant="css-primary" onClick={() => setIsAddDialogOpen(true)}>
-                <Plus className="mr-2 h-4 w-4" />
+              <Plus className="mr-2 h-4 w-4" />
               {translate('addSupplier', '添加供應商')}
-              </Button>
+            </Button>
             <Button variant="css-secondary" onClick={() => setIsImportDialogOpen(true)}>
-                <Download className="mr-2 h-4 w-4" />
+              <Download className="mr-2 h-4 w-4" />
               {translate('importSuppliers', '導入供應商')}
-                </Button>
+            </Button>
+               {/* 數據源選擇器 */}
+               <div className="flex items-center gap-2 mr-4 ">
+              <Select value={dataSource} onValueChange={switchDataSource}>
+                <SelectTrigger className="h-6 px-4 py-3 text-xs text-gray-300 bg-white  border-none rounded-md hover:bg-accent focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 min-w-[120px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {dataSourceOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {/* <span className="text-xs text-muted-foreground">
+                ({suppliers.length} {translate('suppliersCount', '個供應商')})
+              </span> */}
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="mb-2 mx-2 mt-4 flex items-center ">
+
+
+        {/* 渲染對話框 */}
+        {renderAddSupplierDialog()}
+        {renderImportDialog()}
+
+        <div className="mb-2 mx-2 mt-4 flex items-center ">
           <Search className="h-4 w-4 mr-2 text-muted-foreground" />
           <Input
             placeholder={translate('searchSuppliers', '搜索供應商...')}
@@ -1055,14 +1477,15 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
                   <TableHead>{translate('contact', '聯絡人')}</TableHead>
                   <TableHead>{translate('email', '電子郵件')}</TableHead>
                   <TableHead>{translate('phone', '電話')}</TableHead>
-                  <TableHead>{translate('vehicle_count', '車輛數量')}</TableHead>
+                  {dataSource === 'default' && <TableHead>{translate('vehicle_count', '車輛數量')}</TableHead>}
+                  <TableHead>碳排放量</TableHead>
                   <TableHead className="text-right">{translate('action', '操作')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredSuppliers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center">
+                    <TableCell colSpan={dataSource === 'default' ? 8 : 7} className="text-center">
                       {translate('no_supplier', '沒有找到供應商')}
                     </TableCell>
                   </TableRow>
@@ -1079,7 +1502,19 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
                       <TableCell>{supplier.contact}</TableCell>
                       <TableCell>{supplier.email}</TableCell>
                       <TableCell>{supplier.phone}</TableCell>
-                      <TableCell>{supplier.vehicleCount}</TableCell>
+                      {dataSource === 'default' && <TableCell>{supplier.vehicleCount}</TableCell>}
+                      <TableCell>
+                        {supplier.carbonData ? (
+                          <div className="text-sm">
+                            <div className="font-medium">
+                              {new Intl.NumberFormat('zh-TW').format(supplier.carbonData.organizationalGHG)}
+                            </div>
+                            <div className="text-xs text-muted-foreground">噸CO₂e/年</div>
+                          </div>
+                        ) : (
+                          <div className="text-xs text-muted-foreground">無資料</div>
+                        )}
+                      </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                             <Dialog>

@@ -30,6 +30,9 @@ import { Progress } from "@/components/ui/progress"
 // 動態載入 ApexCharts，避免伺服器端渲染問題
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
+// 導入新的數據源切換Hook
+import { useSurveyData } from "@/hooks/useSurveyData"
+
 // 定義問卷回覆數據的類型
 interface Answer {
   [key: string]: string;
@@ -607,21 +610,17 @@ const extractAllFields = (data: SurveyResponse[], type: "organization" | "produc
 };
 
 // 獲取所有報導年度
-const extractYears = (): string[] => {
+const extractYears = (responses: SurveyResponse[]): string[] => {
   const years = new Set<string>();
   
-  // 從組織溫盤中獲取年份
-  organizationResponses.forEach(response => {
-    const period = response.answers["基本資訊"]?.["盤查期間"] || "";
-    const yearMatch = period.match(/(\d{4})年/);
-    if (yearMatch && yearMatch[1]) {
-      years.add(yearMatch[1]);
+  responses.forEach(response => {
+    let period = "";
+    if (response.type === "organization") {
+      period = response.answers["基本資訊"]?.["盤查期間"] || "";
+    } else {
+      period = response.answers["產品資訊"]?.["報導期間"] || "";
     }
-  });
-  
-  // 從產品碳足跡中獲取年份
-  productResponses.forEach(response => {
-    const period = response.answers["產品資訊"]?.["報導期間"] || "";
+    
     const yearMatch = period.match(/(\d{4})年/);
     if (yearMatch && yearMatch[1]) {
       years.add(yearMatch[1]);
@@ -731,6 +730,15 @@ export default function WarRoomPage({
   tWarRoom?: any, 
   tCommon?: any 
 }) {
+  // 數據源切換Hook
+  const { 
+    dataSource, 
+    surveyData, 
+    isLoading: isDataSourceLoading, 
+    switchDataSource, 
+    dataSourceOptions 
+  } = useSurveyData();
+
   // 狀態管理
   const [searchText, setSearchText] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
@@ -746,24 +754,39 @@ export default function WarRoomPage({
   const [activeChart, setActiveChart] = useState<"suppliers" | "map">("suppliers");
   
   // 所有可用年份
-  const availableYears = useMemo(() => extractYears(), []);
+  const availableYears = useMemo(() => extractYears(surveyData), [surveyData]);
+  
+  // 從surveyData分離組織和產品數據
+  const organizationResponses = useMemo(() => 
+    surveyData.filter(response => response.type === "organization"), 
+    [surveyData]
+  );
+  
+  const productResponses = useMemo(() => 
+    surveyData.filter(response => response.type === "product"), 
+    [surveyData]
+  );
   
   // 初始化欄位選擇
   useEffect(() => {
-    setOrgFields(extractAllFields(organizationResponses, "organization"));
-    setProductFields(extractAllFields(productResponses, "product"));
-    setIsDataLoaded(true);
-    
-    // 預設選擇最新年份
-    if (availableYears.length > 0) {
-      setSelectedYear(availableYears[0]);
+    if (!isDataSourceLoading && surveyData.length > 0) {
+      setOrgFields(extractAllFields(organizationResponses, "organization"));
+      setProductFields(extractAllFields(productResponses, "product"));
+      setIsDataLoaded(true);
+      
+      // 預設選擇最新年份
+      if (availableYears.length > 0) {
+        setSelectedYear(availableYears[0]);
+      }
     }
-  }, [availableYears]);
+  }, [availableYears, organizationResponses, productResponses, isDataSourceLoading, surveyData]);
   
-  // 當選擇的年份變化時重新計算統計數據
+  // 當選擇的年份變化或數據源變化時重新計算統計數據
   useEffect(() => {
-    setStats(calculateCarbonStats(surveyResponsesData, selectedYear));
-  }, [selectedYear]);
+    if (!isDataSourceLoading && surveyData.length > 0) {
+      setStats(calculateCarbonStats(surveyData, selectedYear));
+    }
+  }, [selectedYear, surveyData, isDataSourceLoading]);
   
   // 當前所有欄位
   const allFields = useMemo(() => {
@@ -808,7 +831,7 @@ export default function WarRoomPage({
   
   // 過濾回覆
   const filteredResponses = useMemo(() => {
-    let responses = surveyResponsesData.filter(response => response.type === tabValue);
+    let responses = surveyData.filter(response => response.type === tabValue);
     
     // 按年份過濾
     if (selectedYear) {
@@ -832,7 +855,7 @@ export default function WarRoomPage({
     }
     
     return responses;
-  }, [surveyResponsesData, tabValue, selectedYear, searchText]);
+  }, [surveyData, tabValue, selectedYear, searchText]);
   
   // 處理年份選擇
   const handleYearChange = (year: string) => {
@@ -1198,23 +1221,42 @@ export default function WarRoomPage({
           </p>
         </div>
         
-        {/* 年份選擇 */}
-        <div className="flex items-center gap-2">
-          <Label htmlFor="year-select" className="text-sm font-medium">年度:</Label>
-          <Select 
-            value={selectedYear || "all"}
-            onValueChange={handleYearChange}
-          >
-            <SelectTrigger id="year-select" className="w-[120px]">
-              <SelectValue placeholder="選擇年份" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{tWarRoom?.('tags.all_years') || '所有年份'}</SelectItem>
-              {availableYears.map(year => (
-                <SelectItem key={year} value={year}>{year}年</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        {/* 數據源和年份選擇 */}
+        <div className="flex items-center gap-4">
+          {/* 數據源選擇器 */}
+          <div className="flex items-center gap-2">
+            <Select value={dataSource} onValueChange={switchDataSource}>
+              <SelectTrigger className="h-6 px-4 py-3 text-xs text-gray-300 bg-white border-none rounded-md hover:bg-accent focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 min-w-[120px] w-auto">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {dataSourceOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* 年份選擇 */}
+          <div className="flex items-center gap-2">
+            <Label htmlFor="year-select" className="text-sm font-medium">年度:</Label>
+            <Select 
+              value={selectedYear || "all"}
+              onValueChange={handleYearChange}
+            >
+              <SelectTrigger id="year-select" >
+                <SelectValue placeholder="選擇年份" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{tWarRoom?.('tags.all_years') || '所有年份'}</SelectItem>
+                {availableYears.map(year => (
+                  <SelectItem key={year} value={year}>{year}年</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
       
@@ -1270,32 +1312,32 @@ export default function WarRoomPage({
             <PieChart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between gap-1">
-              <div className="flex-1">
+            <div className="space-y-3">
+              <div>
                 <div className="mb-1 flex items-center">
                   <div className="h-2 w-2 rounded-full bg-blue-500 mr-1"></div>
                   <span className="text-xs">{tWarRoom?.('scope1') || '範疇 1'}</span>
                   <span className="ml-auto text-xs">{scopePercentages.scope1.toFixed(1)}%</span>
-              </div>
+                </div>
                 <Progress value={scopePercentages.scope1} className="h-1 bg-slate-200" />
-                      </div>
-              <div className="flex-1">
+              </div>
+              <div>
                 <div className="mb-1 flex items-center">
                   <div className="h-2 w-2 rounded-full bg-indigo-500 mr-1"></div>
                   <span className="text-xs">{tWarRoom?.('scope2') || '範疇 2'}</span>
                   <span className="ml-auto text-xs">{scopePercentages.scope2.toFixed(1)}%</span>
-                    </div>
+                </div>
                 <Progress value={scopePercentages.scope2} className="h-1 bg-slate-200" />
-                        </div>
-              <div className="flex-1">
+              </div>
+              <div>
                 <div className="mb-1 flex items-center">
                   <div className="h-2 w-2 rounded-full bg-slate-500 mr-1"></div>
                   <span className="text-xs">{tWarRoom?.('scope3') || '範疇 3'}</span>
                   <span className="ml-auto text-xs">{scopePercentages.scope3.toFixed(1)}%</span>
-                        </div>
+                </div>
                 <Progress value={scopePercentages.scope3} className="h-1 bg-slate-200" />
-                        </div>
-                        </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
                     </div>

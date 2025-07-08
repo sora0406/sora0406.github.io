@@ -1,80 +1,34 @@
-import { ArrowLeft, Building, Mail, MapPin, Phone, User } from "lucide-react"
+import { ArrowLeft, Building, Mail, MapPin, Phone, User, BarChart3 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { getSuppliers, type Supplier } from "@/lib/mocks/suppliers"
 
-// 添加介面定義
-interface Supplier {
-  id: string;
-  name: string;
-  contact: string;
-  email: string;
-  phone: string;
-  address: string;
-  description: string;
-  carbonData: {
-    organizational: number;
-    product: number;
-  };
-}
-
-// 模擬供應商數據
-const initialSuppliers = [
-  {
-    id: "1",
-    name: "新竹物流",
-    contact: "張小明",
-    email: "contact@hct.com.tw",
-    phone: "02-2216-5589",
-    address: "新北市新莊區新北大道三段7號",
-    description: "提供全台灣快速貨物配送服務，專攻電子商務與B2C的物流解決方案。",
-    carbonData: {
-      organizational: 1250,
-      product: 85,
-    },
-  },
-  {
-    id: "2",
-    name: "統一速達",
-    contact: "李大華",
-    email: "info@t-cat.com.tw",
-    phone: "02-2552-5525",
-    address: "台北市大同區承德路三段210號",
-    description: "提供全台物流整合服務，包括貨件收寄、倉儲與配送等一條龍服務。",
-    carbonData: {
-      organizational: 980,
-      product: 45,
-    },
-  },
-  {
-    id: "3",
-    name: "宅配通",
-    contact: "王美麗",
-    email: "contact@pelican.com.tw",
-    phone: "02-2659-5511",
-    address: "台北市南港區三重路66號",
-    description: "專注於最後一哩路的宅配服務，提供台灣本島及離島的運送服務。",
-    carbonData: {
-      organizational: 1100,
-      product: 60,
-    },
-  },
-]
+// 取得所有供應商用於生成靜態路徑
+const allSuppliers = [...getSuppliers('default'), ...getSuppliers('tsmc')]
 
 // 新增靜態路徑參數生成
 export function generateStaticParams() {
-  return initialSuppliers.map((supplier) => ({
+  return allSuppliers.map((supplier) => ({
     id: supplier.id,
   }))
 }
 
 export default function SupplierDetailPage({ params }: { params: { id: string } }) {
-  // 直接從模擬資料中取得供應商資料，不使用 React hooks
-  const supplier = initialSuppliers.find((s) => s.id === params.id) as Supplier
+  
+  // 查找供應商資料
+  const supplier = allSuppliers.find((s: Supplier) => s.id === params.id)
 
   if (!supplier) {
     return <div className="flex items-center justify-center h-full">找不到供應商</div>
+  }
+
+  // 格式化數字顯示
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('zh-TW').format(num)
   }
 
   return (
@@ -87,12 +41,13 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
           </a>
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">{supplier.name}</h1>
+        <Badge variant="outline">{supplier.country}</Badge>
       </div>
 
       <Tabs defaultValue="details" className="w-full">
         <TabsList>
           <TabsTrigger value="details">基本信息</TabsTrigger>
-          <TabsTrigger value="carbon">碳排放數據</TabsTrigger>
+          <TabsTrigger value="carbon">碳排放</TabsTrigger>
         </TabsList>
         <TabsContent value="details" className="space-y-6">
           <Card>
@@ -108,6 +63,13 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                     <div>
                       <p className="text-sm font-medium">公司名稱</p>
                       <p className="text-sm text-muted-foreground">{supplier.name}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Building className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm font-medium">公司ID</p>
+                      <p className="text-sm text-muted-foreground">{supplier.companyId}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -140,50 +102,133 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                       <p className="text-sm text-muted-foreground">{supplier.address}</p>
                     </div>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Building className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm font-medium">國家</p>
+                      <p className="text-sm text-muted-foreground">{supplier.country}</p>
+                    </div>
+                  </div>
+                  {supplier.vehicleCount && (
+                    <div className="flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5 text-muted-foreground" />
+                      <div>
+                        <p className="text-sm font-medium">車輛數量</p>
+                        <p className="text-sm text-muted-foreground">{formatNumber(supplier.vehicleCount)} 輛</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-              <div>
-                <p className="text-sm font-medium">公司簡介</p>
-                <p className="text-sm text-muted-foreground">{supplier.description}</p>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="carbon" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>碳排放數據</CardTitle>
-              <CardDescription>供應商的碳排放相關數據</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-6 md:grid-cols-2">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">組織碳排放</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {supplier.carbonData.organizational}{" "}
-                      <span className="text-sm font-normal text-muted-foreground">噸 CO₂e/年</span>
+          {supplier.carbonData ? (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle>碳排放資料</CardTitle>
+                  <CardDescription>供應商的碳排放相關數據</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">組織溫室氣體排放量</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">
+                          {formatNumber(supplier.carbonData.organizationalGHG)}{" "}
+                          <span className="text-sm font-normal text-muted-foreground">噸CO2e/年</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">組織範圍內的總溫室氣體排放量</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">產品碳足跡</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">
+                          {supplier.carbonData.productCarbonFootprint}{" "}
+                          <span className="text-sm font-normal text-muted-foreground">kgCO2e/單位</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">每單位產品的碳足跡</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>排放量明細</CardTitle>
+                  <CardDescription>按類別劃分的詳細排放量</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded bg-red-500"></div>
+                        <p className="text-sm font-medium">類別1排放量</p>
+                      </div>
+                      <p className="text-lg font-semibold">{formatNumber(supplier.carbonData.scope1Emissions)} 噸CO2e</p>
+                      <p className="text-xs text-muted-foreground">直接排放</p>
                     </div>
-                    <p className="text-xs text-muted-foreground">組織範圍內的總碳排放量</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">產品碳排放</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {supplier.carbonData.product}{" "}
-                      <span className="text-sm font-normal text-muted-foreground">噸 CO₂e/單位</span>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded bg-orange-500"></div>
+                        <p className="text-sm font-medium">類別2排放量</p>
+                      </div>
+                      <p className="text-lg font-semibold">{formatNumber(supplier.carbonData.scope2Emissions)} 噸CO2e</p>
+                      <p className="text-xs text-muted-foreground">間接排放（能源）</p>
                     </div>
-                    <p className="text-xs text-muted-foreground">每單位產品的碳排放量</p>
-                  </CardContent>
-                </Card>
-              </div>
-            </CardContent>
-          </Card>
+                    {supplier.carbonData.scope4Emissions && (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded bg-blue-500"></div>
+                          <p className="text-sm font-medium">類別4排放量</p>
+                        </div>
+                        <p className="text-lg font-semibold">{formatNumber(supplier.carbonData.scope4Emissions)} 噸CO2e</p>
+                        <p className="text-xs text-muted-foreground">上游運輸配送</p>
+                      </div>
+                    )}
+                    {supplier.carbonData.scope5Emissions && (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded bg-green-500"></div>
+                          <p className="text-sm font-medium">類別5排放量</p>
+                        </div>
+                        <p className="text-lg font-semibold">{formatNumber(supplier.carbonData.scope5Emissions)} 噸CO2e</p>
+                        <p className="text-xs text-muted-foreground">營運廢棄物處理</p>
+                      </div>
+                    )}
+                    {supplier.carbonData.scope6Emissions && (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded bg-purple-500"></div>
+                          <p className="text-sm font-medium">類別6排放量</p>
+                        </div>
+                        <p className="text-lg font-semibold">{formatNumber(supplier.carbonData.scope6Emissions)} 噸CO2e</p>
+                        <p className="text-xs text-muted-foreground">商務旅行</p>
+                      </div>
+                    )}
+                  </div>
+                  <Separator className="my-4" />
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium">總排放量</p>
+                    <p className="text-xl font-bold">{formatNumber(supplier.carbonData.organizationalGHG)} 噸CO2e/年</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          ) : (
+            <Card>
+              <CardContent className="flex items-center justify-center py-8">
+                <p className="text-muted-foreground">暫無碳排放資料</p>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
       </Tabs>
     </div>
