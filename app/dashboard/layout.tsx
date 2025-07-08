@@ -215,7 +215,7 @@ const exactPathMap: Record<string, string> = {
 const pathToNavKeyMap: Record<string, string> = {
   "/dashboard": "dashboard.title",
   "/dashboard/supply-chain": "supply_chain",
-  "/dashboard/suppliers": "suppliers.title",
+  "/dashboard/suppliers": "suppliers",
   "/dashboard/suppliers/new": "suppliers.add_new",
   "/dashboard/requests": "requests.title",
   "/dashboard/requests/new": "requests.create_new",
