@@ -76,18 +76,62 @@ const suppliers = [
 const dataTypes = [
   {
     id: "organizational-carbon",
-    label: "組織溫室氣體排放量",
+    label: "組織溫室氣體排放",
   },
   {
     id: "product-carbon",
     label: "產品碳足跡",
+  },
+  {
+    id: "service-carbon",
+    label: "服務碳足跡",
   }
 ]
 
 // 數據類型描述
 const dataTypeDescriptions = {
-  "organizational-carbon": "收集供應商組織層級的溫室氣體排放資訊，包含範疇1-3的排放數據(單位：tCO2e)",
-  "product-carbon": "收集供應商特定產品的碳足跡資訊，包含貨運服務碳足跡(單位：kgCO2e/噸公里)",
+  "organizational-carbon": "收集供應商組織層級的溫室氣體排放資訊，包含類別1-6的排放數據(單位：tCO2e)",
+  "product-carbon": "收集供應商產品的碳足跡資訊，包含生命週期各階段的排放數據",
+  "service-carbon": "收集供應商服務的碳足跡資訊，包含運輸服務的排放數據"
+}
+
+// 定義請求值類型
+interface RequestValues {
+  title: string;
+  description?: string;
+  dataType: string;
+  isRequired: boolean;
+  reminderDays: string;
+  deadline: Date;
+  // 組織溫室氣體排放相關欄位
+  category1?: string;
+  category2?: string;
+  category3?: string;
+  category4?: string;
+  category5?: string;
+  category6?: string;
+  // 產品碳足跡相關欄位
+  raw_material?: string;
+  life_cycle?: string;
+  product_carbon_footprint?: string;
+  raw_material_stage?: string;
+  manufacturing_stage?: string;
+  usage_stage?: string;
+  disposal_stage?: string;
+  // 服務碳足跡相關欄位
+  transport_service?: string;
+  // 必填欄位控制
+  fieldRequirements?: Record<string, boolean>;
+  [key: string]: any;
+}
+
+// 定義欄位類型
+interface Field {
+  id: string;
+  label: string;
+  type?: "text" | "number" | "select";
+  unit?: string;
+  options?: Array<{ id: string; label: string }>;
 }
 
 // 原材料選項
@@ -100,10 +144,36 @@ const rawMaterials = [
   { id: "M05", label: "M05 – E型鋼" },
 ]
 
+// 組織溫室氣體排放欄位
+const organizationalFields: Field[] = [
+  { id: "category1", label: "類別1排放量", type: "number", unit: "tCO2e" },
+  { id: "category2", label: "類別2排放量", type: "number", unit: "tCO2e" },
+  { id: "category3", label: "類別3排放量", type: "number", unit: "tCO2e" },
+  { id: "category4", label: "類別4排放量", type: "number", unit: "tCO2e" },
+  { id: "category5", label: "類別5排放量", type: "number", unit: "tCO2e" },
+  { id: "category6", label: "類別6排放量", type: "number", unit: "tCO2e" }
+]
+
+// 產品碳足跡欄位
+const productFields: Field[] = [
+  { id: "raw_material", label: "原物料", type: "select", options: rawMaterials },
+  { id: "life_cycle", label: "生命週期", type: "text" },
+  { id: "product_carbon_footprint", label: "產品碳足跡", type: "number", unit: "kgCO2e/單位" },
+  { id: "raw_material_stage", label: "原物料階段", type: "number", unit: "kgCO2e/單位" },
+  { id: "manufacturing_stage", label: "製造階段", type: "number", unit: "kgCO2e/單位" },
+  { id: "usage_stage", label: "使用階段", type: "number", unit: "kgCO2e/單位" },
+  { id: "disposal_stage", label: "廢棄階段", type: "number", unit: "kgCO2e/單位" }
+]
+
+// 服務碳足跡欄位
+const serviceFields: Field[] = [
+  { id: "transport_service", label: "貨運服務碳足跡", type: "number", unit: "kgCO2e/噸公里" }
+]
+
 // 邊界選項
 const boundaries = ["全部", "上游", "營運", "下游"]
 
-// 重新定義表單驗證模式
+// 更新請求模式
 const requestSchema = z.object({
   title: z.string().min(1, "要求名稱不能為空").max(50, "要求名稱最長為50字元"),
   description: z.string().optional(),
@@ -113,16 +183,26 @@ const requestSchema = z.object({
   deadline: z.date({
     required_error: "請選擇截止日期",
   }),
-  materials: z.array(z.string()).optional(),
-  scopeOneEmission: z.string().optional(),
-  scopeOneRequired: z.boolean().default(false),
-  scopeTwoEmission: z.string().optional(),
-  scopeTwoRequired: z.boolean().default(false),
-  scopeThreeEmission: z.string().optional(),
-  scopeThreeRequired: z.boolean().default(false),
-  transportCarbonFootprint: z.string().optional(),
-  transportCarbonRequired: z.boolean().default(false),
-});
+  // 組織溫室氣體排放相關欄位
+  category1: z.string().optional(),
+  category2: z.string().optional(),
+  category3: z.string().optional(),
+  category4: z.string().optional(),
+  category5: z.string().optional(),
+  category6: z.string().optional(),
+  // 產品碳足跡相關欄位
+  raw_material: z.string().optional(),
+  life_cycle: z.string().optional(),
+  product_carbon_footprint: z.string().optional(),
+  raw_material_stage: z.string().optional(),
+  manufacturing_stage: z.string().optional(),
+  usage_stage: z.string().optional(),
+  disposal_stage: z.string().optional(),
+  // 服務碳足跡相關欄位
+  transport_service: z.string().optional(),
+  // 必填欄位控制
+  fieldRequirements: z.record(z.boolean()).optional(),
+}).passthrough();
 
 const formSchema = z.object({
   suppliers: z.array(
@@ -136,7 +216,6 @@ const formSchema = z.object({
 });
 
 // 確保類型定義與 schema 一致
-type RequestValues = z.infer<typeof requestSchema>;
 type FormValues = z.infer<typeof formSchema>;
 
 export default function NewRequestPage() {
@@ -154,18 +233,52 @@ export default function NewRequestPage() {
       isRequired: true,
       reminderDays: "1",
       deadline: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-      materials: [],
-      scopeOneEmission: "0",
-      scopeTwoEmission: "0",
-      scopeThreeEmission: "0",
-      transportCarbonFootprint: "0",
-      scopeOneRequired: false,
-      scopeTwoRequired: false,
-      scopeThreeRequired: false,
-      transportCarbonRequired: false,
+      // 初始化所有可能的欄位
+      category1: "0",
+      category2: "0",
+      category3: "0",
+      category4: "0",
+      category5: "0",
+      category6: "0",
+      raw_material: "",
+      life_cycle: "",
+      product_carbon_footprint: "0",
+      raw_material_stage: "0",
+      manufacturing_stage: "0",
+      usage_stage: "0",
+      disposal_stage: "0",
+      transport_service: "0",
+      fieldRequirements: {}
     }
   ])
   const [currentRequestIndex, setCurrentRequestIndex] = useState(0)
+
+  // 從 localStorage 載入 case 設定
+  useEffect(() => {
+    const savedDataSource = localStorage.getItem('supplier-data-source') as "default" | "tsmc";
+    if (savedDataSource && (savedDataSource === 'default' || savedDataSource === 'tsmc')) {
+      // 根據 case 設定更新相關狀態
+      if (savedDataSource === "tsmc") {
+        // 更新產品碳足跡相關的欄位
+        setRequests(prev => prev.map(request => ({
+          ...request,
+          raw_material: request.raw_material || "",
+          life_cycle: request.life_cycle || "",
+          product_carbon_footprint: request.product_carbon_footprint || "0",
+          raw_material_stage: request.raw_material_stage || "0",
+          manufacturing_stage: request.manufacturing_stage || "0",
+          usage_stage: request.usage_stage || "0",
+          disposal_stage: request.disposal_stage || "0"
+        })));
+      } else {
+        // 更新服務碳足跡相關的欄位
+        setRequests(prev => prev.map(request => ({
+          ...request,
+          transport_service: request.transport_service || "0"
+        })));
+      }
+    }
+  }, []);
 
   // 設置表單
   const form = useForm({
@@ -218,15 +331,25 @@ export default function NewRequestPage() {
       isRequired: true,
       reminderDays: "1",
       deadline: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-      materials: [],
-      scopeOneEmission: "0",
-      scopeTwoEmission: "0",
-      scopeThreeEmission: "0",
-      transportCarbonFootprint: "0",
-      scopeOneRequired: false,
-      scopeTwoRequired: false,
-      scopeThreeRequired: false,
-      transportCarbonRequired: false,
+      // 組織溫室氣體排放相關欄位
+      category1: "0",
+      category2: "0",
+      category3: "0",
+      category4: "0",
+      category5: "0",
+      category6: "0",
+      // 產品碳足跡相關欄位
+      raw_material: "",
+      life_cycle: "",
+      product_carbon_footprint: "0",
+      raw_material_stage: "0",
+      manufacturing_stage: "0",
+      usage_stage: "0",
+      disposal_stage: "0",
+      // 服務碳足跡相關欄位
+      transport_service: "0",
+      // 必填欄位控制
+      fieldRequirements: {}
     };
     setRequests([...requests, newRequest]);
     setCurrentRequestIndex(requests.length);
@@ -264,14 +387,21 @@ export default function NewRequestPage() {
           ...newRequests[index], 
           ...data,
           title: "組織溫室氣體排放量",
-          scopeOneEmission: newRequests[index].scopeOneEmission || "0",
-          scopeTwoEmission: newRequests[index].scopeTwoEmission || "0",
-          scopeThreeEmission: newRequests[index].scopeThreeEmission || "0",
-          scopeOneRequired: newRequests[index].scopeOneRequired || false,
-          scopeTwoRequired: newRequests[index].scopeTwoRequired || false,
-          scopeThreeRequired: newRequests[index].scopeThreeRequired || false,
-          transportCarbonFootprint: "",
-          transportCarbonRequired: false
+          category1: newRequests[index].category1 || "0",
+          category2: newRequests[index].category2 || "0",
+          category3: newRequests[index].category3 || "0",
+          category4: newRequests[index].category4 || "0",
+          category5: newRequests[index].category5 || "0",
+          category6: newRequests[index].category6 || "0",
+          raw_material: "",
+          life_cycle: "",
+          product_carbon_footprint: "",
+          raw_material_stage: "",
+          manufacturing_stage: "",
+          usage_stage: "",
+          disposal_stage: "",
+          transport_service: "",
+          fieldRequirements: {}
         };
       } else if (data.dataType === "product-carbon") {
         // 設置產品碳足跡相關欄位的預設值
@@ -279,14 +409,42 @@ export default function NewRequestPage() {
           ...newRequests[index], 
           ...data,
           title: "產品碳足跡",
-          scopeOneEmission: "",
-          scopeTwoEmission: "",
-          scopeThreeEmission: "",
-          scopeOneRequired: false,
-          scopeTwoRequired: false,
-          scopeThreeRequired: false,
-          transportCarbonFootprint: newRequests[index].transportCarbonFootprint || "0",
-          transportCarbonRequired: newRequests[index].transportCarbonRequired || false
+          category1: "",
+          category2: "",
+          category3: "",
+          category4: "",
+          category5: "",
+          category6: "",
+          raw_material: newRequests[index].raw_material || "",
+          life_cycle: newRequests[index].life_cycle || "",
+          product_carbon_footprint: newRequests[index].product_carbon_footprint || "0",
+          raw_material_stage: newRequests[index].raw_material_stage || "0",
+          manufacturing_stage: newRequests[index].manufacturing_stage || "0",
+          usage_stage: newRequests[index].usage_stage || "0",
+          disposal_stage: newRequests[index].disposal_stage || "0",
+          transport_service: "",
+          fieldRequirements: {}
+        };
+      } else if (data.dataType === "service-carbon") {
+        newRequests[index] = { 
+          ...newRequests[index], 
+          ...data,
+          title: "服務碳足跡",
+          category1: "",
+          category2: "",
+          category3: "",
+          category4: "",
+          category5: "",
+          category6: "",
+          raw_material: "",
+          life_cycle: "",
+          product_carbon_footprint: "",
+          raw_material_stage: "",
+          manufacturing_stage: "",
+          usage_stage: "",
+          disposal_stage: "",
+          transport_service: newRequests[index].transport_service || "0",
+          fieldRequirements: {}
         };
       } else {
         newRequests[index] = { ...newRequests[index], ...data };
@@ -398,23 +556,23 @@ export default function NewRequestPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1">
                       <div>
                         <p className="text-xs font-medium">類別1排放量:</p>
-                        <p className="text-sm text-muted-foreground">{request.scopeOneEmission || '0'}</p>
-                        <Badge variant={request.scopeOneRequired ? "default" : "outline"} className="mt-1">
-                          {request.scopeOneRequired ? "必填" : "選填"}
+                        <p className="text-sm text-muted-foreground">{request.category1 || '0'}</p>
+                        <Badge variant={request.fieldRequirements?.category1 ? "default" : "outline"} className="mt-1">
+                          {request.fieldRequirements?.category1 ? "必填" : "選填"}
                         </Badge>
                       </div>
                       <div>
                         <p className="text-xs font-medium">類別2排放量:</p>
-                        <p className="text-sm text-muted-foreground">{request.scopeTwoEmission || '0'}</p>
-                        <Badge variant={request.scopeTwoRequired ? "default" : "outline"} className="mt-1">
-                          {request.scopeTwoRequired ? "必填" : "選填"}
+                        <p className="text-sm text-muted-foreground">{request.category2 || '0'}</p>
+                        <Badge variant={request.fieldRequirements?.category2 ? "default" : "outline"} className="mt-1">
+                          {request.fieldRequirements?.category2 ? "必填" : "選填"}
                         </Badge>
                       </div>
                       <div>
                         <p className="text-xs font-medium">類別3排放量:</p>
-                        <p className="text-sm text-muted-foreground">{request.scopeThreeEmission || '0'}</p>
-                        <Badge variant={request.scopeThreeRequired ? "default" : "outline"} className="mt-1">
-                          {request.scopeThreeRequired ? "必填" : "選填"}
+                        <p className="text-sm text-muted-foreground">{request.category3 || '0'}</p>
+                        <Badge variant={request.fieldRequirements?.category3 ? "default" : "outline"} className="mt-1">
+                          {request.fieldRequirements?.category3 ? "必填" : "選填"}
                         </Badge>
                       </div>
                     </div>
@@ -427,9 +585,9 @@ export default function NewRequestPage() {
                     <p className="text-sm font-medium">產品碳足跡(單位：kgCO2e/噸公里):</p>
                     <div className="mt-1">
                       <p className="text-xs font-medium">貨運服務碳足跡:</p>
-                      <p className="text-sm text-muted-foreground">{request.transportCarbonFootprint || '0'}</p>
-                      <Badge variant={request.transportCarbonRequired ? "default" : "outline"} className="mt-1">
-                        {request.transportCarbonRequired ? "必填" : "選填"}
+                      <p className="text-sm text-muted-foreground">{request.transport_service || '0'}</p>
+                      <Badge variant={request.fieldRequirements?.transport_service ? "default" : "outline"} className="mt-1">
+                        {request.fieldRequirements?.transport_service ? "必填" : "選填"}
                       </Badge>
                     </div>
                   </div>
@@ -442,273 +600,210 @@ export default function NewRequestPage() {
     );
   };
 
+  // 渲染欄位函數
+  const renderField = (field: Field, requestIndex: number) => {
+    const currentRequest = requests[requestIndex];
+    const isRequired = currentRequest.fieldRequirements?.[field.id] || false;
+    const fieldValue = currentRequest[field.id as keyof RequestValues];
+
+    return (
+      <div key={field.id} className="space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="font-medium">{field.label}</div>
+            {field.unit && (
+              <span className="text-sm text-muted-foreground">
+                ({field.unit})
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <FormLabel htmlFor={`request-${requestIndex}-${field.id}-required`}>必填</FormLabel>
+            <Checkbox
+              id={`request-${requestIndex}-${field.id}-required`}
+              checked={isRequired}
+              onCheckedChange={(checked) => {
+                const newFieldRequirements = {
+                  ...currentRequest.fieldRequirements,
+                  [field.id]: checked === true
+                };
+                updateRequest(requestIndex, { fieldRequirements: newFieldRequirements });
+              }}
+            />
+          </div>
+        </div>
+
+        {field.type === "select" && field.options && (
+          <Select
+            value={fieldValue?.toString() || ""}
+            onValueChange={(value) => 
+              updateRequest(requestIndex, { [field.id]: value })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={`請選擇${field.label}`} />
+            </SelectTrigger>
+            <SelectContent>
+              {field.options.map((option) => (
+                <SelectItem key={option.id} value={option.id}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+
+        {field.type === "number" && (
+          <Input
+            type="number"
+            value={fieldValue?.toString() || ""}
+            onChange={(e) => updateRequest(requestIndex, { [field.id]: e.target.value })}
+            placeholder={`請輸入${field.label}`}
+          />
+        )}
+
+        {field.type === "text" && (
+          <Input
+            type="text"
+            value={fieldValue?.toString() || ""}
+            onChange={(e) => updateRequest(requestIndex, { [field.id]: e.target.value })}
+            placeholder={`請輸入${field.label}`}
+          />
+        )}
+      </div>
+    );
+  };
+
   // 渲染當前編輯的請求表單
   const renderRequestForm = (requestIndex: number) => {
     const currentRequest = requests[requestIndex];
-    
+
     if (!currentRequest) return null;
-    
+
+    const renderFields = (fields: Field[]) => {
+      return fields.map((field) => renderField(field, requestIndex));
+    };
+
     return (
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium">
-            編輯請求 #{requestIndex + 1}
-          </h3>
-          <div className="flex space-x-2">
-            <Button 
-              type="button" 
-              variant="outline" 
-              size="sm"
-              onClick={() => duplicateRequest(requestIndex)}
-            >
-              複製
-            </Button>
-            <Button 
-              type="button" 
-              variant="destructive" 
-              size="sm"
-              onClick={() => deleteRequest(requestIndex)}
-            >
-              刪除
-            </Button>
-          </div>
+      <div className="space-y-6">
+        <div>
+          <FormLabel htmlFor={`request-${requestIndex}-title`}>數據要求名稱</FormLabel>
+          <Input
+            id={`request-${requestIndex}-title`}
+            value={currentRequest.title}
+            onChange={(e) => updateRequest(requestIndex, { title: e.target.value })}
+            placeholder="請輸入數據要求名稱"
+          />
         </div>
-        
-        <div className="space-y-4">
-          <div>
-            <FormLabel htmlFor={`request-${requestIndex}-title`}>數據要求名稱</FormLabel>
-            <Input 
-              id={`request-${requestIndex}-title`}
-              value={currentRequest.title}
-              onChange={(e) => updateRequest(requestIndex, { title: e.target.value })}
-              placeholder="輸入數據要求名稱"
-            />
+
+        <div>
+          <FormLabel htmlFor={`request-${requestIndex}-description`}>描述</FormLabel>
+          <Textarea
+            id={`request-${requestIndex}-description`}
+            value={currentRequest.description}
+            onChange={(e) => updateRequest(requestIndex, { description: e.target.value })}
+            placeholder="請輸入數據要求的描述"
+          />
+        </div>
+
+        <div>
+          <FormLabel htmlFor={`request-${requestIndex}-dataType`}>要求類型</FormLabel>
+          <Select
+            value={currentRequest.dataType}
+            onValueChange={(value) => updateRequest(requestIndex, { dataType: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="請選擇要求類型" />
+            </SelectTrigger>
+            <SelectContent>
+              {dataTypes.map((type) => (
+                <SelectItem key={type.id} value={type.id}>
+                  {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {currentRequest.dataType && (
             <p className="text-sm text-muted-foreground mt-1">
-              為您的數據要求提供一個描述性名稱
+              {dataTypeDescriptions[currentRequest.dataType as keyof typeof dataTypeDescriptions]}
             </p>
-          </div>
-          
-          <div>
-            <FormLabel htmlFor={`request-${requestIndex}-description`}>說明</FormLabel>
-            <Textarea 
-              id={`request-${requestIndex}-description`}
-              value={currentRequest.description || ''}
-              onChange={(e) => updateRequest(requestIndex, { description: e.target.value })}
-              placeholder="輸入數據要求說明"
-              rows={3}
-            />
-            <p className="text-sm text-muted-foreground mt-1">
-              提供更詳細的說明，讓供應商更清楚您的要求
-            </p>
-          </div>
-          
-          <div>
-            <FormLabel htmlFor={`request-${requestIndex}-dataType`}>要求類別</FormLabel>
-            <Select 
-              value={currentRequest.dataType}
-              onValueChange={(value) => updateRequest(requestIndex, { dataType: value, materials: [] })}
+          )}
+        </div>
+
+        <div>
+          <FormLabel htmlFor={`request-${requestIndex}-deadline`}>截止日期</FormLabel>
+          <div className="flex items-center gap-4">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-[240px] justify-start text-left font-normal",
+                    !currentRequest.deadline && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {currentRequest.deadline ? (
+                    format(currentRequest.deadline, "yyyy-MM-dd")
+                  ) : (
+                    <span>選擇日期</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={currentRequest.deadline}
+                  onSelect={(date) => date && updateRequest(requestIndex, { deadline: date })}
+                  disabled={(date) =>
+                    date < new Date() || date < new Date("1900-01-01")
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+
+            <Select
+              value={currentRequest.reminderDays}
+              onValueChange={(value) => updateRequest(requestIndex, { reminderDays: value })}
             >
-              <SelectTrigger id={`request-${requestIndex}-dataType`}>
-                <SelectValue placeholder="選擇要求類別" />
+              <SelectTrigger className="w-[240px]">
+                <SelectValue placeholder="選擇提醒時間" />
               </SelectTrigger>
               <SelectContent>
-                {dataTypes.map((type) => (
-                  <SelectItem key={type.id} value={type.id}>
-                    {type.label}
-                  </SelectItem>
-                ))}
+                <SelectItem value="1">提前1天提醒</SelectItem>
+                <SelectItem value="3">提前3天提醒</SelectItem>
+                <SelectItem value="7">提前7天提醒</SelectItem>
+                <SelectItem value="14">提前14天提醒</SelectItem>
+                <SelectItem value="30">提前30天提醒</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-sm text-muted-foreground mt-1">
-              選擇您要向供應商要求的數據類型
-            </p>
           </div>
-          
-          {/* 根據選擇的數據類型顯示對應的欄位 */}
-          {currentRequest.dataType === "organizational-carbon" && (
-            <div className="border rounded-md p-4 space-y-4">
-              <h4 className="font-medium mb-2">組織溫室氣體排放量(單位：tCO2e)</h4>
-              
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="font-medium">類別1排放量</div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
-                          <InfoIcon className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="max-w-xs">類別1排放是指企業直接產生的溫室氣體排放，如自有設備、車輛等燃燒化石燃料所產生的排放</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FormLabel htmlFor={`request-${requestIndex}-scope-one-required`}>必填</FormLabel>
-                    <Checkbox
-                      id={`request-${requestIndex}-scope-one-required`}
-                      checked={currentRequest.scopeOneRequired}
-                      onCheckedChange={(checked) => 
-                        updateRequest(requestIndex, { scopeOneRequired: checked === true })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="font-medium">類別2排放量</div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
-                          <InfoIcon className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="max-w-xs">類別2排放是指企業因購買電力、熱能、蒸汽等能源而間接產生的溫室氣體排放</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FormLabel htmlFor={`request-${requestIndex}-scope-two-required`}>必填</FormLabel>
-                    <Checkbox
-                      id={`request-${requestIndex}-scope-two-required`}
-                      checked={currentRequest.scopeTwoRequired}
-                      onCheckedChange={(checked) => 
-                        updateRequest(requestIndex, { scopeTwoRequired: checked === true })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="font-medium">類別3排放量</div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
-                          <InfoIcon className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="max-w-xs">類別3排放是指企業價值鏈中的其他間接排放，包括採購的商品和服務、商務旅行、員工通勤、投資等活動產生的排放</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FormLabel htmlFor={`request-${requestIndex}-scope-three-required`}>必填</FormLabel>
-                    <Checkbox
-                      id={`request-${requestIndex}-scope-three-required`}
-                      checked={currentRequest.scopeThreeRequired}
-                      onCheckedChange={(checked) => 
-                        updateRequest(requestIndex, { scopeThreeRequired: checked === true })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {currentRequest.dataType === "product-carbon" && (
-            <div className="border rounded-md p-4 space-y-4">
-              <h4 className="font-medium mb-2">產品碳足跡(單位：kgCO2e/噸公里)</h4>
-              
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="font-medium">貨運服務碳足跡</div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
-                          <InfoIcon className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="max-w-xs">貨運服務碳足跡是指每運送一噸貨物一公里所產生的溫室氣體排放量</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FormLabel htmlFor={`request-${requestIndex}-transport-carbon-required`}>必填</FormLabel>
-                    <Checkbox
-                      id={`request-${requestIndex}-transport-carbon-required`}
-                      checked={currentRequest.transportCarbonRequired}
-                      onCheckedChange={(checked) => 
-                        updateRequest(requestIndex, { transportCarbonRequired: checked === true })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-            <div>
-              <FormLabel htmlFor={`request-${requestIndex}-deadline`}>截止日期</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    id={`request-${requestIndex}-deadline`}
-                    variant={"outline"}
-                    className={cn(
-                      "w-full pl-3 text-left font-normal",
-                      !currentRequest.deadline && "text-muted-foreground"
-                    )}
-                  >
-                    {currentRequest.deadline ? (
-                      format(currentRequest.deadline, "yyyy-MM-dd")
-                    ) : (
-                      <span>選擇日期</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={currentRequest.deadline}
-                    onSelect={(date) => updateRequest(requestIndex, { deadline: date as Date })}
-                    disabled={(date) =>
-                      date < new Date(new Date().setHours(0, 0, 0, 0))
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <p className="text-sm text-muted-foreground mt-1">
-                設定供應商需要回應的截止日期
-              </p>
-            </div>
-            
-            <div>
-              <FormLabel htmlFor={`request-${requestIndex}-reminderDays`}>截止日前提醒</FormLabel>
-              <Select 
-                value={currentRequest.reminderDays}
-                onValueChange={(value) => updateRequest(requestIndex, { reminderDays: value })}
-              >
-                <SelectTrigger id={`request-${requestIndex}-reminderDays`}>
-                  <SelectValue placeholder="選擇提醒時間" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0">無提醒</SelectItem>
-                  <SelectItem value="1">1天前</SelectItem>
-                  <SelectItem value="3">3天前</SelectItem>
-                  <SelectItem value="7">1週前</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-sm text-muted-foreground mt-1">
-                系統會在截止日前自動發送提醒
-              </p>
-            </div>
-          </div>
+          <p className="text-sm text-muted-foreground mt-1">
+            系統會在截止日前自動發送提醒
+          </p>
         </div>
+
+        {currentRequest.dataType === "organizational-carbon" && (
+          <div className="border rounded-md p-4 space-y-4">
+            <h4 className="font-medium mb-2">組織溫室氣體排放量(單位：tCO2e)</h4>
+            {renderFields(organizationalFields)}
+          </div>
+        )}
+
+        {currentRequest.dataType === "product-carbon" && (
+          <div className="border rounded-md p-4 space-y-4">
+            <h4 className="font-medium mb-2">產品碳足跡</h4>
+            {renderFields(productFields)}
+          </div>
+        )}
+
+        {currentRequest.dataType === "service-carbon" && (
+          <div className="border rounded-md p-4 space-y-4">
+            <h4 className="font-medium mb-2">服務碳足跡</h4>
+            {renderFields(serviceFields)}
+          </div>
+        )}
       </div>
     );
   };

@@ -21,6 +21,7 @@ import {
   XCircle
 } from "lucide-react"
 import { format } from "date-fns"
+import { dataSourceOptions } from "@/lib/mocks/suppliers"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -102,7 +103,7 @@ type Response = {
 }
 
 // 模擬回應數據
-const responseData: Response[] = [
+const defaultResponseData: Response[] = [
   {
     id: "resp1",
     requestId: "1",
@@ -162,91 +163,61 @@ const responseData: Response[] = [
         size: "3.1 MB",
       }
     ]
-  },
+  }
+];
+
+const tsmcResponseData: Response[] = [
   {
-    id: "resp3",
-    requestId: "2",
+    id: "tsmc-resp1",
+    requestId: "tsmc-1",
     request: {
-      id: "2",
-      title: "供應商基本信息更新",
-      deadline: "2023-11-15",
+      id: "tsmc-1",
+      title: "半導體製程碳排放評估",
+      deadline: "2024-01-31",
     },
     supplier: {
-      id: "s3",
-      name: "宅配通",
-      companyId: "TW34567890",
-      email: "contact@pelican.com.tw",
+      id: "tsmc-s1",
+      name: "台積電供應商A",
+      companyId: "TSMC001",
+      email: "supplierA@example.com",
     },
-    submittedAt: "2023-10-20",
-    status: "needs_revision",
-    reviewedAt: "2023-10-22",
-    reviewComment: "公司地址信息不完整，請提供詳細地址。",
-    files: [
-      {
-        id: "f4",
-        name: "公司基本資訊.docx",
-        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        size: "850 KB",
-      }
-    ]
-  },
-  {
-    id: "resp4",
-    requestId: "2",
-    request: {
-      id: "2",
-      title: "供應商基本信息更新",
-      deadline: "2023-11-15",
-    },
-    supplier: {
-      id: "s1",
-      name: "新竹物流",
-      companyId: "TW12345678",
-      email: "contact@hct.com.tw",
-    },
-    submittedAt: "2023-10-05",
-    status: "rejected",
-    reviewedAt: "2023-10-08",
-    reviewComment: "提供的資訊與實際不符，請重新提交正確資訊。",
-    files: [
-      {
-        id: "f5",
-        name: "新竹物流基本資訊更新.pdf",
-        type: "application/pdf",
-        size: "1.2 MB",
-      }
-    ]
-  },
-  {
-    id: "resp5",
-    requestId: "3",
-    request: {
-      id: "3",
-      title: "產品碳足跡調查",
-      deadline: "2023-10-30",
-    },
-    supplier: {
-      id: "s4",
-      name: "長榮國際儲運",
-      companyId: "TW45678901",
-      email: "service@evergreen.com.tw",
-    },
-    submittedAt: "2023-10-25",
+    submittedAt: "2023-12-15",
     status: "pending_review",
     reviewedAt: null,
     reviewComment: null,
     files: [
       {
-        id: "f6",
-        name: "產品碳足跡數據.xlsx",
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        size: "2.3 MB",
-      },
-      {
-        id: "f7",
-        name: "產品清單.pdf",
+        id: "tf1",
+        name: "製程碳排放評估報告.pdf",
         type: "application/pdf",
-        size: "1.5 MB",
+        size: "3.2 MB",
+      }
+    ]
+  },
+  {
+    id: "tsmc-resp2",
+    requestId: "tsmc-2",
+    request: {
+      id: "tsmc-2",
+      title: "原物料碳足跡追蹤",
+      deadline: "2024-02-15",
+    },
+    supplier: {
+      id: "tsmc-s2",
+      name: "台積電供應商B",
+      companyId: "TSMC002",
+      email: "supplierB@example.com",
+    },
+    submittedAt: "2023-12-20",
+    status: "approved",
+    reviewedAt: "2023-12-22",
+    reviewComment: "資料完整，符合要求。",
+    files: [
+      {
+        id: "tf2",
+        name: "原物料碳足跡報告.xlsx",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        size: "2.8 MB",
       }
     ]
   }
@@ -255,8 +226,9 @@ const responseData: Response[] = [
 export default function ResponsesPage({ t }: { t?: any }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [responses, setResponses] = useState<Response[]>(responseData);
+  const [responses, setResponses] = useState<Response[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [caseType, setCaseType] = useState<"default" | "tsmc">("default");
   // 從URL獲取要求ID並設置過濾器
   const requestParam = searchParams.get('request');
   const [statusFilter, setStatusFilter] = useState<ResponseStatus | "all">("all");
@@ -299,6 +271,22 @@ export default function ResponsesPage({ t }: { t?: any }) {
     
     return matchesSearch && matchesStatus && matchesRequest;
   });
+
+  // 根據 Case 類型過濾供應商資料
+  const getFilteredSupplierData = (supplier: Supplier) => {
+    if (caseType === "default") {
+      return {
+        name: supplier.name,
+        companyId: supplier.companyId
+      };
+    } else {
+      // Case 2 顯示更多供應商資訊
+      return {
+        name: `${supplier.name} (${supplier.companyId})`,
+        email: supplier.email
+      };
+    }
+  };
 
   // 獲取回應狀態標籤
   const getStatusBadge = (status: ResponseStatus): React.ReactNode => {
@@ -374,14 +362,15 @@ export default function ResponsesPage({ t }: { t?: any }) {
     setReviewDialogOpen(true);
   };
 
-  // 如果有特定的請求ID，篩選僅顯示該請求的回應
+  // 根據 case 類型和請求ID更新回應數據
   useEffect(() => {
+    const responseData = caseType === "tsmc" ? tsmcResponseData : defaultResponseData;
     if (requestParam) {
       setResponses(responseData.filter(response => response.requestId === requestParam));
     } else {
       setResponses(responseData);
     }
-  }, [requestParam]);
+  }, [requestParam, caseType]);
 
   return (
     <div className="space-y-6 ">
@@ -403,7 +392,20 @@ export default function ResponsesPage({ t }: { t?: any }) {
               : t?.('responses_for_all_requests') || `所有要求的回應`}
           </p>
         </div>
-  
+        <div className="ml-auto">
+          <Select value={caseType} onValueChange={(value: "default" | "tsmc") => setCaseType(value)}>
+            <SelectTrigger className="w-[120px]">
+              <SelectValue placeholder="選擇 Case" />
+            </SelectTrigger>
+            <SelectContent>
+              {dataSourceOptions.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       
       {/* 狀態統計卡片 */}
@@ -505,6 +507,9 @@ export default function ResponsesPage({ t }: { t?: any }) {
             <TableRow className="bg-slate-50">
               <TableHead className="w-[250px]">{t?.('request_name') || "要求名稱"}</TableHead>
               <TableHead className="w-[200px]">{t?.('supplier') || "供應商"}</TableHead>
+              {caseType === "tsmc" && (
+                <TableHead className="w-[200px]">{t?.('supplier_email') || "供應商郵箱"}</TableHead>
+              )}
               <TableHead className="w-[120px]">{t?.('submission_date') || "提交日期"}</TableHead>
               <TableHead className="w-[120px]">{t?.('status') || "狀態"}</TableHead>
               <TableHead>{t?.('files') || "檔案"}</TableHead>
@@ -514,72 +519,75 @@ export default function ResponsesPage({ t }: { t?: any }) {
           <TableBody>
             {filteredResponses.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell colSpan={caseType === "tsmc" ? 7 : 6} className="h-24 text-center">
                   沒有找到符合的回應
                 </TableCell>
               </TableRow>
             ) : (
-              filteredResponses.map(response => (
-                <TableRow key={response.id}>
-                  <TableCell className="font-medium">
-                    <div className="flex flex-col">
-                      <span>{response.request.title}</span>
-                      <span className="text-xs text-muted-foreground">
-                        截止日期: {response.request.deadline}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span>{response.supplier.name}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {response.supplier.companyId}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>{response.submittedAt}</TableCell>
-                  <TableCell>{getStatusBadge(response.status)}</TableCell>
-                  <TableCell>
-                    <div className="flex flex-col gap-1">
-                      {response.files.map(file => (
-                        <div key={file.id} className="flex items-center text-sm">
-                          {getFileIcon(file.type)}
-                          <span className="ml-2">{file.name}</span>
-                          <span className="ml-1 text-xs text-muted-foreground">
-                            ({file.size})
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">菜單</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>{t?.('action') || "操作"}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleViewDetails(response)}>
-                          <Eye className="h-4 w-4 mr-2" />
-                          {t?.('view_response') || "查看回應"}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStartReview(response)}>
-                          <CheckCircle2 className="h-4 w-4 mr-2" />
-                          {t?.('review') || "審核"}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Download className="h-4 w-4 mr-2" />
-                          {t?.('download_all_files') || "下載所有檔案"}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
+              filteredResponses.map((response) => {
+                const supplierData = getFilteredSupplierData(response.supplier);
+                return (
+                  <TableRow key={response.id}>
+                    <TableCell>
+                      <div className="font-medium">{response.request.title}</div>
+                      <div className="text-sm text-muted-foreground">
+                        截止日期：{response.request.deadline}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {caseType === "default" ? (
+                        <>
+                          <div className="font-medium">{supplierData.name}</div>
+                          <div className="text-sm text-gray-400">{supplierData.companyId}</div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="font-medium">{supplierData.name}</div>
+                          <div className="text-sm text-gray-400">{supplierData.companyId}</div>
+                        </>
+                      )}
+                    </TableCell>
+                    {caseType === "tsmc" && (
+                      <TableCell>
+                        <div className="text-sm">{supplierData.email}</div>
+                      </TableCell>
+                    )}
+                    <TableCell>{response.submittedAt}</TableCell>
+                    <TableCell>{getStatusBadge(response.status)}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-1">
+                        {response.files.map((file) => (
+                          <div key={file.id} className="flex items-center gap-2">
+                            {getFileIcon(file.type)}
+                            <span className="text-sm">{file.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleViewDetails(response)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            查看詳情
+                          </DropdownMenuItem>
+                          {response.status === "pending_review" && (
+                            <DropdownMenuItem onClick={() => handleStartReview(response)}>
+                              <CheckCircle2 className="mr-2 h-4 w-4" />
+                              開始審核
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>

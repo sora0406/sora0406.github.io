@@ -97,7 +97,7 @@ const emailData = {
   requestTitle: '2023年度碳排放數據收集',
   dueDate: '2023-12-31',
   priority: '高',
-  description: '請提供貴公司2023年度碳排放相關數據...',
+  description: '2023年度碳排放相關數據...',
   contactPerson: '王小明',
   contactEmail: 'contact@example.com',
   requesterName: '林經理',

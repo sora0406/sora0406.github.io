@@ -507,7 +507,7 @@ const productResponses: SurveyResponse[] = [
         "生命週期": "10年"
       },
       "碳足跡數據": {
-        "產品碳足跡": "2.5 kgCO2e/噸公里"
+        "產品碳足跡": "2.5 kgCO2e/宣告單位"
       },
       "生命週期階段": {
         "原(物)料取得": "1.2 kgCO2e/片",
@@ -1162,7 +1162,7 @@ export default function WarRoomPage({
           }
         },
         title: {
-          text: '碳足跡 (kgCO2e/噸公里)',
+          text: '碳足跡 (kgCO2e/宣告單位)',
           style: {
             fontSize: '13px',
             fontWeight: 500

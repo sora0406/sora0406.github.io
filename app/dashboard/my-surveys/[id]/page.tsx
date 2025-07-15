@@ -23,7 +23,7 @@ import { toast } from "@/components/ui/use-toast"
 const surveyDetails = {
   id: "1",
   title: "企業碳排放評估問卷",
-  description: "請提供貴公司的碳排放數據和減碳措施，我們將基於這些資訊評估您公司的永續發展狀況",
+  description: "的碳排放數據和減碳措施，我們將基於這些資訊評估您公司的永續發展狀況",
   sender: "台灣永續科技股份有限公司",
   senderLogo: "/company-logos/sustainable-tech.png",
   sentDate: new Date("2023-11-01"),

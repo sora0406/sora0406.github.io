@@ -1,297 +1,240 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
-import { 
-  ArrowLeft, 
-  CalendarIcon, 
-  Clock, 
-  Download, 
-  Edit, 
-  Send, 
-  Trash, 
-  Users 
-} from "lucide-react"
-import { format } from "date-fns"
+import { useRouter, useSearchParams } from "next/navigation"
+import { ArrowLeft } from "lucide-react"
+import { format, parse } from "date-fns"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { toast } from "@/components/ui/use-toast"
+import { getSuppliers } from "@/lib/mocks/suppliers"
 
-// 模擬數據要求
-const initialRequests = [
-  {
-    id: "1",
-    title: "2023年度碳排放數據收集",
-    description: "請提供貴公司2023年度的碳排放數據，包括範疇1、2和3的排放數據，以及減排措施的相關資訊。",
-    suppliers: ["新竹物流", "統一速達"],
-    supplierCount: 2,
-    requestedData: ["組織溫室氣體排放", "產品碳足跡"],
-    deadline: new Date("2023-12-31"),
-    status: "active",
-    reminderDays: 3,
-    createdAt: new Date("2023-10-01"),
-    responseCount: 1,
-    pendingCount: 1,
-    instructions: "請依照ISO 14064-1標準和GHG Protocol提供溫室氣體排放數據。如有任何疑問，請聯繫sustainability@example.com。"
-  },
-  {
-    id: "2",
-    title: "供應商基本信息更新",
-    description: "請更新貴公司的基本聯絡資訊、主要產品服務清單及認證情況。",
-    suppliers: ["宅配通", "新竹物流"],
-    supplierCount: 2,
-    requestedData: ["公司基本資訊"],
-    deadline: new Date("2023-11-15"),
-    status: "completed",
-    reminderDays: 5,
-    createdAt: new Date("2023-09-15"),
-    responseCount: 2,
-    pendingCount: 0,
-    instructions: "請確保所有資訊為最新狀態，尤其是聯絡人資訊和認證文件。"
-  },
-  {
-    id: "3",
-    title: "產品碳足跡調查",
-    description: "請提供貴公司主要產品的碳足跡數據，包括生產、運輸和使用階段的碳排放資訊。",
-    suppliers: ["統一速達"],
-    supplierCount: 1,
-    requestedData: ["產品碳足跡"],
-    deadline: new Date("2023-10-30"),
-    status: "expired",
-    reminderDays: 7,
-    createdAt: new Date("2023-08-30"),
-    responseCount: 0,
-    pendingCount: 1,
-    instructions: "請參照PAS 2050或ISO 14067標準進行產品碳足跡計算，並提供計算方法和數據來源。"
-  },
-]
-
-// 獲取狀態標籤
-const getStatusBadge = (status: "active" | "completed" | "expired" | string, t?: any) => {
-  switch (status) {
-    case "active":
-      return <Badge className="bg-green-500">{t?.('status_active') || '進行中'}</Badge>
-    case "completed":
-      return <Badge className="bg-blue-500">{t?.('status_completed') || '已完成'}</Badge>
-    case "expired":
-      return <Badge variant="destructive">{t?.('status_expired') || '已過期'}</Badge>
-    default:
-      return <Badge variant="outline">{t?.('status_unknown') || '未知'}</Badge>
+// 模擬數據版本歷史記錄
+interface DataVersion {
+  version: number
+  updatedTime: string
+  inventoryPeriod: {
+    start: string
+    end: string
   }
+  inventoryStandard: string
+  boundaryAddress: string
+  totalEmissions: number
+  category1: number
+  category2: number
 }
 
-export default function RequestDetailPage({ t }: { t?: any }) {
+interface RequestDetails {
+  id: string
+  name: string
+  type: string
+  supplier: {
+    name: string
+    id: string
+  }
+  contactPerson: string
+  email: string
+  expirationDate: string
+  status: "in_progress" | "confirmed"
+  dataVersions: DataVersion[]
+}
+
+// 模擬請求詳細資料
+const mockRequestDetails: RequestDetails = {
+  id: "req-001",
+  name: "2024年度碳排放數據收集",
+  type: "Organizational Carbon Emissions",
+  supplier: {
+    name: "台塑科技",
+    id: "SUP-001"
+  },
+  contactPerson: "John Doe",
+  email: "john.doe@example.com",
+  expirationDate: "2024-12-31",
+  status: "in_progress",
+  dataVersions: Array.from({ length: 10 }, (_, i) => ({
+    version: 10 - i,
+    updatedTime: format(new Date(), "yyyy-MM-dd HH:mm"),
+    inventoryPeriod: {
+      start: format(new Date(), "yyyy-MM-dd"),
+      end: format(new Date(new Date().getFullYear() + 1, new Date().getMonth(), new Date().getDate()), "yyyy-MM-dd")
+    },
+    inventoryStandard: "ISO 14064-1:2018",
+    boundaryAddress: "新竹科學園區工業東路1號",
+    totalEmissions: 624352,
+    category1: 231,
+    category2: 232323
+  }))
+}
+
+export default function RequestDetailsPage() {
   const router = useRouter()
-  const params = useParams()
-  const requestId = params.id as string
-  const [request, setRequest] = useState<any>(null)
+  const searchParams = useSearchParams()
+  const supplierId = searchParams.get('supplier')
+  const [requestDetails, setRequestDetails] = useState<RequestDetails | null>(null)
 
-  // 模擬從API獲取數據
+  // 模擬從API加載數據
   useEffect(() => {
-    const foundRequest = initialRequests.find(req => req.id === requestId)
-    if (foundRequest) {
-      setRequest(foundRequest)
+    // 在實際應用中，這裡會從API獲取數據
+    const supplier = getSuppliers('default').find(s => s.id === supplierId) || {
+      name: "台塑科技",
+      id: "SUP-001"
     }
-  }, [requestId])
 
-  // 如果找不到請求
-  if (!request) {
+    const currentDate = new Date()
+    const startDate = format(currentDate, "MM/dd/yyyy")
+    const endDate = format(new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), currentDate.getDate()), "MM/dd/yyyy")
+
+    setRequestDetails({
+      id: "req-001",
+      name: "2024年度碳排放數據收集",
+      type: "Organizational Carbon Emissions",
+      supplier: {
+        name: supplier.name,
+        id: supplier.id
+      },
+      contactPerson: "John Doe",
+      email: "john.doe@example.com",
+      expirationDate: format(new Date(2024, 11, 31), "yyyy-MM-dd"),
+      status: "in_progress",
+      dataVersions: Array.from({ length: 10 }, (_, i) => ({
+        version: 10 - i,
+        updatedTime: format(currentDate, "yyyy-MM-dd HH:mm"),
+        inventoryPeriod: {
+          start: startDate,
+          end: endDate
+        },
+        inventoryStandard: "ISO 14064-1:2018",
+        boundaryAddress: "新竹科學園區工業東路1號",
+        totalEmissions: 624352,
+        category1: 231,
+        category2: 232323
+      }))
+    })
+  }, [supplierId])
+
+  const getStatusBadge = (status: RequestDetails["status"]) => {
+    switch (status) {
+      case "in_progress":
+        return <Badge className="bg-blue-500">進行中</Badge>
+      case "confirmed":
+        return <Badge className="bg-green-500">已確認</Badge>
+      default:
+        return <Badge>未知狀態</Badge>
+    }
+  }
+
+  if (!requestDetails) {
     return (
-      <div className="flex flex-col items-center justify-center p-12">
-        <h1 className="text-xl font-bold mb-4">{t?.('request_not_found') || '找不到該數據要求'}</h1>
-        <Button onClick={() => router.push("/dashboard/requests")}>
-          {t?.('back_to_requests') || '返回數據要求列表'}
-        </Button>
+      <div className="flex items-center justify-center h-[50vh]">
+        <div className="text-center">
+          <h2 className="text-lg font-medium">載入中...</h2>
+          <p className="text-sm text-muted-foreground">請稍候</p>
+        </div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
-      {/* 頁首 */}
-      <div>
-        <Button variant="ghost" size="sm" className="mb-2" onClick={() => router.back()}>
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          {t?.('back') || '返回'}
+      {/* 頁面標題 */}
+      <div className="flex items-center gap-4">
+        <Button 
+          variant="outline" 
+          onClick={() => router.back()}
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          返回
         </Button>
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold tracking-tight">{request.title}</h2>
-          <div className="flex gap-2">
-            <Button variant="destructive" size="sm">
-              <Trash className="h-4 w-4 mr-2" />
-              {t?.('delete') || '刪除'}
-            </Button>
-            <Button variant="outline" size="sm">
-              <Edit className="h-4 w-4 mr-2" />
-              {t?.('edit') || '編輯'}
-            </Button>
-            <Button size="sm">
-              <Send className="h-4 w-4 mr-2" />
-              {t?.('send_reminder') || '發送提醒'}
-            </Button>
-          </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">查看詳情</h1>
+          <p className="text-sm text-muted-foreground">
+            查看數據要求的詳細資訊和回應歷史
+          </p>
+        </div>
+        <div className="ml-auto">
+          {getStatusBadge(requestDetails.status)}
         </div>
       </div>
 
-      {/* 狀態卡片 */}
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">{t?.('status') || '狀態'}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center">
-              {getStatusBadge(request.status, t)}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">{t?.('deadline') || '截止日期'}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-              {format(request.deadline, "yyyy-MM-dd")}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">{t?.('suppliers') || '供應商'}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              {request.supplierCount} {t?.('suppliers_count') || '家供應商'}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">{t?.('response_rate') || '回應率'}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="font-bold">{Math.round((request.responseCount / request.supplierCount) * 100)}%</div>
-            <div className="text-xs text-muted-foreground">
-              {request.responseCount} / {request.supplierCount} {t?.('responded') || '已回應'}
-            </div>
-          </CardContent>
-        </Card>
+      {/* 基本信息卡片 */}
+      <div className="grid grid-cols-2 gap-6 p-6 border rounded-lg bg-card">
+        <div className="space-y-2">
+          <div className="text-sm font-medium text-muted-foreground">要求名稱</div>
+          <div className="text-sm">{requestDetails.name}</div>
+        </div>
+        <div className="space-y-2">
+          <div className="text-sm font-medium text-muted-foreground">供應商名稱</div>
+          <div className="text-sm">{requestDetails.supplier.name}</div>
+        </div>
+        <div className="space-y-2">
+          <div className="text-sm font-medium text-muted-foreground">要求類型</div>
+          <div className="text-sm">{requestDetails.type}</div>
+        </div>
+        <div className="space-y-2">
+          <div className="text-sm font-medium text-muted-foreground">截止日期</div>
+          <div className="text-sm">{requestDetails.expirationDate}</div>
+        </div>
+        <div className="space-y-2">
+          <div className="text-sm font-medium text-muted-foreground">聯絡人</div>
+          <div className="text-sm">{requestDetails.contactPerson}</div>
+        </div>
+        <div className="space-y-2">
+          <div className="text-sm font-medium text-muted-foreground">Email</div>
+          <div className="text-sm">{requestDetails.email}</div>
+        </div>
       </div>
 
-      {/* 主要內容 */}
-      <Tabs defaultValue="details">
-        <TabsList>
-          <TabsTrigger value="details">{t?.('details') || '詳細資訊'}</TabsTrigger>
-          <TabsTrigger value="responses">{t?.('responses') || '回應'}</TabsTrigger>
-        </TabsList>
-        <TabsContent value="details" className="space-y-6 pt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t?.('request_details') || '請求詳情'}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">{t?.('description') || '描述'}</h3>
-                <p>{request.description}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">{t?.('instructions') || '填寫說明'}</h3>
-                <p>{request.instructions}</p>
-              </div>
-              <Separator />
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">{t?.('request_type') || '要求類型'}</h3>
-                  <div>{request.requestedData.join(", ")}</div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">{t?.('created_at') || '創建日期'}</h3>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    {format(request.createdAt, "yyyy-MM-dd")}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">{t?.('reminder_setting') || '提醒設定'}</h3>
-                  <div>
-                    {t?.('reminder_before_days', { days: request.reminderDays }) || `到期前 ${request.reminderDays} 天`}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">{t?.('deadline') || '截止日期'}</h3>
-                  <div className="flex items-center gap-2">
-                    <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                    {format(request.deadline, "yyyy-MM-dd")}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>{t?.('target_suppliers') || '目標供應商'}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {request.suppliers.map((supplier: string, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-2 border rounded-md">
-                    <div>{supplier}</div>
-                    <Button variant="ghost" size="sm">
-                      {t?.('view_supplier') || '查看供應商'}
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="responses" className="pt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t?.('response_summary') || '回應摘要'}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <div className="text-sm text-muted-foreground mb-2">
-                  {t?.('response_status') || '回應狀態'}
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="p-4 border rounded-md">
-                    <div className="text-2xl font-bold">{request.responseCount}</div>
-                    <div className="text-sm text-muted-foreground">{t?.('total_responses') || '總回應數'}</div>
-                  </div>
-                  <div className="p-4 border rounded-md">
-                    <div className="text-2xl font-bold text-green-500">{request.responseCount - request.pendingCount}</div>
-                    <div className="text-sm text-muted-foreground">{t?.('completed') || '已完成'}</div>
-                  </div>
-                  <div className="p-4 border rounded-md">
-                    <div className="text-2xl font-bold text-amber-500">{request.pendingCount}</div>
-                    <div className="text-sm text-muted-foreground">{t?.('pending') || '待處理'}</div>
-                  </div>
-                  <div className="p-4 border rounded-md">
-                    <div className="text-2xl font-bold text-red-500">{request.supplierCount - request.responseCount}</div>
-                    <div className="text-sm text-muted-foreground">{t?.('not_responded') || '未回應'}</div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-end mb-4">
-                <Button onClick={() => router.push(`/dashboard/requests/responses?request=${requestId}`)}>
-                  {t?.('view_all_responses') || '查看所有回應'}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+      {/* 數據版本歷史 */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">數據版本</h2>
+          <Button variant="outline" className="gap-2">
+            重新發送要求
+          </Button>
+        </div>
+        
+        <div className="border rounded-lg overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">版本</TableHead>
+                <TableHead className="w-[180px]">更新時間</TableHead>
+                <TableHead className="w-[200px]">盤查期間</TableHead>
+                <TableHead className="w-[180px]">盤查標準</TableHead>
+                <TableHead className="w-[200px]">邊界地址</TableHead>
+                <TableHead className="w-[150px] text-right">總排放量</TableHead>
+                <TableHead className="w-[120px] text-right">類別1</TableHead>
+                <TableHead className="w-[120px] text-right">類別2</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {requestDetails.dataVersions.map((version) => (
+                <TableRow key={version.version}>
+                  <TableCell className="font-medium">v{version.version}</TableCell>
+                  <TableCell>{version.updatedTime}</TableCell>
+                  <TableCell>
+                    {version.inventoryPeriod.start} – {version.inventoryPeriod.end}
+                  </TableCell>
+                  <TableCell>{version.inventoryStandard}</TableCell>
+                  <TableCell>{version.boundaryAddress}</TableCell>
+                  <TableCell className="text-right">{version.totalEmissions.toLocaleString()}</TableCell>
+                  <TableCell className="text-right">{version.category1.toLocaleString()}</TableCell>
+                  <TableCell className="text-right">{version.category2.toLocaleString()}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
   )
 }

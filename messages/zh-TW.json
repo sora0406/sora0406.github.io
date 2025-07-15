@@ -38,6 +38,10 @@
       "title": "戰情室",
       "export": "數據匯出"
     },
+    "requests": {
+      "title": "數據要求",
+      "details": "要求詳情"
+    },
     "organization_short": "組織",
     "roles_short": "角色",
     "projects_short": "專案",
@@ -212,6 +216,7 @@
     "request_title": "要求標題",
     "request_name": "要求名稱",
     "suppliers": "供應商",
+    "supplier_email": "供應商郵箱",
     "deadline": "截止日期",
     "status": "狀態",
     "actions": "操作",
@@ -222,7 +227,7 @@
     "send_reminder": "發送提醒",
     "request_not_found": "找不到該數據要求",
     "back_to_requests": "返回數據要求列表",
-    "suppliers_count": "家供應商",
+    "supplier_count": "家供應商",
     "response_rate": "回應率",
     "responded": "已回應",
     "responses": "回應",
@@ -263,7 +268,8 @@
     "review_result": "審核結果",
     "select_review_result": "選擇審核結果",
     "download_all_files": "下載所有檔案",
-    "review": "審核"
+    "review": "審核",
+    "rejected_or_needs_revision": "已拒絕或需要修改"
   },
   "dashboard": {
     "title": "儀表板",

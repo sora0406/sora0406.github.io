@@ -18,7 +18,7 @@ const mySurveys = [
   {
     id: "1",
     title: "企業碳排放評估問卷",
-    description: "請提供貴公司的碳排放數據和減碳措施",
+    description: "的碳排放數據和減碳措施",
     sender: "新竹物流",
     senderLogo: "/company-logos/hct-logistics.png",
     sentDate: new Date("2023-11-01"),
@@ -44,7 +44,7 @@ const mySurveys = [
   {
     id: "3",
     title: "產品碳足跡資訊收集",
-    description: "請提供貴公司產品的碳足跡數據",
+    description: "產品的碳足跡數據",
     sender: "宅配通",
     senderLogo: "/company-logos/pelican.png",
     sentDate: new Date("2023-09-20"),
