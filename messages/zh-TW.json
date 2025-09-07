@@ -334,8 +334,63 @@
       "export": "匯出"
     },
     "chart_options": {
-      "suppliers": "供應商",
-      "map": "地圖"
+      "suppliers": "排放量排名",
+      "map": "供應商分佈"
+    },
+    "tabs": {
+      "overview": "總覽儀表板",
+      "pareto": "帕雷托分析",
+      "geography": "地理分析",
+      "trend": "趨勢分析",
+      "simulation": "情境模擬",
+      "benchmarking": "基準比較"
+    },
+    "dashboard": {
+      "total_emission": "總碳排放量",
+      "key_suppliers": "關鍵供應商",
+      "avg_intensity": "平均排放強度",
+      "data_coverage": "數據覆蓋率",
+      "pareto_principle": "佔總數20% (帕雷托原則)",
+      "per_supplier": "tCO2e/供應商",
+      "coverage_detail": "{current} / {total} 供應商"
+    },
+    "pareto": {
+      "title": "帕雷托分析 (20/80法則)",
+      "description": "識別對總排放量貢獻最大的關鍵供應商",
+      "key_suppliers": "關鍵供應商數量",
+      "emission_contribution": "排放量貢獻度",
+      "supplier_ratio": "供應商比例"
+    },
+    "hotspot": {
+      "title": "地理熱點分析",
+      "description": "供應商地理分布與排放量熱點識別",
+      "high_risk": "高風險",
+      "medium_risk": "中風險",
+      "low_risk": "低風險"
+    },
+    "trends": {
+      "title": "趨勢分析與預測",
+      "description": "時間序列分析、同期比較與減排進度追蹤",
+      "annual_reduction": "年度減排率",
+      "target_achievement": "目標達成率",
+      "projected_reduction": "預計年底減排"
+    },
+    "alerts": {
+      "title": "異常警示管理",
+      "description": "自動檢測異常排放模式與數據品質問題",
+      "new": "新增",
+      "investigating": "調查中",
+      "resolved": "已處理",
+      "anomaly": "異常檢測",
+      "threshold": "閾值警告",
+      "data_quality": "數據品質",
+      "active_alerts": "活躍警示",
+      "resolved_this_week": "本週已處理"
+    },
+    "status": {
+      "last_updated": "數據更新時間",
+      "total_suppliers": "供應商總數",
+      "system_status": "系統正常"
     },
     "tags": {
       "all_years": "所有年度",
