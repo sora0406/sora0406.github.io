@@ -64,16 +64,11 @@ const routes = [
     icon: Users,
     imageNormal: "/side menu_structure_normal.svg",
     imageActive: "/side menu_structure_active.png",
+    hidden: true,
     disabled: true,
   },
   
-  {
-    path: "/dashboard/projects/progress",
-    name: "專案管理",
-    navKey: "projects",
-    shortName: "專案",
-    icon: Briefcase,
-  },
+
   {
     path: "/dashboard/suppliers",
     name: "供應商管理",
@@ -188,7 +183,16 @@ const routes = [
     imageNormal: "/Side Menu_role_normal.svg",
     imageActive: "/Side Menu_role_active.png",
     imageHover: "/Side Menu_role_hover.png",
+    hidden: true,
     disabled: true,
+  },
+
+  {
+    path: "/dashboard/projects/progress",
+    name: "專案管理",
+    navKey: "projects",
+    shortName: "專案",
+    icon: Briefcase,
   },
 ]
 
@@ -405,13 +409,12 @@ export default function DashboardLayout({
 
   return (
     <TooltipProvider>
-    <div className="flex min-h-screen">
-        {/* 桌面側邊欄 - 固定寬度80px */}
+    <div className="flex min-h-screen bg-background">
+        {/* 桌面側邊欄 - 現代化設計 */}
       <aside
-          className="fixed left-0 top-0 z-20 h-full border-r w-[80px] hidden lg:block pt-3"
-        style={{ backgroundColor: "#000000" }}
+          className="fixed left-0 top-0 z-20 h-full border-r border-border w-[80px] hidden lg:block bg-card/50 backdrop-blur-sm"
       >
-        <div className="flex h-16 items-center justify-center border-b" style={{ borderColor: "#333333" }}>
+        <div className="flex h-16 items-center justify-center border-b border-border">
             <div 
               className="flex items-center justify-center cursor-pointer"
               onClick={() => handleNavigate("/dashboard/survey-results")}
@@ -442,10 +445,10 @@ export default function DashboardLayout({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div
-              className={cn(
-                            "flex flex-col p-2 gap-4 rounded-md transition-colors",
+                          className={cn(
+                            "flex flex-col gap-2 rounded-lg transition-all duration-200",
                             "items-center justify-center text-center self-stretch",
-                            "text-gray-400 opacity-80 cursor-not-allowed"
+                            "p-3 text-muted-foreground/50 cursor-not-allowed"
                           )}
                         >
                           {route.imageNormal ? (
@@ -474,12 +477,12 @@ export default function DashboardLayout({
                       <TooltipTrigger asChild>
                         <div
                           className={cn(
-                            "flex flex-col gap-2 rounded-[8px] transition-colors",
+                            "flex flex-col gap-2 rounded-lg transition-all duration-200",
                             "items-center justify-center text-center cursor-pointer",
-                            "p-2 self-stretch",
+                            "p-3 self-stretch group",
                             isActive
-                  ? "text-[#F2A900]" 
-                              : "text-gray-400 hover:bg-[rgba(255,255,255,0.16)]"
+                              ? "text-primary bg-primary/10 shadow-sm" 
+                              : "text-muted-foreground hover:text-foreground hover:bg-accent"
                           )}
                           onClick={() => {
                             // 直接導航到路徑，不管是否有子路由
@@ -562,7 +565,7 @@ export default function DashboardLayout({
         <div className="flex flex-col flex-1 lg:ml-[80px]">
         {/* 頂部工具欄 */}
         <header className="sticky top-0 z-10 border-b bg-background">
-            <div className="px-6 flex h-16 items-center justify-between py-4">
+            <div className="px-4 flex h-14 items-center justify-between py-4">
               <div className="flex items-center gap-4">
               {/* 移動端側邊欄觸發器 */}
               <div className="lg:hidden">
@@ -645,7 +648,7 @@ export default function DashboardLayout({
                 {/* 功能標題 */}
                 <div className="hidden lg:block">
                   {/* <h1 className="text-xl font-semibold">{pageName}</h1> */}
-                  <h1 className="text-xl font-semibold">CarbonM</h1>
+                  <h1 className="text-lg font-semibold">Supplier Management</h1>
 
                 </div>
 
@@ -710,7 +713,7 @@ export default function DashboardLayout({
         </header>
 
         {/* 主要內容 */}
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        <main className="flex-1 bg-background min-h-screen p-2 md:p-4">{children}</main>
       </div>
     </div>
     </TooltipProvider>
