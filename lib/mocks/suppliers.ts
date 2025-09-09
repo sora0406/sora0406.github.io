@@ -42,13 +42,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 3800,
     carbonData: {
-      organizationalGHG: 52800,
-      productCarbonFootprint: 0.85,
-      scope1Emissions: 12500,
-      scope2Emissions: 35000,
-      scope4Emissions: 3800,
-      scope5Emissions: 1200,
-      scope6Emissions: 300
+      organizationalGHG: 52800.789,
+      productCarbonFootprint: 0.859,
+      scope1Emissions: 12500.2345,
+      scope2Emissions: 35000.6789,
+      scope4Emissions: 3800.9876,
+      scope5Emissions: 1200.5432,
+      scope6Emissions: 300.1111
     }
   },
   {
@@ -62,13 +62,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 2500,
     carbonData: {
-      organizationalGHG: 38500,
-      productCarbonFootprint: 0.78,
-      scope1Emissions: 8500,
-      scope2Emissions: 25000,
-      scope4Emissions: 3200,
-      scope5Emissions: 1400,
-      scope6Emissions: 400
+      organizationalGHG: 38500.789,
+      productCarbonFootprint: 0.7889,
+      scope1Emissions: 8500.2345,
+      scope2Emissions: 25000.6789,
+      scope4Emissions: 3200.9876,
+      scope5Emissions: 1400.5432,
+      scope6Emissions: 400.1111
     }
   },
   {
@@ -82,13 +82,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 2000,
     carbonData: {
-      organizationalGHG: 31200,
-      productCarbonFootprint: 0.82,
-      scope1Emissions: 7200,
-      scope2Emissions: 20000,
-      scope4Emissions: 2500,
-      scope5Emissions: 1100,
-      scope6Emissions: 400
+      organizationalGHG: 31200.789,
+      productCarbonFootprint: 0.8289,
+      scope1Emissions: 7200.2345,
+      scope2Emissions: 20000.6789,
+      scope4Emissions: 2500.9876,
+      scope5Emissions: 1100.5432,
+      scope6Emissions: 400.1111
     }
   },
   {
@@ -102,13 +102,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 1500,
     carbonData: {
-      organizationalGHG: 45600,
-      productCarbonFootprint: 1.25,
-      scope1Emissions: 18000,
-      scope2Emissions: 22000,
-      scope4Emissions: 3200,
-      scope5Emissions: 1800,
-      scope6Emissions: 600
+      organizationalGHG: 45600.789,
+      productCarbonFootprint: 1.2589,
+      scope1Emissions: 18000.2345,
+      scope2Emissions: 22000.6789,
+      scope4Emissions: 3200.9876,
+      scope5Emissions: 1800.5432,
+      scope6Emissions: 600.1111
     }
   },
   {
@@ -122,13 +122,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 1200,
     carbonData: {
-      organizationalGHG: 28800,
-      productCarbonFootprint: 0.95,
-      scope1Emissions: 8500,
-      scope2Emissions: 16000,
-      scope4Emissions: 2800,
-      scope5Emissions: 1200,
-      scope6Emissions: 300
+      organizationalGHG: 28800.789,
+      productCarbonFootprint: 0.9589,
+      scope1Emissions: 8500.2345,
+      scope2Emissions: 16000.6789,
+      scope4Emissions: 2800.9876,
+      scope5Emissions: 1200.5432,
+      scope6Emissions: 300.1111
     }
   },
   {
@@ -142,13 +142,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 1000,
     carbonData: {
-      organizationalGHG: 22400,
-      productCarbonFootprint: 0.88,
-      scope1Emissions: 6800,
-      scope2Emissions: 12500,
-      scope4Emissions: 2100,
-      scope5Emissions: 800,
-      scope6Emissions: 200
+      organizationalGHG: 22400.789,
+      productCarbonFootprint: 0.8889,
+      scope1Emissions: 6800.2345,
+      scope2Emissions: 12500.6789,
+      scope4Emissions: 2100.9876,
+      scope5Emissions: 800.5432,
+      scope6Emissions: 200.1111
     }
   },
   {
@@ -162,13 +162,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 900,
     carbonData: {
-      organizationalGHG: 19800,
-      productCarbonFootprint: 0.75,
-      scope1Emissions: 5800,
-      scope2Emissions: 11000,
-      scope4Emissions: 1800,
-      scope5Emissions: 900,
-      scope6Emissions: 300
+      organizationalGHG: 19800.789,
+      productCarbonFootprint: 0.7589,
+      scope1Emissions: 5800.2345,
+      scope2Emissions: 11000.6789,
+      scope4Emissions: 1800.9876,
+      scope5Emissions: 900.5432,
+      scope6Emissions: 300.1111
     }
   },
   {
@@ -182,13 +182,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 800,
     carbonData: {
-      organizationalGHG: 17600,
-      productCarbonFootprint: 0.73,
-      scope1Emissions: 5200,
-      scope2Emissions: 9800,
-      scope4Emissions: 1600,
-      scope5Emissions: 800,
-      scope6Emissions: 200
+      organizationalGHG: 17600.789,
+      productCarbonFootprint: 0.7389,
+      scope1Emissions: 5200.2345,
+      scope2Emissions: 9800.6789,
+      scope4Emissions: 1600.9876,
+      scope5Emissions: 800.5432,
+      scope6Emissions: 200.1111
     }
   },
   {
@@ -202,13 +202,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 700,
     carbonData: {
-      organizationalGHG: 15400,
-      productCarbonFootprint: 0.71,
-      scope1Emissions: 4600,
-      scope2Emissions: 8500,
-      scope4Emissions: 1400,
-      scope5Emissions: 700,
-      scope6Emissions: 200
+      organizationalGHG: 15400.789,
+      productCarbonFootprint: 0.7189,
+      scope1Emissions: 4600.2345,
+      scope2Emissions: 8500.6789,
+      scope4Emissions: 1400.9876,
+      scope5Emissions: 700.5432,
+      scope6Emissions: 200.1111
     }
   },
   {
@@ -222,13 +222,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 600,
     carbonData: {
-      organizationalGHG: 26400,
-      productCarbonFootprint: 1.42,
-      scope1Emissions: 8800,
-      scope2Emissions: 12000,
-      scope4Emissions: 3600,
-      scope5Emissions: 1600,
-      scope6Emissions: 400
+      organizationalGHG: 26400.789,
+      productCarbonFootprint: 1.4289,
+      scope1Emissions: 8800.2345,
+      scope2Emissions: 12000.6789,
+      scope4Emissions: 3600.9876,
+      scope5Emissions: 1600.5432,
+      scope6Emissions: 400.1111
     }
   },
   {
@@ -242,13 +242,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 500,
     carbonData: {
-      organizationalGHG: 12500,
-      productCarbonFootprint: 0.68,
-      scope1Emissions: 3800,
-      scope2Emissions: 6700,
-      scope4Emissions: 1200,
-      scope5Emissions: 600,
-      scope6Emissions: 200
+      organizationalGHG: 12500.789,
+      productCarbonFootprint: 0.6889,
+      scope1Emissions: 3800.2345,
+      scope2Emissions: 6700.6789,
+      scope4Emissions: 1200.9876,
+      scope5Emissions: 600.5432,
+      scope6Emissions: 200.1111
     }
   },
   {
@@ -262,13 +262,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 400,
     carbonData: {
-      organizationalGHG: 32800,
-      productCarbonFootprint: 2.15,
-      scope1Emissions: 14000,
-      scope2Emissions: 15000,
-      scope4Emissions: 2400,
-      scope5Emissions: 1100,
-      scope6Emissions: 300
+      organizationalGHG: 32800.789,
+      productCarbonFootprint: 2.1589,
+      scope1Emissions: 14000.2345,
+      scope2Emissions: 15000.6789,
+      scope4Emissions: 2400.9876,
+      scope5Emissions: 1100.5432,
+      scope6Emissions: 300.1111
     }
   },
   {
@@ -282,13 +282,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 300,
     carbonData: {
-      organizationalGHG: 45800,
-      productCarbonFootprint: 3.85,
-      scope1Emissions: 22000,
-      scope2Emissions: 18000,
-      scope4Emissions: 3200,
-      scope5Emissions: 2100,
-      scope6Emissions: 500
+      organizationalGHG: 45800.789,
+      productCarbonFootprint: 3.8589,
+      scope1Emissions: 22000.2345,
+      scope2Emissions: 18000.6789,
+      scope4Emissions: 3200.9876,
+      scope5Emissions: 2100.5432,
+      scope6Emissions: 500.1111
     }
   },
   {
@@ -302,13 +302,13 @@ const defaultSuppliers: Supplier[] = [
     country: "台灣",
     vehicleCount: 200,
     carbonData: {
-      organizationalGHG: 18600,
-      productCarbonFootprint: 1.68,
-      scope1Emissions: 6500,
-      scope2Emissions: 8800,
-      scope4Emissions: 2100,
-      scope5Emissions: 1000,
-      scope6Emissions: 200
+      organizationalGHG: 18600.789,
+      productCarbonFootprint: 1.6889,
+      scope1Emissions: 6500.2345,
+      scope2Emissions: 8800.6789,
+      scope4Emissions: 2100.9876,
+      scope5Emissions: 1000.5432,
+      scope6Emissions: 200.1111
     }
   }
 ];
@@ -325,13 +325,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區工業東路26號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 185000,
-      productCarbonFootprint: 12.5,
-      scope1Emissions: 45000,
-      scope2Emissions: 120000,
-      scope4Emissions: 12000,
-      scope5Emissions: 6000,
-      scope6Emissions: 2000
+      organizationalGHG: 185000.789,
+      productCarbonFootprint: 12.589,
+      scope1Emissions: 45000.2345,
+      scope2Emissions: 120000.6789,
+      scope4Emissions: 12000.9876,
+      scope5Emissions: 6000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -344,13 +344,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "東京都千代田區有楽町1-1-2",
     country: "日本",
     carbonData: {
-      organizationalGHG: 425000,
-      productCarbonFootprint: 28.5,
-      scope1Emissions: 165000,
-      scope2Emissions: 220000,
-      scope4Emissions: 25000,
-      scope5Emissions: 12000,
-      scope6Emissions: 3000
+      organizationalGHG: 425000.789,
+      productCarbonFootprint: 28.589,
+      scope1Emissions: 165000.2345,
+      scope2Emissions: 220000.6789,
+      scope4Emissions: 25000.9876,
+      scope5Emissions: 12000.5432,
+      scope6Emissions: 3000.1111
     }
   },
   {
@@ -363,13 +363,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區園區二路68號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 98000,
-      productCarbonFootprint: 8.2,
-      scope1Emissions: 28000,
-      scope2Emissions: 55000,
-      scope4Emissions: 9000,
-      scope5Emissions: 4500,
-      scope6Emissions: 1500
+      organizationalGHG: 98000.789,
+      productCarbonFootprint: 8.289,
+      scope1Emissions: 28000.2345,
+      scope2Emissions: 55000.6789,
+      scope4Emissions: 9000.9876,
+      scope5Emissions: 4500.5432,
+      scope6Emissions: 1500.1111
     }
   },
   {
@@ -382,13 +382,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區研發六路1號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 325000,
-      productCarbonFootprint: 45.8,
-      scope1Emissions: 85000,
-      scope2Emissions: 195000,
-      scope4Emissions: 28000,
-      scope5Emissions: 14000,
-      scope6Emissions: 3000
+      organizationalGHG: 325000.789,
+      productCarbonFootprint: 45.889,
+      scope1Emissions: 85000.2345,
+      scope2Emissions: 195000.6789,
+      scope4Emissions: 28000.9876,
+      scope5Emissions: 14000.5432,
+      scope6Emissions: 3000.1111
     }
   },
   {
@@ -401,13 +401,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "東京都大田區下丸子3-30-2",
     country: "日本",
     carbonData: {
-      organizationalGHG: 156000,
-      productCarbonFootprint: 15.8,
-      scope1Emissions: 38000,
-      scope2Emissions: 95000,
-      scope4Emissions: 14000,
-      scope5Emissions: 7500,
-      scope6Emissions: 1500
+      organizationalGHG: 156000.789,
+      productCarbonFootprint: 15.889,
+      scope1Emissions: 38000.2345,
+      scope2Emissions: 95000.6789,
+      scope4Emissions: 14000.9876,
+      scope5Emissions: 7500.5432,
+      scope6Emissions: 1500.1111
     }
   },
   {
@@ -420,13 +420,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "台北市中正區忠孝西路一段66號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 78000,
-      productCarbonFootprint: 5.2,
-      scope1Emissions: 22000,
-      scope2Emissions: 45000,
-      scope4Emissions: 7000,
-      scope5Emissions: 3500,
-      scope6Emissions: 500
+      organizationalGHG: 78000.789,
+      productCarbonFootprint: 5.289,
+      scope1Emissions: 22000.2345,
+      scope2Emissions: 45000.6789,
+      scope4Emissions: 7000.9876,
+      scope5Emissions: 3500.5432,
+      scope6Emissions: 500.1111
     }
   },
   {
@@ -439,13 +439,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區創新一路1號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 145000,
-      productCarbonFootprint: 18.5,
-      scope1Emissions: 35000,
-      scope2Emissions: 85000,
-      scope4Emissions: 15000,
-      scope5Emissions: 8000,
-      scope6Emissions: 2000
+      organizationalGHG: 145000.789,
+      productCarbonFootprint: 18.589,
+      scope1Emissions: 35000.2345,
+      scope2Emissions: 85000.6789,
+      scope4Emissions: 15000.9876,
+      scope5Emissions: 8000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -458,13 +458,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "台中市西屯區工業區路66號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 125000,
-      productCarbonFootprint: 11.8,
-      scope1Emissions: 32000,
-      scope2Emissions: 75000,
-      scope4Emissions: 12000,
-      scope5Emissions: 5000,
-      scope6Emissions: 1000
+      organizationalGHG: 125000.789,
+      productCarbonFootprint: 11.889,
+      scope1Emissions: 32000.2345,
+      scope2Emissions: 75000.6789,
+      scope4Emissions: 12000.9876,
+      scope5Emissions: 5000.5432,
+      scope6Emissions: 1000.1111
     }
   },
   {
@@ -477,13 +477,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "東京都千代田區大手町1-1-2",
     country: "日本",
     carbonData: {
-      organizationalGHG: 285000,
-      productCarbonFootprint: 35.8,
-      scope1Emissions: 125000,
-      scope2Emissions: 135000,
-      scope4Emissions: 18000,
-      scope5Emissions: 6000,
-      scope6Emissions: 1000
+      organizationalGHG: 285000.789,
+      productCarbonFootprint: 35.889,
+      scope1Emissions: 125000.2345,
+      scope2Emissions: 135000.6789,
+      scope4Emissions: 18000.9876,
+      scope5Emissions: 6000.5432,
+      scope6Emissions: 1000.1111
     }
   },
   {
@@ -496,13 +496,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區研發二路2號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 165000,
-      productCarbonFootprint: 22.5,
-      scope1Emissions: 42000,
-      scope2Emissions: 95000,
-      scope4Emissions: 18000,
-      scope5Emissions: 8000,
-      scope6Emissions: 2000
+      organizationalGHG: 165000.789,
+      productCarbonFootprint: 22.589,
+      scope1Emissions: 42000.2345,
+      scope2Emissions: 95000.6789,
+      scope4Emissions: 18000.9876,
+      scope5Emissions: 8000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -515,13 +515,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區工業東路26號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 198000,
-      productCarbonFootprint: 28.5,
-      scope1Emissions: 48000,
-      scope2Emissions: 115000,
-      scope4Emissions: 22000,
-      scope5Emissions: 10000,
-      scope6Emissions: 3000
+      organizationalGHG: 198000.789,
+      productCarbonFootprint: 28.589,
+      scope1Emissions: 48000.2345,
+      scope2Emissions: 115000.6789,
+      scope4Emissions: 22000.9876,
+      scope5Emissions: 10000.5432,
+      scope6Emissions: 3000.1111
     }
   },
   {
@@ -534,13 +534,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "高雄市大社區中山路1號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 385000,
-      productCarbonFootprint: 45.2,
-      scope1Emissions: 185000,
-      scope2Emissions: 165000,
-      scope4Emissions: 25000,
-      scope5Emissions: 8000,
-      scope6Emissions: 2000
+      organizationalGHG: 385000.789,
+      productCarbonFootprint: 45.289,
+      scope1Emissions: 185000.2345,
+      scope2Emissions: 165000.6789,
+      scope4Emissions: 25000.9876,
+      scope5Emissions: 8000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -553,13 +553,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "京都府京都市伏見区竹田向代町136",
     country: "日本",
     carbonData: {
-      organizationalGHG: 158000,
-      productCarbonFootprint: 25.8,
-      scope1Emissions: 38000,
-      scope2Emissions: 95000,
-      scope4Emissions: 16000,
-      scope5Emissions: 7000,
-      scope6Emissions: 2000
+      organizationalGHG: 158000.789,
+      productCarbonFootprint: 25.889,
+      scope1Emissions: 38000.2345,
+      scope2Emissions: 95000.6789,
+      scope4Emissions: 16000.9876,
+      scope5Emissions: 7000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -572,13 +572,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "東京都中央區日本橋1-9-1",
     country: "日本",
     carbonData: {
-      organizationalGHG: 128000,
-      productCarbonFootprint: 18.5,
-      scope1Emissions: 32000,
-      scope2Emissions: 78000,
-      scope4Emissions: 12000,
-      scope5Emissions: 5000,
-      scope6Emissions: 1000
+      organizationalGHG: 128000.789,
+      productCarbonFootprint: 18.589,
+      scope1Emissions: 32000.2345,
+      scope2Emissions: 78000.6789,
+      scope4Emissions: 12000.9876,
+      scope5Emissions: 5000.5432,
+      scope6Emissions: 1000.1111
     }
   },
   {
@@ -591,13 +591,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區力行路5號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 89000,
-      productCarbonFootprint: 12.8,
-      scope1Emissions: 25000,
-      scope2Emissions: 52000,
-      scope4Emissions: 8000,
-      scope5Emissions: 3500,
-      scope6Emissions: 500
+      organizationalGHG: 89000.789,
+      productCarbonFootprint: 12.889,
+      scope1Emissions: 25000.2345,
+      scope2Emissions: 52000.6789,
+      scope4Emissions: 8000.9876,
+      scope5Emissions: 3500.5432,
+      scope6Emissions: 500.1111
     }
   },
   {
@@ -610,13 +610,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區園區一路15號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 95000,
-      productCarbonFootprint: 14.2,
-      scope1Emissions: 26000,
-      scope2Emissions: 58000,
-      scope4Emissions: 7000,
-      scope5Emissions: 3500,
-      scope6Emissions: 500
+      organizationalGHG: 95000.789,
+      productCarbonFootprint: 14.289,
+      scope1Emissions: 26000.2345,
+      scope2Emissions: 58000.6789,
+      scope4Emissions: 7000.9876,
+      scope5Emissions: 3500.5432,
+      scope6Emissions: 500.1111
     }
   },
   {
@@ -629,13 +629,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區研發三路3號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 78000,
-      productCarbonFootprint: 9.8,
-      scope1Emissions: 22000,
-      scope2Emissions: 45000,
-      scope4Emissions: 6500,
-      scope5Emissions: 3800,
-      scope6Emissions: 700
+      organizationalGHG: 78000.789,
+      productCarbonFootprint: 9.889,
+      scope1Emissions: 22000.2345,
+      scope2Emissions: 45000.6789,
+      scope4Emissions: 6500.9876,
+      scope5Emissions: 3800.5432,
+      scope6Emissions: 700.1111
     }
   },
   {
@@ -648,13 +648,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區研發路88號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 142000,
-      productCarbonFootprint: 19.5,
-      scope1Emissions: 38000,
-      scope2Emissions: 85000,
-      scope4Emissions: 12000,
-      scope5Emissions: 6000,
-      scope6Emissions: 1000
+      organizationalGHG: 142000.789,
+      productCarbonFootprint: 19.589,
+      scope1Emissions: 38000.2345,
+      scope2Emissions: 85000.6789,
+      scope4Emissions: 12000.9876,
+      scope5Emissions: 6000.5432,
+      scope6Emissions: 1000.1111
     }
   },
   {
@@ -667,13 +667,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區工業東路16號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 118000,
-      productCarbonFootprint: 16.8,
-      scope1Emissions: 32000,
-      scope2Emissions: 72000,
-      scope4Emissions: 9000,
-      scope5Emissions: 4500,
-      scope6Emissions: 500
+      organizationalGHG: 118000.789,
+      productCarbonFootprint: 16.889,
+      scope1Emissions: 32000.2345,
+      scope2Emissions: 72000.6789,
+      scope4Emissions: 9000.9876,
+      scope5Emissions: 4500.5432,
+      scope6Emissions: 500.1111
     }
   },
   {
@@ -686,13 +686,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "東京都千代田區大手町2-6-1",
     country: "日本",
     carbonData: {
-      organizationalGHG: 485000,
-      productCarbonFootprint: 58.5,
-      scope1Emissions: 225000,
-      scope2Emissions: 215000,
-      scope4Emissions: 32000,
-      scope5Emissions: 11000,
-      scope6Emissions: 2000
+      organizationalGHG: 485000.789,
+      productCarbonFootprint: 58.589,
+      scope1Emissions: 225000.2345,
+      scope2Emissions: 215000.6789,
+      scope4Emissions: 32000.9876,
+      scope5Emissions: 11000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -705,13 +705,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "東京都港區台場2-3-1",
     country: "日本",
     carbonData: {
-      organizationalGHG: 365000,
-      productCarbonFootprint: 42.8,
-      scope1Emissions: 185000,
-      scope2Emissions: 145000,
-      scope4Emissions: 25000,
-      scope5Emissions: 8000,
-      scope6Emissions: 2000
+      organizationalGHG: 365000.789,
+      productCarbonFootprint: 42.889,
+      scope1Emissions: 185000.2345,
+      scope2Emissions: 145000.6789,
+      scope4Emissions: 25000.9876,
+      scope5Emissions: 8000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -724,13 +724,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區創新二路2號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 85000,
-      productCarbonFootprint: 11.5,
-      scope1Emissions: 24000,
-      scope2Emissions: 48000,
-      scope4Emissions: 8000,
-      scope5Emissions: 4000,
-      scope6Emissions: 1000
+      organizationalGHG: 85000.789,
+      productCarbonFootprint: 11.589,
+      scope1Emissions: 24000.2345,
+      scope2Emissions: 48000.6789,
+      scope4Emissions: 8000.9876,
+      scope5Emissions: 4000.5432,
+      scope6Emissions: 1000.1111
     }
   },
   {
@@ -743,13 +743,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區研發一路1號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 225000,
-      productCarbonFootprint: 32.5,
-      scope1Emissions: 65000,
-      scope2Emissions: 125000,
-      scope4Emissions: 22000,
-      scope5Emissions: 11000,
-      scope6Emissions: 2000
+      organizationalGHG: 225000.789,
+      productCarbonFootprint: 32.589,
+      scope1Emissions: 65000.2345,
+      scope2Emissions: 125000.6789,
+      scope4Emissions: 22000.9876,
+      scope5Emissions: 11000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -762,13 +762,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "神奈川県川崎市中原区中丸子150",
     country: "日本",
     carbonData: {
-      organizationalGHG: 195000,
-      productCarbonFootprint: 28.8,
-      scope1Emissions: 85000,
-      scope2Emissions: 85000,
-      scope4Emissions: 16000,
-      scope5Emissions: 7000,
-      scope6Emissions: 2000
+      organizationalGHG: 195000.789,
+      productCarbonFootprint: 28.889,
+      scope1Emissions: 85000.2345,
+      scope2Emissions: 85000.6789,
+      scope4Emissions: 16000.9876,
+      scope5Emissions: 7000.5432,
+      scope6Emissions: 2000.1111
     }
   },
   {
@@ -781,13 +781,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹縣湖口鄉新竹工業區工業一路1號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 168000,
-      productCarbonFootprint: 25.5,
-      scope1Emissions: 78000,
-      scope2Emissions: 72000,
-      scope4Emissions: 12000,
-      scope5Emissions: 5000,
-      scope6Emissions: 1000
+      organizationalGHG: 168000.789,
+      productCarbonFootprint: 25.589,
+      scope1Emissions: 78000.2345,
+      scope2Emissions: 72000.6789,
+      scope4Emissions: 12000.9876,
+      scope5Emissions: 5000.5432,
+      scope6Emissions: 1000.1111
     }
   },
   {
@@ -800,13 +800,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "高雄市路竹區中山路168號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 285000,
-      productCarbonFootprint: 48.5,
-      scope1Emissions: 145000,
-      scope2Emissions: 105000,
-      scope4Emissions: 22000,
-      scope5Emissions: 10000,
-      scope6Emissions: 3000
+      organizationalGHG: 285000.789,
+      productCarbonFootprint: 48.589,
+      scope1Emissions: 145000.2345,
+      scope2Emissions: 105000.6789,
+      scope4Emissions: 22000.9876,
+      scope5Emissions: 10000.5432,
+      scope6Emissions: 3000.1111
     }
   },
   {
@@ -819,13 +819,13 @@ const tsmcSuppliers: Supplier[] = [
     address: "新竹科學園區研發路110號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 125000,
-      productCarbonFootprint: 18.2,
-      scope1Emissions: 35000,
-      scope2Emissions: 72000,
-      scope4Emissions: 12000,
-      scope5Emissions: 5000,
-      scope6Emissions: 1000
+      organizationalGHG: 125000.789,
+      productCarbonFootprint: 18.289,
+      scope1Emissions: 35000.2345,
+      scope2Emissions: 72000.6789,
+      scope4Emissions: 12000.9876,
+      scope5Emissions: 5000.5432,
+      scope6Emissions: 1000.1111
     }
   }
 ];
@@ -842,13 +842,13 @@ const materialsSuppliers: Supplier[] = [
     address: "台中市西屯區工業區38路168號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 892000,
-      productCarbonFootprint: 1890.5,
-      scope1Emissions: 534000,
-      scope2Emissions: 267600,
-      scope4Emissions: 45200,
-      scope5Emissions: 31680,
-      scope6Emissions: 13520
+      organizationalGHG: 892000.789,
+      productCarbonFootprint: 1890.589,
+      scope1Emissions: 534000.2345,
+      scope2Emissions: 267600.6789,
+      scope4Emissions: 45200.9876,
+      scope5Emissions: 31680.5432,
+      scope6Emissions: 13520.1111
     }
   },
   {
@@ -861,13 +861,13 @@ const materialsSuppliers: Supplier[] = [
     address: "高雄市楠梓區興楠路105號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 345000,
-      productCarbonFootprint: 1245.8,
-      scope1Emissions: 172500,
-      scope2Emissions: 138000,
-      scope4Emissions: 17250,
-      scope5Emissions: 12075,
-      scope6Emissions: 5175
+      organizationalGHG: 345000.789,
+      productCarbonFootprint: 1245.889,
+      scope1Emissions: 172500.2345,
+      scope2Emissions: 138000.6789,
+      scope4Emissions: 17250.9876,
+      scope5Emissions: 12075.5432,
+      scope6Emissions: 5175.1111
     }
   },
   {
@@ -880,13 +880,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新北市樹林區俊英街86號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 567000,
-      productCarbonFootprint: 3456.2,
-      scope1Emissions: 283500,
-      scope2Emissions: 204120,
-      scope4Emissions: 28350,
-      scope5Emissions: 39690,
-      scope6Emissions: 11340
+      organizationalGHG: 567000.789,
+      productCarbonFootprint: 3456.289,
+      scope1Emissions: 283500.2345,
+      scope2Emissions: 204120.6789,
+      scope4Emissions: 28350.9876,
+      scope5Emissions: 39690.5432,
+      scope6Emissions: 11340.1111
     }
   },
   {
@@ -899,13 +899,13 @@ const materialsSuppliers: Supplier[] = [
     address: "桃園市中壢區中華路二段568號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 1235000,
-      productCarbonFootprint: 8945.6,
-      scope1Emissions: 741000,
-      scope2Emissions: 371000,
-      scope4Emissions: 61750,
-      scope5Emissions: 43225,
-      scope6Emissions: 18525
+      organizationalGHG: 1235000.789,
+      productCarbonFootprint: 8945.689,
+      scope1Emissions: 741000.2345,
+      scope2Emissions: 371000.6789,
+      scope4Emissions: 61750.9876,
+      scope5Emissions: 43225.5432,
+      scope6Emissions: 18525.1111
     }
   },
   {
@@ -918,13 +918,13 @@ const materialsSuppliers: Supplier[] = [
     address: "台南市安南區工業一路235號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 456000,
-      productCarbonFootprint: 2678.9,
-      scope1Emissions: 228000,
-      scope2Emissions: 164160,
-      scope4Emissions: 22800,
-      scope5Emissions: 31920,
-      scope6Emissions: 9120
+      organizationalGHG: 456000.789,
+      productCarbonFootprint: 2678.989,
+      scope1Emissions: 228000.2345,
+      scope2Emissions: 164160.6789,
+      scope4Emissions: 22800.9876,
+      scope5Emissions: 31920.5432,
+      scope6Emissions: 9120.1111
     }
   },
   {
@@ -937,13 +937,13 @@ const materialsSuppliers: Supplier[] = [
     address: "苗栗縣竹南鎮科學路158號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 234000,
-      productCarbonFootprint: 156.7,
-      scope1Emissions: 140400,
-      scope2Emissions: 70200,
-      scope4Emissions: 11700,
-      scope5Emissions: 8190,
-      scope6Emissions: 3510
+      organizationalGHG: 234000.789,
+      productCarbonFootprint: 156.789,
+      scope1Emissions: 140400.2345,
+      scope2Emissions: 70200.6789,
+      scope4Emissions: 11700.9876,
+      scope5Emissions: 8190.5432,
+      scope6Emissions: 3510.1111
     }
   },
   {
@@ -956,13 +956,13 @@ const materialsSuppliers: Supplier[] = [
     address: "雲林縣斗六市工業路126號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 189000,
-      productCarbonFootprint: 4567.3,
-      scope1Emissions: 75600,
-      scope2Emissions: 83160,
-      scope4Emissions: 9450,
-      scope5Emissions: 13230,
-      scope6Emissions: 7560
+      organizationalGHG: 189000.789,
+      productCarbonFootprint: 4567.389,
+      scope1Emissions: 75600.2345,
+      scope2Emissions: 83160.6789,
+      scope4Emissions: 9450.9876,
+      scope5Emissions: 13230.5432,
+      scope6Emissions: 7560.1111
     }
   },
   {
@@ -975,13 +975,13 @@ const materialsSuppliers: Supplier[] = [
     address: "南投縣南投市工業南路89號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 298000,
-      productCarbonFootprint: 7834.5,
-      scope1Emissions: 149000,
-      scope2Emissions: 107280,
-      scope4Emissions: 14900,
-      scope5Emissions: 20860,
-      scope6Emissions: 5960
+      organizationalGHG: 298000.789,
+      productCarbonFootprint: 7834.589,
+      scope1Emissions: 149000.2345,
+      scope2Emissions: 107280.6789,
+      scope4Emissions: 14900.9876,
+      scope5Emissions: 20860.5432,
+      scope6Emissions: 5960.1111
     }
   },
   {
@@ -994,13 +994,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新竹縣竹北市科技七路198號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 145000,
-      productCarbonFootprint: 89.3,
-      scope1Emissions: 58000,
-      scope2Emissions: 64120,
-      scope4Emissions: 7250,
-      scope5Emissions: 10150,
-      scope6Emissions: 5480
+      organizationalGHG: 145000.789,
+      productCarbonFootprint: 89.389,
+      scope1Emissions: 58000.2345,
+      scope2Emissions: 64120.6789,
+      scope4Emissions: 7250.9876,
+      scope5Emissions: 10150.5432,
+      scope6Emissions: 5480.1111
     }
   },
   {
@@ -1013,13 +1013,13 @@ const materialsSuppliers: Supplier[] = [
     address: "高雄市大寮區鳳林三路555號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 1456000,
-      productCarbonFootprint: 2345.7,
-      scope1Emissions: 728000,
-      scope2Emissions: 583680,
-      scope4Emissions: 72800,
-      scope5Emissions: 101920,
-      scope6Emissions: 29600
+      organizationalGHG: 1456000.789,
+      productCarbonFootprint: 2345.789,
+      scope1Emissions: 728000.2345,
+      scope2Emissions: 583680.6789,
+      scope4Emissions: 72800.9876,
+      scope5Emissions: 101920.5432,
+      scope6Emissions: 29600.1111
     }
   },
   {
@@ -1032,13 +1032,13 @@ const materialsSuppliers: Supplier[] = [
     address: "彰化縣和美鎮工業路268號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 678000,
-      productCarbonFootprint: 2890.4,
-      scope1Emissions: 339000,
-      scope2Emissions: 244080,
-      scope4Emissions: 33900,
-      scope5Emissions: 47460,
-      scope6Emissions: 13560
+      organizationalGHG: 678000.789,
+      productCarbonFootprint: 2890.489,
+      scope1Emissions: 339000.2345,
+      scope2Emissions: 244080.6789,
+      scope4Emissions: 33900.9876,
+      scope5Emissions: 47460.5432,
+      scope6Emissions: 13560.1111
     }
   },
   {
@@ -1051,13 +1051,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新北市新店區寶橋路165號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 234000,
-      productCarbonFootprint: 956.8,
-      scope1Emissions: 117000,
-      scope2Emissions: 84240,
-      scope4Emissions: 11700,
-      scope5Emissions: 16380,
-      scope6Emissions: 4680
+      organizationalGHG: 234000.789,
+      productCarbonFootprint: 956.889,
+      scope1Emissions: 117000.2345,
+      scope2Emissions: 84240.6789,
+      scope4Emissions: 11700.9876,
+      scope5Emissions: 16380.5432,
+      scope6Emissions: 4680.1111
     }
   },
   {
@@ -1070,13 +1070,13 @@ const materialsSuppliers: Supplier[] = [
     address: "桃園市大園區航空城工業一路369號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 789000,
-      productCarbonFootprint: 67.9,
-      scope1Emissions: 394500,
-      scope2Emissions: 284040,
-      scope4Emissions: 39450,
-      scope5Emissions: 55230,
-      scope6Emissions: 15780
+      organizationalGHG: 789000.789,
+      productCarbonFootprint: 67.989,
+      scope1Emissions: 394500.2345,
+      scope2Emissions: 284040.6789,
+      scope4Emissions: 39450.9876,
+      scope5Emissions: 55230.5432,
+      scope6Emissions: 15780.1111
     }
   },
   {
@@ -1089,13 +1089,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新竹科學園區研發五路188號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 456000,
-      productCarbonFootprint: 45.6,
-      scope1Emissions: 228000,
-      scope2Emissions: 164160,
-      scope4Emissions: 22800,
-      scope5Emissions: 31920,
-      scope6Emissions: 9120
+      organizationalGHG: 456000.789,
+      productCarbonFootprint: 45.689,
+      scope1Emissions: 228000.2345,
+      scope2Emissions: 164160.6789,
+      scope4Emissions: 22800.9876,
+      scope5Emissions: 31920.5432,
+      scope6Emissions: 9120.1111
     }
   },
   {
@@ -1108,13 +1108,13 @@ const materialsSuppliers: Supplier[] = [
     address: "苗栗縣頭份市工業二路125號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 323000,
-      productCarbonFootprint: 567.3,
-      scope1Emissions: 161500,
-      scope2Emissions: 116280,
-      scope4Emissions: 16150,
-      scope5Emissions: 22610,
-      scope6Emissions: 6460
+      organizationalGHG: 323000.789,
+      productCarbonFootprint: 567.389,
+      scope1Emissions: 161500.2345,
+      scope2Emissions: 116280.6789,
+      scope4Emissions: 16150.9876,
+      scope5Emissions: 22610.5432,
+      scope6Emissions: 6460.1111
     }
   },
   {
@@ -1127,13 +1127,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新北市汐止區康寧街268號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 398000,
-      productCarbonFootprint: 2456.7,
-      scope1Emissions: 199000,
-      scope2Emissions: 143280,
-      scope4Emissions: 19900,
-      scope5Emissions: 27860,
-      scope6Emissions: 7960
+      organizationalGHG: 398000.789,
+      productCarbonFootprint: 2456.789,
+      scope1Emissions: 199000.2345,
+      scope2Emissions: 143280.6789,
+      scope4Emissions: 19900.9876,
+      scope5Emissions: 27860.5432,
+      scope6Emissions: 7960.1111
     }
   },
   {
@@ -1146,13 +1146,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新竹科學園區工業東路88號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 867000,
-      productCarbonFootprint: 89.4,
-      scope1Emissions: 433500,
-      scope2Emissions: 312120,
-      scope4Emissions: 43350,
-      scope5Emissions: 60690,
-      scope6Emissions: 17340
+      organizationalGHG: 867000.789,
+      productCarbonFootprint: 89.489,
+      scope1Emissions: 433500.2345,
+      scope2Emissions: 312120.6789,
+      scope4Emissions: 43350.9876,
+      scope5Emissions: 60690.5432,
+      scope6Emissions: 17340.1111
     }
   },
   {
@@ -1165,13 +1165,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新竹科學園區創新路168號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 654000,
-      productCarbonFootprint: 76.8,
-      scope1Emissions: 327000,
-      scope2Emissions: 235440,
-      scope4Emissions: 32700,
-      scope5Emissions: 45780,
-      scope6Emissions: 13080
+      organizationalGHG: 654000.789,
+      productCarbonFootprint: 76.889,
+      scope1Emissions: 327000.2345,
+      scope2Emissions: 235440.6789,
+      scope4Emissions: 32700.9876,
+      scope5Emissions: 45780.5432,
+      scope6Emissions: 13080.1111
     }
   },
   {
@@ -1184,13 +1184,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新竹科學園區力行路268號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 498000,
-      productCarbonFootprint: 124.6,
-      scope1Emissions: 249000,
-      scope2Emissions: 179280,
-      scope4Emissions: 24900,
-      scope5Emissions: 34860,
-      scope6Emissions: 9960
+      organizationalGHG: 498000.789,
+      productCarbonFootprint: 124.689,
+      scope1Emissions: 249000.2345,
+      scope2Emissions: 179280.6789,
+      scope4Emissions: 24900.9876,
+      scope5Emissions: 34860.5432,
+      scope6Emissions: 9960.1111
     }
   },
   {
@@ -1203,13 +1203,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新北市土城區工業一路89號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 287000,
-      productCarbonFootprint: 18.9,
-      scope1Emissions: 143500,
-      scope2Emissions: 103320,
-      scope4Emissions: 14350,
-      scope5Emissions: 20080,
-      scope6Emissions: 5750
+      organizationalGHG: 287000.789,
+      productCarbonFootprint: 18.989,
+      scope1Emissions: 143500.2345,
+      scope2Emissions: 103320.6789,
+      scope4Emissions: 14350.9876,
+      scope5Emissions: 20080.5432,
+      scope6Emissions: 5750.1111
     }
   },
   {
@@ -1222,13 +1222,13 @@ const materialsSuppliers: Supplier[] = [
     address: "桃園市楊梅區工業三路168號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 432000,
-      productCarbonFootprint: 34.7,
-      scope1Emissions: 216000,
-      scope2Emissions: 155520,
-      scope4Emissions: 21600,
-      scope5Emissions: 30240,
-      scope6Emissions: 8640
+      organizationalGHG: 432000.789,
+      productCarbonFootprint: 34.789,
+      scope1Emissions: 216000.2345,
+      scope2Emissions: 155520.6789,
+      scope4Emissions: 21600.9876,
+      scope5Emissions: 30240.5432,
+      scope6Emissions: 8640.1111
     }
   },
   {
@@ -1241,13 +1241,13 @@ const materialsSuppliers: Supplier[] = [
     address: "台中市西屯區福科路268號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 598000,
-      productCarbonFootprint: 56.8,
-      scope1Emissions: 299000,
-      scope2Emissions: 215280,
-      scope4Emissions: 29900,
-      scope5Emissions: 41860,
-      scope6Emissions: 11960
+      organizationalGHG: 598000.789,
+      productCarbonFootprint: 56.889,
+      scope1Emissions: 299000.2345,
+      scope2Emissions: 215280.6789,
+      scope4Emissions: 29900.9876,
+      scope5Emissions: 41860.5432,
+      scope6Emissions: 11960.1111
     }
   },
   {
@@ -1260,13 +1260,13 @@ const materialsSuppliers: Supplier[] = [
     address: "高雄市路竹區科學路189號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 167000,
-      productCarbonFootprint: 23.4,
-      scope1Emissions: 83500,
-      scope2Emissions: 60120,
-      scope4Emissions: 8350,
-      scope5Emissions: 11690,
-      scope6Emissions: 3340
+      organizationalGHG: 167000.789,
+      productCarbonFootprint: 23.489,
+      scope1Emissions: 83500.2345,
+      scope2Emissions: 60120.6789,
+      scope4Emissions: 8350.9876,
+      scope5Emissions: 11690.5432,
+      scope6Emissions: 3340.1111
     }
   },
   {
@@ -1279,13 +1279,13 @@ const materialsSuppliers: Supplier[] = [
     address: "台南市永康區環工路268號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 534000,
-      productCarbonFootprint: 3567.8,
-      scope1Emissions: 267000,
-      scope2Emissions: 192240,
-      scope4Emissions: 26700,
-      scope5Emissions: 37380,
-      scope6Emissions: 10680
+      organizationalGHG: 534000.789,
+      productCarbonFootprint: 3567.889,
+      scope1Emissions: 267000.2345,
+      scope2Emissions: 192240.6789,
+      scope4Emissions: 26700.9876,
+      scope5Emissions: 37380.5432,
+      scope6Emissions: 10680.1111
     }
   },
   {
@@ -1298,13 +1298,13 @@ const materialsSuppliers: Supplier[] = [
     address: "彰化縣溪湖鎮工業東路198號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 156000,
-      productCarbonFootprint: 856.7,
-      scope1Emissions: 78000,
-      scope2Emissions: 56160,
-      scope4Emissions: 7800,
-      scope5Emissions: 10920,
-      scope6Emissions: 3120
+      organizationalGHG: 156000.789,
+      productCarbonFootprint: 856.789,
+      scope1Emissions: 78000.2345,
+      scope2Emissions: 56160.6789,
+      scope4Emissions: 7800.9876,
+      scope5Emissions: 10920.5432,
+      scope6Emissions: 3120.1111
     }
   },
   {
@@ -1317,13 +1317,13 @@ const materialsSuppliers: Supplier[] = [
     address: "雲林縣虎尾鎮工業路365號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 289000,
-      productCarbonFootprint: 1234.5,
-      scope1Emissions: 144500,
-      scope2Emissions: 104040,
-      scope4Emissions: 14450,
-      scope5Emissions: 20230,
-      scope6Emissions: 5780
+      organizationalGHG: 289000.789,
+      productCarbonFootprint: 1234.589,
+      scope1Emissions: 144500.2345,
+      scope2Emissions: 104040.6789,
+      scope4Emissions: 14450.9876,
+      scope5Emissions: 20230.5432,
+      scope6Emissions: 5780.1111
     }
   },
   {
@@ -1336,13 +1336,13 @@ const materialsSuppliers: Supplier[] = [
     address: "屏東縣屏東市工業區路268號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 756000,
-      productCarbonFootprint: 4567.8,
-      scope1Emissions: 378000,
-      scope2Emissions: 272160,
-      scope4Emissions: 37800,
-      scope5Emissions: 52920,
-      scope6Emissions: 15120
+      organizationalGHG: 756000.789,
+      productCarbonFootprint: 4567.889,
+      scope1Emissions: 378000.2345,
+      scope2Emissions: 272160.6789,
+      scope4Emissions: 37800.9876,
+      scope5Emissions: 52920.5432,
+      scope6Emissions: 15120.1111
     }
   },
   {
@@ -1355,13 +1355,13 @@ const materialsSuppliers: Supplier[] = [
     address: "桃園市龍潭區工業一路168號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 445000,
-      productCarbonFootprint: 3245.6,
-      scope1Emissions: 222500,
-      scope2Emissions: 160200,
-      scope4Emissions: 22250,
-      scope5Emissions: 31150,
-      scope6Emissions: 8900
+      organizationalGHG: 445000.789,
+      productCarbonFootprint: 3245.689,
+      scope1Emissions: 222500.2345,
+      scope2Emissions: 160200.6789,
+      scope4Emissions: 22250.9876,
+      scope5Emissions: 31150.5432,
+      scope6Emissions: 8900.1111
     }
   },
   {
@@ -1374,13 +1374,13 @@ const materialsSuppliers: Supplier[] = [
     address: "高雄市仁武區工業三路89號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 234000,
-      productCarbonFootprint: 1567.9,
-      scope1Emissions: 117000,
-      scope2Emissions: 84240,
-      scope4Emissions: 11700,
-      scope5Emissions: 16380,
-      scope6Emissions: 4680
+      organizationalGHG: 234000.789,
+      productCarbonFootprint: 1567.989,
+      scope1Emissions: 117000.2345,
+      scope2Emissions: 84240.6789,
+      scope4Emissions: 11700.9876,
+      scope5Emissions: 16380.5432,
+      scope6Emissions: 4680.1111
     }
   },
   {
@@ -1393,13 +1393,13 @@ const materialsSuppliers: Supplier[] = [
     address: "新北市汐止區新台五路一段268號",
     country: "台灣",
     carbonData: {
-      organizationalGHG: 678000,
-      productCarbonFootprint: 234.5,
-      scope1Emissions: 339000,
-      scope2Emissions: 244080,
-      scope4Emissions: 33900,
-      scope5Emissions: 47460,
-      scope6Emissions: 13560
+      organizationalGHG: 678000.789,
+      productCarbonFootprint: 234.589,
+      scope1Emissions: 339000.2345,
+      scope2Emissions: 244080.6789,
+      scope4Emissions: 33900.9876,
+      scope5Emissions: 47460.5432,
+      scope6Emissions: 13560.1111
     }
   }
 ];
