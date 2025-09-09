@@ -705,92 +705,116 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                   </div>
                   
                   <div className="modern-border rounded-lg overflow-hidden">
-                    <table className="professional-table">
-                      <thead className="professional-table-header">
-                        <tr>
-                          <th className="professional-table-cell w-[200px]">供應商</th>
-                          {selectedDataType === "organization" ? (
-                            <>
-                              <th className="professional-table-cell w-[120px]">類別1排放量</th>
-                              <th className="professional-table-cell w-[120px]">類別2排放量</th>
-                              <th className="professional-table-cell w-[120px]">類別3排放量</th>
-                              <th className="professional-table-cell w-[120px]">完成日期</th>
-                              <th className="professional-table-cell text-right">操作</th>
-                            </>
-                          ) : (
-                            <>
-                              <th className="professional-table-cell w-[200px]">產品名稱</th>
-                              <th className="professional-table-cell w-[180px]">報導期間</th>
-                              <th className="professional-table-cell w-[150px]">產品碳足跡</th>
-                              <th className="professional-table-cell w-[120px]">完成日期</th>
-                              <th className="professional-table-cell text-right">操作</th>
-                            </>
-                          )}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredCarbonData.length === 0 ? (
+                    <div className="overflow-x-auto">
+                      <table className="professional-table min-w-full">
+                        <thead className="professional-table-header">
                           <tr>
-                            <td colSpan={selectedDataType === "organization" ? 6 : 6} className="professional-table-data text-center py-8">
-                              沒有符合條件的數據
-                            </td>
+                            <th className="professional-table-cell min-w-[200px]">供應商</th>
+                            {selectedDataType === "organization" ? (
+                              <>
+                                <th className="professional-table-cell min-w-[150px] text-right">總排放量</th>
+                                <th className="professional-table-cell min-w-[140px] text-right">類別1排放量</th>
+                                <th className="professional-table-cell min-w-[140px] text-right">類別2排放量</th>
+                                <th className="professional-table-cell min-w-[140px] text-right">類別3排放量</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">完成日期</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">操作</th>
+                              </>
+                            ) : (
+                              <>
+                                <th className="professional-table-cell min-w-[220px]">產品名稱</th>
+                                <th className="professional-table-cell min-w-[200px]">報導期間</th>
+                                <th className="professional-table-cell min-w-[160px] text-right">產品碳足跡</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">完成日期</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">操作</th>
+                              </>
+                            )}
                           </tr>
-                        ) : (
-                          filteredCarbonData.map((response) => (
-                            <tr key={response.id} className="hover:bg-slate-50/50">
-                              <td className="professional-table-data">
-                                <div className="font-medium text-slate-900">{response.supplierName}</div>
-                                <div className="text-xs text-slate-500">{response.respondentName}</div>
+                        </thead>
+                        <tbody>
+                          {filteredCarbonData.length === 0 ? (
+                            <tr>
+                              <td colSpan={selectedDataType === "organization" ? 7 : 6} className="professional-table-data text-center py-8">
+                                沒有符合條件的數據
                               </td>
-                              
-                              {selectedDataType === "organization" ? (
-                                <>
-                                  <td className="professional-table-data">
-                                    {response.answers["排放量資料"]?.["類別1排放量"]?.replace(".000", "") || "0"} tCO2e
-                                  </td>
-                                  <td className="professional-table-data">
-                                    {response.answers["排放量資料"]?.["類別2排放量"]?.replace(".000", "") || "0"} tCO2e
-                                  </td>
-                                  <td className="professional-table-data">
-                                    {response.answers["排放量資料"]?.["類別3排放量"]?.replace(".000", "") || "0"} tCO2e
-                                  </td>
-                                  <td className="professional-table-data">
-                                    {format(response.completedDate, "yyyy-MM-dd")}
-                                  </td>
-                                  <td className="professional-table-data text-right">
-                                    <button className="professional-button-secondary compact-button">
-                                      <BarChart3 className="h-4 w-4 mr-1" />
-                                      查看問卷
-                                    </button>
-                                  </td>
-                                </>
-                              ) : (
-                                <>
-                                  <td className="professional-table-data">
-                                    {response.answers["產品資訊"]?.["產品名稱"] || "-"}
-                                  </td>
-                                  <td className="professional-table-data">
-                                    {response.answers["產品資訊"]?.["報導期間"] || "-"}
-                                  </td>
-                                  <td className="professional-table-data">
-                                    {response.answers["碳足跡數據"]?.["產品碳足跡"] || "-"}
-                                  </td>
-                                  <td className="professional-table-data">
-                                    {format(response.completedDate, "yyyy-MM-dd")}
-                                  </td>
-                                  <td className="professional-table-data text-right">
-                                    <button className="professional-button-secondary compact-button">
-                                      <BarChart3 className="h-4 w-4 mr-1" />
-                                      查看問卷
-                                    </button>
-                                  </td>
-                                </>
-                              )}
                             </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
+                          ) : (
+                            filteredCarbonData.map((response) => (
+                              <tr key={response.id} className="hover:bg-slate-50/50">
+                                <td className="professional-table-data">
+                                  <div className="font-medium text-slate-900">{response.supplierName}</div>
+                                  <div className="text-xs text-slate-500">{response.respondentName}</div>
+                                </td>
+                                
+                                {selectedDataType === "organization" ? (
+                                  <>
+                                    <td className="professional-table-data text-right">
+                                      <div className="font-semibold text-slate-900">
+                                        {response.answers["排放量資料"]?.["總排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-right">
+                                      <div className="text-slate-700">
+                                        {response.answers["排放量資料"]?.["類別1排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-right">
+                                      <div className="text-slate-700">
+                                        {response.answers["排放量資料"]?.["類別2排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-right">
+                                      <div className="text-slate-700">
+                                        {response.answers["排放量資料"]?.["類別3排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-center">
+                                      <div className="text-slate-600">
+                                        {format(response.completedDate, "yyyy-MM-dd")}
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-center">
+                                      <button className="professional-button-secondary compact-button">
+                                        <BarChart3 className="h-4 w-4 mr-1" />
+                                        查看問卷
+                                      </button>
+                                    </td>
+                                  </>
+                                ) : (
+                                  <>
+                                    <td className="professional-table-data">
+                                      <div className="font-medium text-slate-900">
+                                        {response.answers["產品資訊"]?.["產品名稱"] || "-"}
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data">
+                                      <div className="text-slate-600">
+                                        {response.answers["產品資訊"]?.["報導期間"] || "-"}
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-right">
+                                      <div className="font-semibold text-slate-900">
+                                        {response.answers["碳足跡數據"]?.["產品碳足跡"] || "-"}
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-center">
+                                      <div className="text-slate-600">
+                                        {format(response.completedDate, "yyyy-MM-dd")}
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-center">
+                                      <button className="professional-button-secondary compact-button">
+                                        <BarChart3 className="h-4 w-4 mr-1" />
+                                        查看問卷
+                                      </button>
+                                    </td>
+                                  </>
+                                )}
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
