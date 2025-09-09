@@ -652,8 +652,8 @@ export default function ResponsesPage({ t }: { t?: any }) {
                         <span className="text-xs text-muted-foreground">({file.size})</span>
                       </div>
                       <Button variant="outline" size="sm">
-                        <Download className="h-4 w-4 mr-2" />
-                        下載
+                        <Download className="h-2 w-2" />
+                      
                       </Button>
                     </div>
                   ))}

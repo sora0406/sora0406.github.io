@@ -27,6 +27,13 @@
     "dashboard": "Dashboard"
   },
   "nav": {
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "requests": {
+      "title": "Data Requests",
+      "create_new": "Create New Request"
+    },
     "organization": "Organization Management",
     "roles": "Roles",
     "projects": "Organization Projects",
@@ -34,7 +41,9 @@
     "suppliers": "Supplier Management",
     "data_requests": "Data Requests",
     "questionnaires": "Questionnaire Tracking",
-    "war_room": "War Room",
+    "war_room": {
+      "title": "War Room"
+    },
     "organization_short": "Structure",
     "roles_short": "Roles",
     "projects_short": "Projects",
@@ -197,7 +206,40 @@
     "review_result": "Review Result",
     "select_review_result": "Select review result",
     "download_all_files": "Download All Files",
-    "review": "Review"
+    "review": "Review",
+    "overview_tab": "Overview",
+    "requests_tab": "Data Requests",
+    "case_selector": "Select Case",
+    "total_responses_stat": "Total Responses",
+    "supplier_responses": "Supplier Survey Responses",
+    "org_total_emission": "Total Organization Emissions",
+    "org_emission_unit": "tCO2e",
+    "org_emission_count": "Organization GHG Emissions",
+    "companies_count": " companies",
+    "product_total_footprint": "Total Product Carbon Footprint",
+    "product_footprint_unit": "kgCO2e",
+    "product_footprint_count": "Product Carbon Footprint",
+    "coverage_rate": "Coverage Rate",
+    "data_collection_completeness": "Data Collection Completeness",
+    "supplier_carbon_emission_data": "Supplier Carbon Emission Data",
+    "search_suppliers": "Search suppliers...",
+    "export_data": "Export",
+    "organization_ghg_emission": "Organization GHG Emissions",
+    "product_carbon_footprint_tab": "Product Carbon Footprint",
+    "supplier_name_header": "Supplier",
+    "total_emission_header": "Total Emissions",
+    "scope1_emission_header": "Scope 1",
+    "scope2_emission_header": "Scope 2",
+    "scope3_emission_header": "Scope 3",
+    "renewable_energy_header": "Renewable Energy",
+    "certificate_header": "Certificate",
+    "completion_date_header": "Completion Date",
+    "action_header": "Action",
+    "product_name_header": "Product Name",
+    "reporting_period_header": "Reporting Period",
+    "product_footprint_header": "Product Carbon Footprint",
+    "no_matching_data": "No matching data found",
+    "view_survey": "View"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -225,13 +267,13 @@
   "war_room": {
     "title": "War Room",
     "export": "Export Data",
-    "subtitle": "Carbon Emission Data Overview",
+    "subtitle": "Carbon Emissions Data Overview",
     "supplier_carbon_data": "Supplier Carbon Emission Data",
     "overview": "Data Overview",
     "statistics": {
       "total_responses": "Total Responses",
       "carbon_footprint": "Total Product Carbon Footprint",
-      "total_emission": "Total Organization Emission",
+      "total_emission": "Total Organization Emissions",
       "suppliers_count": "Suppliers Count"
     },
     "summary": {
@@ -263,7 +305,7 @@
       "completion_date": "Completion Date",
       "actions": "Actions",
       "no_data": "No matching data found",
-      "view_survey": "View Survey"
+      "view_survey": "View"
     },
     "filters": {
       "search": "Search suppliers...",
@@ -280,8 +322,8 @@
     "tags": {
       "all_years": "All Years Data",
       "data_year": "{{year}} Data",
-      "emission_unit": "Emission (tCO2e)",
-      "organization_emission": "Organization GHG Emission (tCO2e)",
+      "emission_unit": "Emissions (tCO2e)",
+      "organization_emission": "Organization GHG Emissions (tCO2e)",
       "product_footprint": "Product Carbon Footprint (kgCO2e)"
     }
   }

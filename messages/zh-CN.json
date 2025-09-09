@@ -27,6 +27,13 @@
     "dashboard": "仪表板"
   },
   "nav": {
+    "dashboard": {
+      "title": "仪表板"
+    },
+    "requests": {
+      "title": "数据要求",
+      "create_new": "创建要求"
+    },
     "organization": "组织架构管理",
     "roles": "角色",
     "projects": "组织计划",
@@ -34,7 +41,9 @@
     "suppliers": "供应商管理",
     "data_requests": "数据要求",
     "questionnaires": "问卷跟踪",
-    "war_room": "战情室",
+    "war_room": {
+      "title": "战情室"
+    },
     "organization_short": "组织",
     "roles_short": "角色",
     "projects_short": "计划",
@@ -197,7 +206,40 @@
     "review_result": "审核结果",
     "select_review_result": "选择审核结果",
     "download_all_files": "下载所有文件",
-    "review": "审核"
+    "review": "审核",
+    "overview_tab": "总览检视",
+    "requests_tab": "数据要求",
+    "case_selector": "选择 Case",
+    "total_responses_stat": "总回复数",
+    "supplier_responses": "供应商问卷回复",
+    "org_total_emission": "组织总排放量",
+    "org_emission_unit": "tCO2e",
+    "org_emission_count": "组织温室气体排放",
+    "companies_count": "家",
+    "product_total_footprint": "产品总碳足迹",
+    "product_footprint_unit": "kgCO2e",
+    "product_footprint_count": "产品碳足迹",
+    "coverage_rate": "覆盖率",
+    "data_collection_completeness": "数据收集完整度",
+    "supplier_carbon_emission_data": "供应商碳排放资料",
+    "search_suppliers": "搜索供应商...",
+    "export_data": "导出",
+    "organization_ghg_emission": "组织温室气体排放",
+    "product_carbon_footprint_tab": "产品碳足迹",
+    "supplier_name_header": "供应商",
+    "total_emission_header": "总排放量",
+    "scope1_emission_header": "范畴1排放量",
+    "scope2_emission_header": "范畴2排放量",
+    "scope3_emission_header": "范畴3排放量",
+    "renewable_energy_header": "可再生能源",
+    "certificate_header": "证书",
+    "completion_date_header": "完成日期",
+    "action_header": "操作",
+    "product_name_header": "产品名称",
+    "reporting_period_header": "报告期间",
+    "product_footprint_header": "产品碳足迹",
+    "no_matching_data": "没有符合条件的数据",
+    "view_survey": "查看"
   },
   "dashboard": {
     "title": "仪表板",
@@ -251,7 +293,7 @@
       "completion_date": "完成日期",
       "actions": "操作",
       "no_data": "没有符合条件的数据",
-      "view_survey": "查看问卷"
+      "": "查看问卷"
     },
     "filters": {
       "search": "搜索供应商...",

@@ -170,7 +170,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded bg-red-500"></div>
-                        <p className="text-sm font-medium">類別1排放量</p>
+                        <p className="text-sm font-medium">範疇1排放量</p>
                       </div>
                       <p className="text-lg font-semibold">{formatNumber(supplier.carbonData.scope1Emissions)} 噸CO2e</p>
                       <p className="text-xs text-muted-foreground">直接排放</p>
@@ -178,7 +178,7 @@ export default function SupplierDetailPage({ params }: { params: { id: string } 
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded bg-orange-500"></div>
-                        <p className="text-sm font-medium">類別2排放量</p>
+                        <p className="text-sm font-medium">範疇2排放量</p>
                       </div>
                       <p className="text-lg font-semibold">{formatNumber(supplier.carbonData.scope2Emissions)} 噸CO2e</p>
                       <p className="text-xs text-muted-foreground">間接排放（能源）</p>

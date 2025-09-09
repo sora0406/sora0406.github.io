@@ -68,7 +68,7 @@ export default function EmailPreview() {
       formLink: "https://example.com/form/123",
       dueDate: "2023-12-31",
       priority: "高",
-      description: "2023年度碳排放相關數據，包括類別1、2、3的排放量。",
+      description: "2023年度碳排放相關數據，包括範疇1、2、3的排放量。",
       contactPerson: "王小明",
       contactEmail: "contact@example.com",
       requesterName: "林經理",

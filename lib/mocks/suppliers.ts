@@ -1,8 +1,8 @@
 export interface CarbonEmissionData {
   organizationalGHG: number; // 組織溫室氣體排放量 (噸CO2e/年)
   productCarbonFootprint: number; // 產品碳足跡 (kgCO2e/單位)
-  scope1Emissions: number; // 類別1排放量 (噸CO2e/年)
-  scope2Emissions: number; // 類別2排放量 (噸CO2e/年)
+  scope1Emissions: number; // 範疇1排放量 (噸CO2e/年)
+  scope2Emissions: number; // 範疇2排放量 (噸CO2e/年)
   scope4Emissions?: number; // 類別4排放量 (噸CO2e/年)
   scope5Emissions?: number; // 類別5排放量 (噸CO2e/年)
   scope6Emissions?: number; // 類別6排放量 (噸CO2e/年)

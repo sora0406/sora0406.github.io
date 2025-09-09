@@ -27,6 +27,14 @@
     "dashboard": "儀表板"
   },
   "nav": {
+    "dashboard": {
+      "title": "儀表板"
+    },
+    "requests": {
+      "title": "數據要求",
+      "create_new": "創建要求",
+      "details": "要求詳情"
+    },
     "organization": "組織架構管理",
     "roles": "角色",
     "projects": "專案管理",
@@ -37,10 +45,6 @@
     "war_room": {
       "title": "戰情室",
       "export": "數據匯出"
-    },
-    "requests": {
-      "title": "數據要求",
-      "details": "要求詳情"
     },
     "organization_short": "組織",
     "roles_short": "角色",
@@ -180,8 +184,8 @@
     "carbonData": "碳排放資料",
     "organizationalGHG": "組織溫室氣體排放量",
     "productCarbonFootprint": "產品碳足跡",
-    "scope1Emissions": "類別1排放量",
-    "scope2Emissions": "類別2排放量",
+    "scope1Emissions": "範疇1排放量",
+    "scope2Emissions": "範疇2排放量",
     "scope4Emissions": "類別4排放量",
     "scope5Emissions": "類別5排放量",
     "scope6Emissions": "類別6排放量",
@@ -269,7 +273,38 @@
     "select_review_result": "選擇審核結果",
     "download_all_files": "下載所有檔案",
     "review": "審核",
-    "rejected_or_needs_revision": "已拒絕或需要修改"
+    "rejected_or_needs_revision": "已拒絕或需要修改",
+    "overview_tab": "總覽檢視",
+    "requests_tab": "數據要求",
+    "case_selector": "選擇 Case",
+    "total_responses_stat": "總回覆數",
+    "supplier_responses": "供應商問卷回覆",
+    "org_total_emission": "組織總排放量",
+    "org_emission_unit": "tCO2e",
+    "org_emission_count": "組織溫室氣體排放",
+    "companies_count": "家",
+    "product_total_footprint": "產品總碳足跡",
+    "product_footprint_unit": "kgCO2e",
+    "product_footprint_count": "產品碳足跡",
+    "coverage_rate": "覆蓋率",
+    "data_collection_completeness": "數據收集完整度",
+    "supplier_carbon_emission_data": "供應商碳排放資料",
+    "search_suppliers": "搜尋供應商...",
+    "export_data": "匯出",
+    "organization_ghg_emission": "組織溫室氣體排放",
+    "product_carbon_footprint_tab": "產品碳足跡",
+    "supplier_name_header": "供應商",
+    "total_emission_header": "總排放量",
+    "scope1_emission_header": "範疇1排放量",
+    "scope2_emission_header": "範疇2排放量",
+    "scope3_emission_header": "範疇3排放量",
+    "completion_date_header": "完成日期",
+    "action_header": "操作",
+    "product_name_header": "產品名稱",
+    "reporting_period_header": "報導期間",
+    "product_footprint_header": "產品碳足跡",
+    "no_matching_data": "沒有符合條件的數據",
+    "view_survey": "查看"
   },
   "dashboard": {
     "title": "儀表板",
@@ -323,7 +358,7 @@
       "completion_date": "完成日期",
       "actions": "操作",
       "no_data": "沒有符合條件的數據",
-      "view_survey": "查看問卷"
+      "view_survey": "查看"
     },
     "filters": {
       "search": "搜尋供應商...",

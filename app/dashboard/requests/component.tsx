@@ -373,9 +373,9 @@ const carbonResponses: CarbonResponse[] = [
       },
       "排放量資料": {
         "總排放量": "5850.000",
-        "類別1排放量": "1250.000",
-        "類別2排放量": "3500.000",
-        "類別3排放量": "1100.000"
+        "範疇1排放量": "1250.000",
+        "範疇2排放量": "3500.000",
+        "範疇3排放量": "1100.000"
       }
     }
   },
@@ -411,9 +411,9 @@ const carbonResponses: CarbonResponse[] = [
       },
       "排放量資料": {
         "總排放量": "2870.000",
-        "類別1排放量": "850.000",
-        "類別2排放量": "1650.000",
-        "類別3排放量": "370.000"
+        "範疇1排放量": "850.000",
+        "範疇2排放量": "1650.000",
+        "範疇3排放量": "370.000"
       }
     }
   },
@@ -549,10 +549,10 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
   return (
     <TooltipProvider>
       <div className="compact-layout">
-        <div className="compact-header -mx-4 -mt-6 px-4 mb-6">
+        {/* <div className="">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-semibold text-slate-900">{t('title')}</h1>
+              <h1 className="text-lg font-semibold text-slate-900">{t('title')}</h1>
               <p className="text-sm text-slate-600 mt-1">
                 {t('description')}
               </p>
@@ -560,7 +560,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
           <div className="flex items-center gap-4">
             <Select value={caseType} onValueChange={(value: SupplierDataSource) => setCaseType(value)}>
               <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="選擇 Case" />
+                <SelectValue placeholder={t('case_selector')} />
               </SelectTrigger>
               <SelectContent>
                 {dataSourceOptions.map(option => (
@@ -577,17 +577,17 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
             )}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* 標籤頁導航 */}
-        <div className="professional-tabs mb-6">
+        <div className="professional-tabs">
             <button
               className={cn("professional-tab", activeTab === "overview" && "data-[state=active]:bg-white")}
               onClick={() => setActiveTab("overview")}
               data-state={activeTab === "overview" ? "active" : "inactive"}
             >
               <BarChart3 className="mr-2 h-4 w-4" />
-              總覽檢視
+              {t('overview_tab')}
             </button>
             <button
               className={cn("professional-tab", activeTab === "requests" && "data-[state=active]:bg-white")}
@@ -595,7 +595,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
               data-state={activeTab === "requests" ? "active" : "inactive"}
             >
               <MessageSquare className="mr-2 h-4 w-4" />
-              數據要求
+              {t('requests_tab')}
             </button>
         </div>
 
@@ -607,9 +607,9 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                 <div className="ultra-compact-card">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-medium text-slate-600">總回覆數</p>
+                      <p className="text-xs font-medium text-slate-600">{t('total_responses_stat')}</p>
                       <p className="text-xl font-semibold text-slate-900">{carbonStats.totalResponses}</p>
-                      <p className="text-xs text-slate-500">供應商問卷回覆</p>
+                      <p className="text-xs text-slate-500">{t('supplier_responses')}</p>
                     </div>
                     <div className="p-2 bg-slate-100 rounded-md">
                       <BarChart3 className="h-4 w-4 text-slate-600" />
@@ -620,11 +620,11 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                 <div className="ultra-compact-card">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-medium text-slate-600">組織總排放量</p>
+                      <p className="text-xs font-medium text-slate-600">{t('org_total_emission')}</p>
                       <p className="text-xl font-semibold text-slate-900">
-                        {carbonStats.orgTotalEmission} <span className="text-sm font-normal text-slate-500">tCO2e</span>
+                        {carbonStats.orgTotalEmission} <span className="text-sm font-normal text-slate-500">{t('org_emission_unit')}</span>
                       </p>
-                      <p className="text-xs text-slate-500">組織溫室氣體排放: {carbonStats.orgCount}家</p>
+                      <p className="text-xs text-slate-500">  {carbonStats.orgCount}{t('companies_count')}</p>
                     </div>
                     <div className="p-2 bg-slate-100 rounded-md">
                       <Target className="h-4 w-4 text-slate-600" />
@@ -635,11 +635,11 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                 <div className="ultra-compact-card">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-medium text-slate-600">產品總碳足跡</p>
+                      <p className="text-xs font-medium text-slate-600">{t('product_total_footprint')}</p>
                       <p className="text-xl font-semibold text-slate-900">
-                        {carbonStats.productTotalFootprint} <span className="text-sm font-normal text-slate-500">kgCO2e</span>
+                        {carbonStats.productTotalFootprint} <span className="text-sm font-normal text-slate-500">{t('product_footprint_unit')}</span>
                       </p>
-                      <p className="text-xs text-slate-500">產品碳足跡: {carbonStats.productCount}家</p>
+                      <p className="text-xs text-slate-500">  {carbonStats.productCount}{t('companies_count')}</p>
                     </div>
                     <div className="p-2 bg-slate-100 rounded-md">
                       <TrendingUp className="h-4 w-4 text-slate-600" />
@@ -650,9 +650,9 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                 <div className="ultra-compact-card">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-medium text-slate-600">覆蓋率</p>
+                      <p className="text-xs font-medium text-slate-600">{t('coverage_rate')}</p>
                       <p className="text-xl font-semibold text-slate-900">100%</p>
-                      <p className="text-xs text-slate-500">數據收集完整度</p>
+                      <p className="text-xs text-slate-500">{t('data_collection_completeness')}</p>
                     </div>
                     <div className="p-2 bg-slate-100 rounded-md">
                       <PieChart className="h-4 w-4 text-slate-600" />
@@ -665,13 +665,13 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
               <div className="professional-card">
                 <div className="p-4 border-b border-slate-200/60">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-slate-900">供應商碳排放資料</h2>
+                    <h2 className="text-lg font-semibold text-slate-900">{t('supplier_carbon_emission_data')}</h2>
                     <div className="flex items-center gap-2">
                       <div className="relative w-60">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
                         <input
                           type="search"
-                          placeholder="搜尋供應商..."
+                          placeholder={t('search_suppliers')}
                           className="professional-input pl-8"
                           value={carbonSearchTerm}
                           onChange={(e) => setCarbonSearchTerm(e.target.value)}
@@ -679,7 +679,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                       </div>
                       <button className="professional-button-secondary compact-button">
                         <Download className="h-4 w-4 mr-1" />
-                        匯出
+                        {t('export_data')}
                       </button>
                     </div>
                   </div>
@@ -691,7 +691,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                       onClick={() => setSelectedDataType("organization")}
                       data-state={selectedDataType === "organization" ? "active" : "inactive"}
                     >
-                      組織溫室氣體排放
+                      {t('organization_ghg_emission')}
                       <span className="ml-2 professional-badge">{surveyData.filter(r => r.type === "organization").length}</span>
                     </button>
                     <button
@@ -699,7 +699,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                       onClick={() => setSelectedDataType("product")}
                       data-state={selectedDataType === "product" ? "active" : "inactive"}
                     >
-                      產品碳足跡
+                      {t('product_carbon_footprint_tab')}
                       <span className="ml-2 professional-badge">{surveyData.filter(r => r.type === "product").length}</span>
                     </button>
                   </div>
@@ -709,23 +709,25 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                       <table className="professional-table min-w-full">
                         <thead className="professional-table-header">
                           <tr>
-                            <th className="professional-table-cell min-w-[200px]">供應商</th>
+                            <th className="professional-table-cell min-w-[200px]">{t('supplier_name_header')}</th>
                             {selectedDataType === "organization" ? (
                               <>
-                                <th className="professional-table-cell min-w-[150px] text-right">總排放量</th>
-                                <th className="professional-table-cell min-w-[140px] text-right">類別1排放量</th>
-                                <th className="professional-table-cell min-w-[140px] text-right">類別2排放量</th>
-                                <th className="professional-table-cell min-w-[140px] text-right">類別3排放量</th>
-                                <th className="professional-table-cell min-w-[120px] text-center">完成日期</th>
-                                <th className="professional-table-cell min-w-[120px] text-center">操作</th>
+                                <th className="professional-table-cell min-w-[150px] text-right">{t('total_emission_header')}</th>
+                                <th className="professional-table-cell min-w-[140px] text-right">{t('scope1_emission_header')}</th>
+                                <th className="professional-table-cell min-w-[140px] text-right">{t('scope2_emission_header')}</th>
+                                <th className="professional-table-cell min-w-[140px] text-right">{t('scope3_emission_header')}</th>
+                                <th className="professional-table-cell min-w-[140px] text-right">{t('renewable_energy_header')}</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">{t('certificate_header')}</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">{t('completion_date_header')}</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">{t('action_header')}</th>
                               </>
                             ) : (
                               <>
-                                <th className="professional-table-cell min-w-[220px]">產品名稱</th>
-                                <th className="professional-table-cell min-w-[200px]">報導期間</th>
-                                <th className="professional-table-cell min-w-[160px] text-right">產品碳足跡</th>
-                                <th className="professional-table-cell min-w-[120px] text-center">完成日期</th>
-                                <th className="professional-table-cell min-w-[120px] text-center">操作</th>
+                                <th className="professional-table-cell min-w-[220px]">{t('product_name_header')}</th>
+                                {/* <th className="professional-table-cell min-w-[200px]">{t('reporting_period_header')}</th> */}
+                                <th className="professional-table-cell min-w-[160px] text-right">{t('product_footprint_header')}</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">{t('completion_date_header')}</th>
+                                <th className="professional-table-cell min-w-[120px] text-center">{t('action_header')}</th>
                               </>
                             )}
                           </tr>
@@ -733,8 +735,8 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                         <tbody>
                           {filteredCarbonData.length === 0 ? (
                             <tr>
-                              <td colSpan={selectedDataType === "organization" ? 7 : 6} className="professional-table-data text-center py-8">
-                                沒有符合條件的數據
+                              <td colSpan={selectedDataType === "organization" ? 9 : 6} className="professional-table-data text-center py-8">
+                                {t('no_matching_data')}
                               </td>
                             </tr>
                           ) : (
@@ -742,7 +744,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                               <tr key={response.id} className="hover:bg-slate-50/50">
                                 <td className="professional-table-data">
                                   <div className="font-medium text-slate-900">{response.supplierName}</div>
-                                  <div className="text-xs text-slate-500">{response.respondentName}</div>
+                                  {/* <div className="text-xs text-slate-500">{response.respondentName}</div> */}
                                 </td>
                                 
                                 {selectedDataType === "organization" ? (
@@ -754,18 +756,44 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                                     </td>
                                     <td className="professional-table-data text-right">
                                       <div className="text-slate-700">
-                                        {response.answers["排放量資料"]?.["類別1排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
+                                        {response.answers["排放量資料"]?.["範疇1排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
                                       </div>
                                     </td>
                                     <td className="professional-table-data text-right">
                                       <div className="text-slate-700">
-                                        {response.answers["排放量資料"]?.["類別2排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
+                                        {response.answers["排放量資料"]?.["範疇2排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
                                       </div>
                                     </td>
                                     <td className="professional-table-data text-right">
                                       <div className="text-slate-700">
-                                        {response.answers["排放量資料"]?.["類別3排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
+                                        {response.answers["排放量資料"]?.["範疇3排放量"] || "0"} <span className="text-xs text-slate-500">tCO2e</span>
                                       </div>
+                                    </td>
+                                    <td className="professional-table-data text-right">
+                                      <div className="text-slate-700">
+                                        {response.answers["再生能源"]?.["再生能源使用量"] || "0"} <span className="text-xs text-slate-500">kWh</span>
+                                      </div>
+                                      <div className="text-xs text-slate-500">
+                                        {response.answers["再生能源"]?.["再生能源比例"] || "0"}%
+                                      </div>
+                                    </td>
+                                    <td className="professional-table-data text-center">
+                                      <button 
+                                        className="professional-button-secondary compact-button"
+                                        onClick={() => {
+                                          const certificateFile = response.answers["驗證資訊"]?.["證書檔案"];
+                                          if (certificateFile) {
+                                            // 模擬下載證書檔案
+                                            const link = document.createElement('a');
+                                            link.href = `#`; // 實際應用中這裡應該是真實的檔案 URL
+                                            link.download = certificateFile;
+                                            link.click();
+                                          }
+                                        }}
+                                      >
+                                        <Download className="h-4 w-4" />
+                                        
+                                      </button>
                                     </td>
                                     <td className="professional-table-data text-center">
                                       <div className="text-slate-600">
@@ -775,7 +803,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                                     <td className="professional-table-data text-center">
                                       <button className="professional-button-secondary compact-button">
                                         <BarChart3 className="h-4 w-4 mr-1" />
-                                        查看問卷
+                                        {t('view_survey')}
                                       </button>
                                     </td>
                                   </>
@@ -786,11 +814,11 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                                         {response.answers["產品資訊"]?.["產品名稱"] || "-"}
                                       </div>
                                     </td>
-                                    <td className="professional-table-data">
+                                    {/* <td className="professional-table-data">
                                       <div className="text-slate-600">
                                         {response.answers["產品資訊"]?.["報導期間"] || "-"}
                                       </div>
-                                    </td>
+                                    </td> */}
                                     <td className="professional-table-data text-right">
                                       <div className="font-semibold text-slate-900">
                                         {response.answers["碳足跡數據"]?.["產品碳足跡"] || "-"}
@@ -804,7 +832,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                                     <td className="professional-table-data text-center">
                                       <button className="professional-button-secondary compact-button">
                                         <BarChart3 className="h-4 w-4 mr-1" />
-                                        查看問卷
+                                        {t('view_survey')}
                                       </button>
                                     </td>
                                   </>

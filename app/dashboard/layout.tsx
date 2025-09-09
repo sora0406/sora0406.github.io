@@ -7,6 +7,14 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { BarChart3, ChevronLeft, ChevronRight, FileText, Home, Menu, Package, Users, ClipboardList, ClipboardCheck, Briefcase, Globe } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -41,8 +49,9 @@ const getLocalizedPath = (path: string, locale: string = 'zh-TW'): string => {
     cleanPath = '/' + cleanPath;
   }
   
-  // 加上新的語言前綴
-  return `/${locale}${cleanPath}`;
+  // 為了解決路由衝突，當前直接使用無前綴路由
+  // TODO: 需要重構路由結構以正確支援 i18n
+  return cleanPath;
 };
 
 // 擴展路由定義，增加子路由
@@ -247,11 +256,18 @@ const getShortName = (name: string): string => {
   return name;
 };
 
-// 導航路徑部分生成函數
-const generateBreadcrumbs = (path: string) => {
+// 導航路徑部分生成函數（支援 i18n）
+const generateBreadcrumbs = (path: string, tNav?: any) => {
+  // 移除語言前綴
+  let cleanPath = path;
+  locales.forEach(locale => {
+    const localePrefix = new RegExp(`^/(${locale})`);
+    cleanPath = cleanPath.replace(localePrefix, '');
+  });
+  
   // 移除開頭斜線並分割路徑
-  const pathWithoutSlash = path.startsWith('/') ? path.substring(1) : path;
-  const pathSegments = pathWithoutSlash.split('/');
+  const pathWithoutSlash = cleanPath.startsWith('/') ? cleanPath.substring(1) : cleanPath;
+  const pathSegments = pathWithoutSlash.split('/').filter(segment => segment !== '');
   
   // 生成麵包屑數組
   const breadcrumbs = [];
@@ -264,23 +280,44 @@ const generateBreadcrumbs = (path: string) => {
     // 如果是數字，則可能是ID，嘗試獲取上一層的名稱
     if (!isNaN(Number(segment)) && i > 0) {
       const prevSegment = pathSegments[i-1];
-      // 根據上一層段落判斷類型
+      let detailName = segment;
+      
+      // 根據上一層段落判斷類型，支援 i18n
       if (prevSegment === 'suppliers') {
-        breadcrumbs.push({ path: `/${currentPath}`, name: "供應商詳情" });
+        detailName = tNav ? tNav('suppliers.details', { fallback: "供應商詳情" }) : "供應商詳情";
       } else if (prevSegment === 'requests') {
-        breadcrumbs.push({ path: `/${currentPath}`, name: "數據要求詳情" });
+        detailName = tNav ? tNav('requests.details', { fallback: "數據要求詳情" }) : "數據要求詳情";
       } else if (prevSegment === 'surveys') {
-        breadcrumbs.push({ path: `/${currentPath}`, name: "問卷詳情" });
+        detailName = tNav ? tNav('surveys.details', { fallback: "問卷詳情" }) : "問卷詳情";
       } else if (prevSegment === 'my-surveys') {
-        breadcrumbs.push({ path: `/${currentPath}`, name: "問卷詳情" });
-      } else {
-        breadcrumbs.push({ path: `/${currentPath}`, name: segment });
+        detailName = tNav ? tNav('my_surveys.details', { fallback: "問卷詳情" }) : "問卷詳情";
       }
+      
+      breadcrumbs.push({ 
+        path: `/${currentPath}`, 
+        name: detailName,
+        isActive: i === pathSegments.length - 1
+      });
     } else {
-      // 使用路徑映射表獲取名稱，或直接使用段落名稱
+      // 使用路徑映射表獲取名稱，並支援 i18n
       const fullPath = `/${currentPath}`;
-      const segmentName = exactPathMap[fullPath] || segment.charAt(0).toUpperCase() + segment.slice(1);
-      breadcrumbs.push({ path: fullPath, name: segmentName });
+      const navKey = pathToNavKeyMap[fullPath];
+      let segmentName = exactPathMap[fullPath] || segment.charAt(0).toUpperCase() + segment.slice(1);
+      
+      // 如果有 navKey 且有翻譯函數，使用翻譯
+      if (navKey && tNav) {
+        if (navKey === 'war_room') {
+          segmentName = tNav('war_room.title', { fallback: segmentName });
+        } else {
+          segmentName = tNav(navKey, { fallback: segmentName });
+        }
+      }
+      
+      breadcrumbs.push({ 
+        path: fullPath, 
+        name: segmentName,
+        isActive: i === pathSegments.length - 1
+      });
     }
   }
   
@@ -371,7 +408,7 @@ export default function DashboardLayout({
   }
 
   // 生成當前頁面的麵包屑
-  const breadcrumbs = generateBreadcrumbs(pathname);
+  const breadcrumbs = generateBreadcrumbs(pathname, tNav);
 
   // 切換子菜單的開關狀態
   const toggleSubMenu = (path: string) => {
@@ -402,20 +439,20 @@ export default function DashboardLayout({
       const localizedPath = getLocalizedPath(path, localeToUse);
       console.log("導航到路徑:", localizedPath); // 記錄導航路徑
       
-      // 使用 window.location.href 直接跳轉，避免 i18n 路由問題
-      window.location.href = localizedPath;
+      // 使用 router.push 來確保正確的路由處理
+      router.push(localizedPath);
     }
   };
 
   // 修正：補上 TooltipProvider 的 children，並修正縮排與語法
   return (
     <TooltipProvider>
-    <div className="flex min-h-screen professional-layout">
+    <div className="flex min-h-screen professional-layout  ">
         {/* 桌面側邊欄 - 現代化專業設計 */}
       <aside
-          className="fixed left-0 top-0 z-20 h-full border-r border-slate-200/60 w-[72px] hidden lg:block bg-white/95 backdrop-blur-sm professional-shadow"
+          className="  fixed left-0 top-0 z-20 h-full border-r border-slate-200/60 w-[72px] hidden lg:block bg-white/95 backdrop-blur-sm professional-shadow "
       >
-        <div className="flex h-14 items-center justify-center border-b border-slate-200/60">
+        <div className="flex h-14 items-center justify-center border-b border-slate-200/60 ">
             <div 
               className="flex items-center justify-center cursor-pointer"
               onClick={() => handleNavigate("/dashboard/survey-results")}
@@ -431,7 +468,7 @@ export default function DashboardLayout({
               {/* 移除展開時顯示文字邏輯 */}
             </div>
         </div>
-        <div className="flex flex-col gap-1 p-2">
+        <div className="flex flex-col gap-4 p-2">
             {routes.filter(route => !route.hideInMainNav && !route.hidden).map((route) => {
               // 調整路徑匹配邏輯，考慮語言前綴
               const routePath = route.path;
@@ -478,7 +515,7 @@ export default function DashboardLayout({
                       <TooltipTrigger asChild>
                         <div
                           className={cn(
-                            "flex flex-col gap-1 rounded-md transition-all duration-200",
+                            "flex flex-col gap-4 rounded-md transition-all duration-200",
                             "items-center justify-center text-center cursor-pointer",
                             "p-2 self-stretch group",
                             isActive
@@ -516,13 +553,13 @@ export default function DashboardLayout({
                           ) : (
                             <route.icon className="h-6 w-6" style={{ width: "24px", height: "24px" }} />
                           )}
-                          <span className="text-xs">
+                          {/* <span className="text-xs">
                             {route.navKey && tNav 
                               ? (route.navKey === 'war_room' 
                                   ? tNav('war_room_short', {fallback: getShortName(route.name)})
                                   : tNav(`${route.navKey}_short`, {fallback: getShortName(route.name)})) 
                               : getShortName(route.name)}
-                          </span>
+                          </span> */}
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side="right">
@@ -646,11 +683,67 @@ export default function DashboardLayout({
                 </Sheet>
               </div>
 
-                {/* 功能標題 */}
+                {/* Breadcrumb 導航 - 桌面版 */}
                 <div className="hidden lg:block">
-                  {/* <h1 className="text-xl font-semibold">{pageName}</h1> */}
-                  <h1 className="text-lg font-semibold">Supplier Management</h1>
+                  <Breadcrumb>
+                    <BreadcrumbList>
+                      {breadcrumbs.map((crumb, index) => (
+                        <React.Fragment key={crumb.path}>
+                          <BreadcrumbItem>
+                            {crumb.isActive ? (
+                              <BreadcrumbPage className="text-sm text-foreground flex items-center gap-1">
+                                {crumb.path === '/dashboard' || crumb.path.endsWith('/dashboard') ? (
+                                  <Home className="h-4 w-4" />
+                                ) : (
+                                  crumb.name
+                                )}
+                              </BreadcrumbPage>
+                            ) : (
+                              <BreadcrumbLink 
+                                asChild
+                                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                              >
+                                <button 
+                                  onClick={() => handleNavigate(crumb.path)}
+                                  className="hover:underline flex items-center gap-2"
+                                >
+                                  {crumb.path === '/dashboard' || crumb.path.endsWith('/dashboard') ? (
+                                    <Home className="h-4 w-4" />
+                                  ) : (
+                                    crumb.name
+                                  )}
+                                </button>
+                              </BreadcrumbLink>
+                            )}
+                          </BreadcrumbItem>
+                          {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+                        </React.Fragment>
+                      ))}
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </div>
 
+                {/* Breadcrumb 導航 - 移動版（僅顯示當前頁面） */}
+                <div className="lg:hidden">
+                  <h1 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    {breadcrumbs.length > 0 ? (
+                      <>
+                        {(breadcrumbs[breadcrumbs.length - 1].path === '/dashboard' || breadcrumbs[breadcrumbs.length - 1].path.endsWith('/dashboard')) ? (
+                          <Home className="h-5 w-5" />
+                        ) : (
+                          breadcrumbs[breadcrumbs.length - 1].name
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {(pathname === '/dashboard' || pathname.endsWith('/dashboard')) ? (
+                          <Home className="h-5 w-5" />
+                        ) : (
+                          pageName
+                        )}
+                      </>
+                    )}
+                  </h1>
                 </div>
 
             
@@ -698,17 +791,7 @@ export default function DashboardLayout({
                 </svg>
               </div>
 
-              {/* Wizard 按鈕 */}
-              <div className="flex items-center rounded-full border border-gray-200 shadow-sm px-2 py-1 hover:bg-gray-50 transition-colors cursor-pointer">
-                <div className="flex items-center gap-2 px-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#F2A900" stroke="none">
-                    <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10a9.96 9.96 0 01-4.587-1.112l-3.826 1.067a1.5 1.5 0 01-1.842-1.842l1.067-3.826A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2zm0 5c-.988 0-1.945.148-2.848.425a1 1 0 10.601 1.906A8.46 8.46 0 0112 9c2.186 0 4.235.713 5.992 1.56a1 1 0 001.106-1.666A11.11 11.11 0 0012 7zm-4 5a1 1 0 100 2 1 1 0 000-2zm4 0a1 1 0 100 2 1 1 0 000-2zm4 0a1 1 0 100 2 1 1 0 000-2z" />
-                  </svg>
-                  <span className="text-[#F2A900] text-sm font-semibold">Wizard</span>
-                </div>
-                {/* 線上指示圓點 */}
-                <div className="h-3 w-3 rounded-full bg-green-500 ml-1"></div>
-              </div>
+             
             </div>
           </div>
         </header>

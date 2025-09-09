@@ -121,19 +121,19 @@ const questionTemplates = [
   },
   { 
     id: "ghg5", 
-    text: "類別1排放量 (Catgory 1).000 tCO2e", 
+    text: "範疇1排放量 (Catgory 1).000 tCO2e", 
     type: "numberField", 
     category: "組織溫盤資訊",
   },
   { 
     id: "ghg6", 
-    text: "類別2排放量 (Catgory 2).000 tCO2e", 
+    text: "範疇2排放量 (Catgory 2).000 tCO2e", 
     type: "numberField",
     category: "組織溫盤資訊",
   },
   { 
     id: "ghg7", 
-    text: "類別3排放量 (Catgory 3).000 tCO2e", 
+    text: "範疇3排放量 (Catgory 3).000 tCO2e", 
     type: "numberField",
     category: "組織溫盤資訊",
   },

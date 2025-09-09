@@ -212,8 +212,8 @@ export default function RequestDetailsPage() {
                 <TableHead className="w-[180px]">盤查標準</TableHead>
                 <TableHead className="w-[200px]">邊界地址</TableHead>
                 <TableHead className="w-[150px] text-right">總排放量</TableHead>
-                <TableHead className="w-[120px] text-right">類別1</TableHead>
-                <TableHead className="w-[120px] text-right">類別2</TableHead>
+                <TableHead className="w-[120px] text-right">範疇1</TableHead>
+                <TableHead className="w-[120px] text-right">範疇2</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

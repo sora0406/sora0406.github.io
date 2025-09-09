@@ -146,12 +146,12 @@ const rawMaterials = [
 
 // 組織溫室氣體排放欄位
 const organizationalFields: Field[] = [
-  { id: "category1", label: "類別1排放量", type: "number", unit: "tCO2e" },
-  { id: "category2", label: "類別2排放量", type: "number", unit: "tCO2e" },
-  { id: "category3", label: "類別3排放量", type: "number", unit: "tCO2e" },
-  { id: "category4", label: "類別4排放量", type: "number", unit: "tCO2e" },
-  { id: "category5", label: "類別5排放量", type: "number", unit: "tCO2e" },
-  { id: "category6", label: "類別6排放量", type: "number", unit: "tCO2e" }
+  { id: "category1", label: "範疇1排放量", type: "number", unit: "tCO2e" },
+  { id: "category2", label: "範疇2排放量", type: "number", unit: "tCO2e" },
+  { id: "category3", label: "範疇3排放量", type: "number", unit: "tCO2e" },
+  // { id: "category4", label: "類別4排放量", type: "number", unit: "tCO2e" },
+  // { id: "category5", label: "類別5排放量", type: "number", unit: "tCO2e" },
+  // { id: "category6", label: "類別6排放量", type: "number", unit: "tCO2e" }
 ]
 
 // 產品碳足跡欄位
@@ -555,21 +555,21 @@ export default function NewRequestPage() {
                     <p className="text-sm font-medium">組織溫室氣體排放量(單位：tCO2e):</p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1">
                       <div>
-                        <p className="text-xs font-medium">類別1排放量:</p>
+                        <p className="text-xs font-medium">範疇1排放量:</p>
                         <p className="text-sm text-muted-foreground">{request.category1 || '0'}</p>
                         <Badge variant={request.fieldRequirements?.category1 ? "default" : "outline"} className="mt-1">
                           {request.fieldRequirements?.category1 ? "必填" : "選填"}
                         </Badge>
                       </div>
                       <div>
-                        <p className="text-xs font-medium">類別2排放量:</p>
+                        <p className="text-xs font-medium">範疇2排放量:</p>
                         <p className="text-sm text-muted-foreground">{request.category2 || '0'}</p>
                         <Badge variant={request.fieldRequirements?.category2 ? "default" : "outline"} className="mt-1">
                           {request.fieldRequirements?.category2 ? "必填" : "選填"}
                         </Badge>
                       </div>
                       <div>
-                        <p className="text-xs font-medium">類別3排放量:</p>
+                        <p className="text-xs font-medium">範疇3排放量:</p>
                         <p className="text-sm text-muted-foreground">{request.category3 || '0'}</p>
                         <Badge variant={request.fieldRequirements?.category3 ? "default" : "outline"} className="mt-1">
                           {request.fieldRequirements?.category3 ? "必填" : "選填"}
