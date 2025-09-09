@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import React, { useState, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation" 
 import { CalendarIcon, Eye, Plus, Search, MessageSquare, BarChart3, TrendingUp, Target, PieChart, Clock, Download, Filter, BarChart2, MapPin } from "lucide-react"
@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Progress } from "@/components/ui/progress"
-import { getSuppliers, dataSourceOptions } from "@/lib/mocks/suppliers"
+import { getSuppliers, dataSourceOptions, type SupplierDataSource } from "@/lib/mocks/suppliers"
 import { useSurveyData } from "@/hooks/useSurveyData"
 import { cn } from "@/lib/utils"
 
@@ -233,6 +233,110 @@ const tsmcRequests = [
   }
 ];
 
+// Case 3: 材料製造業的數據要求
+const materialsRequests = [
+  {
+    id: "materials-1",
+    title: "原材料碳足跡評估",
+    description: "請提供主要原材料的碳足跡數據，包括採礦、冶煉和加工過程的碳排放。",
+    suppliers: getSuppliers('materials').slice(0, 5).map(s => s.id),
+    requestedData: ["原材料碳足跡"],
+    deadline: new Date("2024-02-15"),
+    status: "active",
+    reminderDays: 7,
+  },
+  {
+    id: "materials-2",
+    title: "材料製程能源消耗評估",
+    description: "請評估材料製程的能源使用效率，包括熔煉、軋製和表面處理過程。",
+    suppliers: getSuppliers('materials').slice(5, 10).map(s => s.id),
+    requestedData: ["製程能源消耗"],
+    deadline: new Date("2024-01-31"),
+    status: "active",
+    reminderDays: 5,
+  },
+  {
+    id: "materials-3",
+    title: "合金材料環境影響評估",
+    description: "請提供合金材料生產的環境影響評估，包括空氣和水污染控制措施。",
+    suppliers: getSuppliers('materials').slice(10, 15).map(s => s.id),
+    requestedData: ["環境影響評估"],
+    deadline: new Date("2024-02-28"),
+    status: "active",
+    reminderDays: 10,
+  },
+  {
+    id: "materials-4",
+    title: "稀土元素開採碳排放",
+    description: "請提供稀土元素開採和提煉過程的碳排放數據及減排計劃。",
+    suppliers: getSuppliers('materials').slice(15, 20).map(s => s.id),
+    requestedData: ["開採碳排放"],
+    deadline: new Date("2024-03-15"),
+    status: "active",
+    reminderDays: 14,
+  },
+  {
+    id: "materials-5",
+    title: "高分子材料回收方案",
+    description: "請提供高分子材料的回收再利用方案，包括循環經濟實施計劃。",
+    suppliers: getSuppliers('materials').slice(20, 25).map(s => s.id),
+    requestedData: ["回收方案"],
+    deadline: new Date("2024-02-10"),
+    status: "completed",
+    reminderDays: 7,
+  },
+  {
+    id: "materials-6",
+    title: "陶瓷材料製程優化",
+    description: "請提供陶瓷材料製程的節能減碳優化措施及實施成效。",
+    suppliers: getSuppliers('materials').slice(25, 30).map(s => s.id),
+    requestedData: ["製程優化"],
+    deadline: new Date("2024-01-20"),
+    status: "completed",
+    reminderDays: 5,
+  },
+  {
+    id: "materials-7",
+    title: "半導體材料純度檢測",
+    description: "請提供半導體級材料的純度檢測報告，包括雜質控制和品質保證。",
+    suppliers: getSuppliers('materials').slice(0, 8).map(s => s.id),
+    requestedData: ["純度檢測"],
+    deadline: new Date("2024-03-01"),
+    status: "active",
+    reminderDays: 10,
+  },
+  {
+    id: "materials-8",
+    title: "磁性材料性能評估",
+    description: "請提供永磁材料的磁性能評估報告，包括溫度穩定性和耐腐蝕性測試。",
+    suppliers: getSuppliers('materials').slice(8, 15).map(s => s.id),
+    requestedData: ["性能評估"],
+    deadline: new Date("2024-02-20"),
+    status: "active",
+    reminderDays: 7,
+  },
+  {
+    id: "materials-9",
+    title: "生物基材料生命週期評估",
+    description: "請提供生物基塑膠材料的完整生命週期評估，包括可生物降解性驗證。",
+    suppliers: getSuppliers('materials').slice(15, 22).map(s => s.id),
+    requestedData: ["生命週期評估"],
+    deadline: new Date("2024-03-31"),
+    status: "active",
+    reminderDays: 14,
+  },
+  {
+    id: "materials-10",
+    title: "奈米材料安全性評估",
+    description: "請提供奈米級材料的安全性評估報告，包括職業健康和環境安全措施。",
+    suppliers: getSuppliers('materials').slice(22, 30).map(s => s.id),
+    requestedData: ["安全性評估"],
+    deadline: new Date("2024-01-25"),
+    status: "expired",
+    reminderDays: 5,
+  }
+];
+
 // 供應商碳排放數據結構
 interface CarbonAnswer {
   [key: string]: string;
@@ -364,19 +468,32 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
     t = (key) => key;
   }
   
-  const [caseType, setCaseType] = useState<"default" | "tsmc">("default")
+  const [caseType, setCaseType] = useState<SupplierDataSource>("default")
+  const { surveyData, dataSource, switchDataSource } = useSurveyData()
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState<"overview" | "requests">("overview")
   const [carbonSearchTerm, setCarbonSearchTerm] = useState("")
   const [selectedDataType, setSelectedDataType] = useState<"organization" | "product">("organization")
   const router = useRouter()
   
-  // 計算碳排放統計數據
-  const carbonStats = useMemo(() => calculateCarbonStats(carbonResponses), [])
+  // 計算碳排放統計數據 - 使用動態問卷數據
+  const carbonStats = useMemo(() => {
+    const responses = surveyData.map(survey => ({
+      id: survey.id,
+      surveyTitle: survey.surveyTitle,
+      supplierName: survey.supplierName,
+      respondentName: survey.respondentName,
+      respondentEmail: survey.respondentEmail,
+      completedDate: survey.completedDate,
+      answers: survey.answers,
+      type: survey.type
+    }));
+    return calculateCarbonStats(responses);
+  }, [surveyData])
   
-  // 過濾碳排放數據
+  // 過濾碳排放數據 - 使用動態問卷數據
   const filteredCarbonData = useMemo(() => {
-    let data = carbonResponses.filter(response => response.type === selectedDataType)
+    let data = surveyData.filter(response => response.type === selectedDataType)
     
     if (carbonSearchTerm) {
       const searchLower = carbonSearchTerm.toLowerCase()
@@ -387,7 +504,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
     }
     
     return data
-  }, [selectedDataType, carbonSearchTerm])
+  }, [selectedDataType, carbonSearchTerm, surveyData])
   
   const handleNavigate = (path: string) => {
     console.log("Navigating to:", path);
@@ -395,8 +512,15 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
   };
 
   // 根據 case 類型選擇對應的數據
-  const requests = caseType === "tsmc" ? tsmcRequests : defaultRequests;
+  const requests = caseType === "tsmc" ? tsmcRequests : caseType === "materials" ? materialsRequests : defaultRequests;
   const suppliers = getSuppliers(caseType);
+  
+  // 同步數據源切換
+  React.useEffect(() => {
+    if (caseType !== dataSource) {
+      switchDataSource(caseType);
+    }
+  }, [caseType, dataSource, switchDataSource]);
 
   // 過濾數據要求
   const filteredRequests = requests.filter(
@@ -434,7 +558,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
               </p>
             </div>
           <div className="flex items-center gap-4">
-            <Select value={caseType} onValueChange={(value: "default" | "tsmc") => setCaseType(value)}>
+            <Select value={caseType} onValueChange={(value: SupplierDataSource) => setCaseType(value)}>
               <SelectTrigger className="w-[120px]">
                 <SelectValue placeholder="選擇 Case" />
               </SelectTrigger>
@@ -568,7 +692,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                       data-state={selectedDataType === "organization" ? "active" : "inactive"}
                     >
                       組織溫室氣體排放
-                      <span className="ml-2 professional-badge">{carbonResponses.filter(r => r.type === "organization").length}</span>
+                      <span className="ml-2 professional-badge">{surveyData.filter(r => r.type === "organization").length}</span>
                     </button>
                     <button
                       className={cn("professional-tab", selectedDataType === "product" && "data-[state=active]:bg-white")}
@@ -576,7 +700,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                       data-state={selectedDataType === "product" ? "active" : "inactive"}
                     >
                       產品碳足跡
-                      <span className="ml-2 professional-badge">{carbonResponses.filter(r => r.type === "product").length}</span>
+                      <span className="ml-2 professional-badge">{surveyData.filter(r => r.type === "product").length}</span>
                     </button>
                   </div>
                   
