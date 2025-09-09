@@ -16,31 +16,6 @@ body {
     text-wrap: balance;
   }
   
-<<<<<<< HEAD
-  /* 緊湊間距工具類 */
-  .compact-spacing {
-    @apply space-y-3;
-  }
-  
-  .tight-spacing {
-    @apply space-y-2;
-  }
-  
-  /* 現代化陰影 */
-  .modern-shadow {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-  }
-  
-  .modern-shadow-md {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  }
-  
-  /* 玻璃態效果 */
-  .glass-effect {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-=======
   /* 緊湊佈局工具 */
   .compact-layout {
     @apply space-y-4;
@@ -71,7 +46,6 @@ body {
   /* 專業級漸變 */
   .professional-gradient {
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
->>>>>>> 064f4cc (新增專業級樣式和佈局，包含緊湊佈局、專業級陰影、現代化邊框及按鈕設計，並更新儀表板和數據要求頁面以使用新樣式，改善用戶界面和可讀性。)
   }
 }
 
@@ -186,17 +160,6 @@ body {
 }
 
 @layer components {
-<<<<<<< HEAD
-  /* 現代化卡片樣式 */
-  .modern-card {
-    @apply bg-card border-border rounded-xl border modern-shadow;
-    backdrop-filter: blur(8px);
-  }
-  
-  /* 緊湊卡片 */
-  .compact-card {
-    @apply bg-card border-border rounded-lg border modern-shadow p-4;
-  }
   
   /* 現代化按鈕 */
   .modern-button {
@@ -244,11 +207,6 @@ body {
     @apply space-y-4 p-4;
   }
   
-  /* 現代化徽章 */
-  .modern-badge {
-    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
-    @apply transition-colors focus:outline-none focus:ring-2 focus:ring-ring;
-=======
   /* 專業級卡片設計 */
   .professional-card {
     @apply bg-white rounded-lg professional-shadow modern-border;
@@ -344,6 +302,5 @@ body {
   
   .professional-table-data {
     @apply px-4 py-3 text-sm text-slate-600;
->>>>>>> 064f4cc (新增專業級樣式和佈局，包含緊湊佈局、專業級陰影、現代化邊框及按鈕設計，並更新儀表板和數據要求頁面以使用新樣式，改善用戶界面和可讀性。)
   }
 }
