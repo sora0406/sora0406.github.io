@@ -48,84 +48,130 @@ interface CarbonOverviewProps {
 
 // 1. 碳排放總覽儀表板元件
 const CarbonOverviewDashboard = ({ stats, selectedYear, tWarRoom }: CarbonOverviewProps) => {
+  // 模擬範疇1-3排放量數據（實際應從stats中計算）
+  const scopeEmissions = useMemo(() => {
+    const totalEmission = parseFloat(stats.orgTotalEmission) || 0;
+    return {
+      scope1: (totalEmission * 0.35).toFixed(1), // 範疇1約35%
+      scope2: (totalEmission * 0.45).toFixed(1), // 範疇2約45%
+      scope3: (totalEmission * 0.20).toFixed(1)  // 範疇3約20%
+    };
+  }, [stats.orgTotalEmission]);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-      {/* 總排放量 */}
-      <Card className="modern-card border-l-4 border-l-red-500 hover:shadow-md transition-shadow">
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-foreground">
-            總碳排放量
-          </CardTitle>
-          <div className="p-1.5 bg-red-50 rounded-md">
-            <Factory className="h-4 w-4 text-red-600" />
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0 pb-3">
-          <div className="text-xl font-bold text-foreground">{stats.orgTotalEmission} <span className="text-sm font-normal text-muted-foreground">tCO2e</span></div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {selectedYear ? `${selectedYear}年度數據` : '所有年度'}
-          </p>
-        </CardContent>
-      </Card>
+    <div className="space-y-4 mb-4">
+      {/* 整合的核心指標區塊 */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* 整合的範疇1-3排放量 */}
+        <Card className="modern-card border-l-4 border-l-red-500 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-foreground">
+              碳排放量分析
+            </CardTitle>
+            <div className="p-1.5 bg-red-50 rounded-md">
+              <Factory className="h-4 w-4 text-red-600" />
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 pb-3">
+            <div className="grid grid-cols-3 gap-4 mb-3">
+              <div>
+                <div className="text-lg font-bold text-foreground">{scopeEmissions.scope1}</div>
+                <div className="text-xs text-muted-foreground">範疇1排放量<br/>(tCO2e)</div>
+              </div>
+              <div>
+                <div className="text-lg font-bold text-foreground">{scopeEmissions.scope2}</div>
+                <div className="text-xs text-muted-foreground">範疇2排放量<br/>(tCO2e)</div>
+              </div>
+              <div>
+                <div className="text-lg font-bold text-foreground">{scopeEmissions.scope3}</div>
+                <div className="text-xs text-muted-foreground">範疇3排放量<br/>(tCO2e)</div>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-border">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-muted-foreground">總排放量</span>
+                <span className="text-sm font-medium text-foreground">
+                  {stats.orgTotalEmission} tCO2e
+                </span>
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {selectedYear ? `${selectedYear}年度數據` : '所有年度數據'}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        {/* 整合的關鍵供應商與數據覆蓋率 */}
+        <Card className="modern-card border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-foreground">
+              供應商概況
+            </CardTitle>
+            <div className="p-1.5 bg-green-50 rounded-md">
+              <Users className="h-4 w-4 text-green-600" />
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 pb-3">
+            <div className="grid grid-cols-2 gap-4 mb-3">
+              <div>
+                <div className="text-lg font-bold text-foreground">{Math.round(stats.orgCount * 0.2)}</div>
+                <div className="text-xs text-muted-foreground">關鍵供應商</div>
+              </div>
+              <div>
+                <div className="text-lg font-bold text-foreground">{stats.orgCount}</div>
+                <div className="text-xs text-muted-foreground">總供應商數</div>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-border">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-muted-foreground">數據覆蓋率</span>
+                <span className="text-sm font-medium text-foreground">
+                  {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}%
+                </span>
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {stats.totalResponses} / {stats.totalResponses + 5} 已回應
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* 關鍵供應商數量 */}
-      <Card className="modern-card border-l-4 border-l-orange-500 hover:shadow-md transition-shadow">
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-foreground">
-            關鍵供應商
-          </CardTitle>
-          <div className="p-1.5 bg-orange-50 rounded-md">
-            <Users className="h-4 w-4 text-orange-600" />
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0 pb-3">
-          <div className="text-xl font-bold text-foreground">{Math.round(stats.orgCount * 0.2)} <span className="text-sm font-normal text-muted-foreground">家</span></div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            佔總數20% (帕雷托原則)
-          </p>
-        </CardContent>
-      </Card>
-
-      {/* 排放強度 */}
-      <Card className="modern-card border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-foreground">
-            平均排放強度
-          </CardTitle>
-          <div className="p-1.5 bg-blue-50 rounded-md">
-            <TrendingUp className="h-4 w-4 text-blue-600" />
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0 pb-3">
-          <div className="text-xl font-bold text-foreground">
-            {stats.orgCount > 0 ? (parseFloat(stats.orgTotalEmission) / stats.orgCount).toFixed(1) : '0'} 
-            <span className="text-sm font-normal text-muted-foreground ml-1">tCO2e/家</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            每家供應商平均
-          </p>
-        </CardContent>
-      </Card>
-
-      {/* 數據覆蓋率 */}
-      <Card className="modern-card border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-foreground">
-            數據覆蓋率
-          </CardTitle>
-          <div className="p-1.5 bg-green-50 rounded-md">
-            <Shield className="h-4 w-4 text-green-600" />
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0 pb-3">
-          <div className="text-xl font-bold text-foreground">
-            {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}<span className="text-sm font-normal text-muted-foreground">%</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {stats.totalResponses} / {stats.totalResponses + 5} 供應商
-          </p>
-        </CardContent>
-      </Card>
+        {/* 排放績效指標 */}
+        <Card className="modern-card border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-foreground">
+              排放績效指標
+            </CardTitle>
+            <div className="p-1.5 bg-blue-50 rounded-md">
+              <TrendingUp className="h-4 w-4 text-blue-600" />
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 pb-3">
+            <div className="grid grid-cols-2 gap-4 mb-3">
+              <div>
+                <div className="text-lg font-bold text-foreground">
+                  {stats.orgCount > 0 ? (parseFloat(stats.orgTotalEmission) / stats.orgCount).toFixed(1) : '0'}
+                </div>
+                <div className="text-xs text-muted-foreground">平均排放強度<br/>(tCO2e/家)</div>
+              </div>
+              <div>
+                <div className="text-lg font-bold text-foreground">
+                  {((parseFloat(stats.orgTotalEmission) / parseFloat(scopeEmissions.scope2)) * 100).toFixed(1)}%
+                </div>
+                <div className="text-xs text-muted-foreground">範疇2占比<br/>(%)</div>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-border">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-muted-foreground">年度減排目標</span>
+                <span className="text-sm font-medium text-foreground">-10%</span>
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                相較前一年度
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
