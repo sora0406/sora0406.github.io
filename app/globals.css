@@ -160,18 +160,25 @@ body {
 }
 
 @layer components {
-  
-  /* 現代化按鈕 */
-  .modern-button {
-    @apply inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200;
-    @apply bg-primary text-primary-foreground hover:bg-primary/90;
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
-    @apply disabled:pointer-events-none disabled:opacity-50;
+  /* 專業級卡片設計 */
+  .professional-card {
+    @apply bg-white rounded-lg professional-shadow modern-border;
+    backdrop-filter: blur(8px);
   }
   
-  /* 緊湊按鈕 */
-  .compact-button {
-    @apply modern-button px-3 py-1.5 text-sm;
+  .compact-card {
+    @apply professional-card p-4;
+  }
+  
+  .ultra-compact-card {
+    @apply professional-card p-3;
+  }
+  
+  /* 現代化按鈕系統 */
+  .modern-button {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-all duration-200;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
   }
   
   /* 現代化輸入框 */

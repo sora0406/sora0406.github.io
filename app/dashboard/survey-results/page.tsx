@@ -18,5 +18,5 @@ export default function WarRoomPage({
       tWarRoom={tWarRoom}
       tCommon={tCommon}
     />
-  );
+  )
 }
