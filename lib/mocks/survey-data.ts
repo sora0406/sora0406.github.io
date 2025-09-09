@@ -1485,6 +1485,847 @@ const materialsSurveyData: SurveyResponse[] = [
         "查證證書": "TUV-CF-2023-214"
       }
     }
+  },
+  // 添加剩餘 15 個供應商
+  {
+    id: "materials-31",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "CeramiX Materials Group",
+    respondentName: "謝立民",
+    respondentEmail: "contact@ceramix.com",
+    completedDate: new Date("2023-12-22"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "398000.000",
+        "類別1排放量": "199000.000",
+        "類別2排放量": "143280.000",
+        "類別3排放量": "55720.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "DNV-ISO14064-2023-215"
+      }
+    }
+  },
+  {
+    id: "materials-32",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "CeramiX Materials Group",
+    respondentName: "謝立民",
+    respondentEmail: "contact@ceramix.com",
+    completedDate: new Date("2023-12-22"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "高溫陶瓷材料",
+        "功能單位": "每公噸",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "2456.7 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "1228.4 kgCO2e/單位",
+        "製造階段": "982.7 kgCO2e/單位",
+        "運輸階段": "172.0 kgCO2e/單位",
+        "使用階段": "73.6 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "DNV-CF-2023-215"
+      }
+    }
+  },
+  {
+    id: "materials-33",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "Silicore Semiconductor Materials",
+    respondentName: "林志華",
+    respondentEmail: "contact@silicore.com",
+    completedDate: new Date("2023-12-24"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "867000.000",
+        "類別1排放量": "433500.000",
+        "類別2排放量": "312120.000",
+        "類別3排放量": "121380.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "SGS-ISO14064-2023-216"
+      }
+    }
+  },
+  {
+    id: "materials-34",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "Silicore Semiconductor Materials",
+    respondentName: "林志華",
+    respondentEmail: "contact@silicore.com",
+    completedDate: new Date("2023-12-24"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "半導體用矽晶圓",
+        "功能單位": "每片晶圓",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "89.4 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "35.8 kgCO2e/單位",
+        "製造階段": "44.7 kgCO2e/單位",
+        "運輸階段": "6.3 kgCO2e/單位",
+        "使用階段": "2.6 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "SGS-CF-2023-216"
+      }
+    }
+  },
+  {
+    id: "materials-35",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "WaferTech Materials Ltd.",
+    respondentName: "張美惠",
+    respondentEmail: "contact@wafertech.com",
+    completedDate: new Date("2023-12-26"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "654000.000",
+        "類別1排放量": "327000.000",
+        "類別2排放量": "235440.000",
+        "類別3排放量": "91560.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "BSI-ISO14064-2023-217"
+      }
+    }
+  },
+  {
+    id: "materials-36",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "WaferTech Materials Ltd.",
+    respondentName: "張美惠",
+    respondentEmail: "contact@wafertech.com",
+    completedDate: new Date("2023-12-26"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "半導體拋光片",
+        "功能單位": "每片",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "76.8 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "30.7 kgCO2e/單位",
+        "製造階段": "38.4 kgCO2e/單位",
+        "運輸階段": "5.4 kgCO2e/單位",
+        "使用階段": "2.3 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "BSI-CF-2023-217"
+      }
+    }
+  },
+  {
+    id: "materials-37",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "InnoChip Substrates",
+    respondentName: "劉德華",
+    respondentEmail: "contact@innochip.com",
+    completedDate: new Date("2023-12-28"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "498000.000",
+        "類別1排放量": "249000.000",
+        "類別2排放量": "179280.000",
+        "類別3排放量": "69720.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "TUV-ISO14064-2023-218"
+      }
+    }
+  },
+  {
+    id: "materials-38",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "InnoChip Substrates",
+    respondentName: "劉德華",
+    respondentEmail: "contact@innochip.com",
+    completedDate: new Date("2023-12-28"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "IC基板材料",
+        "功能單位": "每平方米",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "124.6 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "49.8 kgCO2e/單位",
+        "製造階段": "62.3 kgCO2e/單位",
+        "運輸階段": "8.7 kgCO2e/單位",
+        "使用階段": "3.8 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "TUV-CF-2023-218"
+      }
+    }
+  },
+  {
+    id: "materials-39",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "BondAlloy Solderworks",
+    respondentName: "王志明",
+    respondentEmail: "contact@bondalloy.com",
+    completedDate: new Date("2023-12-30"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "287000.000",
+        "類別1排放量": "143500.000",
+        "類別2排放量": "103320.000",
+        "類別3排放量": "40180.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "DNV-ISO14064-2023-219"
+      }
+    }
+  },
+  {
+    id: "materials-40",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "BondAlloy Solderworks",
+    respondentName: "王志明",
+    respondentEmail: "contact@bondalloy.com",
+    completedDate: new Date("2023-12-30"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "無鉛焊錫合金",
+        "功能單位": "每公斤",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "18.9 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "7.6 kgCO2e/單位",
+        "製造階段": "9.5 kgCO2e/單位",
+        "運輸階段": "1.3 kgCO2e/單位",
+        "使用階段": "0.5 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "DNV-CF-2023-219"
+      }
+    }
+  },
+  {
+    id: "materials-41",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "FlexCopper Foils",
+    respondentName: "陳雅玲",
+    respondentEmail: "contact@flexcopper.com",
+    completedDate: new Date("2024-01-02"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "432000.000",
+        "類別1排放量": "216000.000",
+        "類別2排放量": "155520.000",
+        "類別3排放量": "60480.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "SGS-ISO14064-2023-220"
+      }
+    }
+  },
+  {
+    id: "materials-42",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "FlexCopper Foils",
+    respondentName: "陳雅玲",
+    respondentEmail: "contact@flexcopper.com",
+    completedDate: new Date("2024-01-02"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "電子級銅箔",
+        "功能單位": "每平方米",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "34.7 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "13.9 kgCO2e/單位",
+        "製造階段": "17.4 kgCO2e/單位",
+        "運輸階段": "2.4 kgCO2e/單位",
+        "使用階段": "1.0 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "SGS-CF-2023-220"
+      }
+    }
+  },
+  {
+    id: "materials-43",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "AltiGlass Displays",
+    respondentName: "蘇建國",
+    respondentEmail: "contact@altiglass.com",
+    completedDate: new Date("2024-01-04"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "598000.000",
+        "類別1排放量": "299000.000",
+        "類別2排放量": "215280.000",
+        "類別3排放量": "83720.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "BSI-ISO14064-2023-221"
+      }
+    }
+  },
+  {
+    id: "materials-44",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "AltiGlass Displays",
+    respondentName: "蘇建國",
+    respondentEmail: "contact@altiglass.com",
+    completedDate: new Date("2024-01-04"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "顯示器用玻璃",
+        "功能單位": "每平方米",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "56.8 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "22.7 kgCO2e/單位",
+        "製造階段": "28.4 kgCO2e/單位",
+        "運輸階段": "4.0 kgCO2e/單位",
+        "使用階段": "1.7 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "BSI-CF-2023-221"
+      }
+    }
+  },
+  {
+    id: "materials-45",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "NanoPowder Chemicals",
+    respondentName: "呂志成",
+    respondentEmail: "contact@nanopowder.com",
+    completedDate: new Date("2024-01-06"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "167000.000",
+        "類別1排放量": "83500.000",
+        "類別2排放量": "60120.000",
+        "類別3排放量": "23380.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "TUV-ISO14064-2023-222"
+      }
+    }
+  },
+  {
+    id: "materials-46",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "NanoPowder Chemicals",
+    respondentName: "呂志成",
+    respondentEmail: "contact@nanopowder.com",
+    completedDate: new Date("2024-01-06"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "奈米級化工粉體",
+        "功能單位": "每公斤",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "23.4 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "9.4 kgCO2e/單位",
+        "製造階段": "11.7 kgCO2e/單位",
+        "運輸階段": "1.6 kgCO2e/單位",
+        "使用階段": "0.7 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "TUV-CF-2023-222"
+      }
+    }
+  },
+  {
+    id: "materials-47",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "ThermoResin Compounds",
+    respondentName: "徐雅婷",
+    respondentEmail: "contact@thermoresin.com",
+    completedDate: new Date("2024-01-08"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "534000.000",
+        "類別1排放量": "267000.000",
+        "類別2排放量": "192240.000",
+        "類別3排放量": "74760.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "DNV-ISO14064-2023-223"
+      }
+    }
+  },
+  {
+    id: "materials-48",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "ThermoResin Compounds",
+    respondentName: "徐雅婷",
+    respondentEmail: "contact@thermoresin.com",
+    completedDate: new Date("2024-01-08"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "熱固性樹脂複合材料",
+        "功能單位": "每公噸",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "3567.8 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "1783.9 kgCO2e/單位",
+        "製造階段": "1427.1 kgCO2e/單位",
+        "運輸階段": "249.7 kgCO2e/單位",
+        "使用階段": "107.1 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "DNV-CF-2023-223"
+      }
+    }
+  },
+  {
+    id: "materials-49",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "BioPolymer Solutions",
+    respondentName: "朱美華",
+    respondentEmail: "contact@biopolymer.com",
+    completedDate: new Date("2024-01-10"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "156000.000",
+        "類別1排放量": "78000.000",
+        "類別2排放量": "56160.000",
+        "類別3排放量": "21840.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "SGS-ISO14064-2023-224"
+      }
+    }
+  },
+  {
+    id: "materials-50",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "BioPolymer Solutions",
+    respondentName: "朱美華",
+    respondentEmail: "contact@biopolymer.com",
+    completedDate: new Date("2024-01-10"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "生物基塑膠材料",
+        "功能單位": "每公噸",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "856.7 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "257.0 kgCO2e/單位",
+        "製造階段": "428.4 kgCO2e/單位",
+        "運輸階段": "119.9 kgCO2e/單位",
+        "使用階段": "51.4 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "SGS-CF-2023-224"
+      }
+    }
+  },
+  {
+    id: "materials-51",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "GreenTex Fibers",
+    respondentName: "何志強",
+    respondentEmail: "contact@greentex.com",
+    completedDate: new Date("2024-01-12"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "289000.000",
+        "類別1排放量": "144500.000",
+        "類別2排放量": "104040.000",
+        "類別3排放量": "40460.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "BSI-ISO14064-2023-225"
+      }
+    }
+  },
+  {
+    id: "materials-52",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "GreenTex Fibers",
+    respondentName: "何志強",
+    respondentEmail: "contact@greentex.com",
+    completedDate: new Date("2024-01-12"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "再生纖維材料",
+        "功能單位": "每公噸",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "1234.5 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "370.4 kgCO2e/單位",
+        "製造階段": "617.3 kgCO2e/單位",
+        "運輸階段": "172.4 kgCO2e/單位",
+        "使用階段": "74.4 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "BSI-CF-2023-225"
+      }
+    }
+  },
+  {
+    id: "materials-53",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "HardCarb Industrial Minerals",
+    respondentName: "溫志偉",
+    respondentEmail: "contact@hardcarb.com",
+    completedDate: new Date("2024-01-14"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "756000.000",
+        "類別1排放量": "378000.000",
+        "類別2排放量": "272160.000",
+        "類別3排放量": "105840.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "TUV-ISO14064-2023-226"
+      }
+    }
+  },
+  {
+    id: "materials-54",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "HardCarb Industrial Minerals",
+    respondentName: "溫志偉",
+    respondentEmail: "contact@hardcarb.com",
+    completedDate: new Date("2024-01-14"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "碳化物耐火材料",
+        "功能單位": "每公噸",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "4567.8 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "2283.9 kgCO2e/單位",
+        "製造階段": "1827.1 kgCO2e/單位",
+        "運輸階段": "319.7 kgCO2e/單位",
+        "使用階段": "137.1 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "TUV-CF-2023-226"
+      }
+    }
+  },
+  {
+    id: "materials-55",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "ZircoMat Ceramics",
+    respondentName: "沈美玲",
+    respondentEmail: "contact@zircomat.com",
+    completedDate: new Date("2024-01-16"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "445000.000",
+        "類別1排放量": "222500.000",
+        "類別2排放量": "160200.000",
+        "類別3排放量": "62300.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "DNV-ISO14064-2023-227"
+      }
+    }
+  },
+  {
+    id: "materials-56",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "ZircoMat Ceramics",
+    respondentName: "沈美玲",
+    respondentEmail: "contact@zircomat.com",
+    completedDate: new Date("2024-01-16"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "氧化鋯陶瓷",
+        "功能單位": "每公噸",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "3245.6 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "1622.8 kgCO2e/單位",
+        "製造階段": "1298.2 kgCO2e/單位",
+        "運輸階段": "227.2 kgCO2e/單位",
+        "使用階段": "97.4 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "DNV-CF-2023-227"
+      }
+    }
+  },
+  {
+    id: "materials-57",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "PhosChem Specialty Ltd.",
+    respondentName: "黃建民",
+    respondentEmail: "contact@phoschem.com",
+    completedDate: new Date("2024-01-18"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "234000.000",
+        "類別1排放量": "117000.000",
+        "類別2排放量": "84240.000",
+        "類別3排放量": "32760.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "SGS-ISO14064-2023-228"
+      }
+    }
+  },
+  {
+    id: "materials-58",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "PhosChem Specialty Ltd.",
+    respondentName: "黃建民",
+    respondentEmail: "contact@phoschem.com",
+    completedDate: new Date("2024-01-18"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "磷化學品添加劑",
+        "功能單位": "每公噸",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "1567.9 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "627.2 kgCO2e/單位",
+        "製造階段": "784.0 kgCO2e/單位",
+        "運輸階段": "109.8 kgCO2e/單位",
+        "使用階段": "46.9 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "SGS-CF-2023-228"
+      }
+    }
+  },
+  {
+    id: "materials-59",
+    surveyTitle: "2023年度材料製造業碳排放評估",
+    supplierName: "MagnetX Materials",
+    respondentName: "馬志豪",
+    respondentEmail: "contact@magnetx.com",
+    completedDate: new Date("2024-01-20"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日",
+        "組織邊界": "營運控制權法",
+        "盤查標準": "ISO 14064-1:2018"
+      },
+      "排放量資料": {
+        "總排放量": "678000.000",
+        "類別1排放量": "339000.000",
+        "類別2排放量": "244080.000",
+        "類別3排放量": "94920.000"
+      },
+      "驗證資訊": {
+        "查證": "是",
+        "查證證書": "BSI-ISO14064-2023-229"
+      }
+    }
+  },
+  {
+    id: "materials-60",
+    surveyTitle: "材料製造產品碳足跡評估",
+    supplierName: "MagnetX Materials",
+    respondentName: "馬志豪",
+    respondentEmail: "contact@magnetx.com",
+    completedDate: new Date("2024-01-20"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "稀土永磁材料",
+        "功能單位": "每公斤",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "234.5 kgCO2e/單位"
+      },
+      "生命週期階段": {
+        "原料取得": "117.3 kgCO2e/單位",
+        "製造階段": "93.8 kgCO2e/單位",
+        "運輸階段": "16.4 kgCO2e/單位",
+        "使用階段": "7.0 kgCO2e/單位"
+      },
+      "驗證資訊": {
+        "採用標準": "ISO 14067:2018",
+        "查證": "是",
+        "查證證書": "BSI-CF-2023-229"
+      }
+    }
   }
 ];
 

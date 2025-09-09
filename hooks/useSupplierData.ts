@@ -11,7 +11,7 @@ export function useSupplierData() {
   // 從 localStorage 載入保存的數據源選擇
   useEffect(() => {
     const savedDataSource = localStorage.getItem('supplier-data-source') as SupplierDataSource;
-    if (savedDataSource && (savedDataSource === 'default' || savedDataSource === 'tsmc')) {
+    if (savedDataSource && (savedDataSource === 'default' || savedDataSource === 'tsmc' || savedDataSource === 'materials')) {
       setDataSource(savedDataSource);
     }
     setIsLoading(false);
@@ -36,6 +36,8 @@ export function useSupplierData() {
     switch (dataSource) {
       case 'tsmc':
         return 'Case2';
+      case 'materials':
+        return 'Case3';
       case 'default':
       default:
         return 'Case1';

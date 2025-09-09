@@ -27,7 +27,7 @@ export interface Supplier {
   }[];
 }
 
-export type SupplierDataSource = 'default' | 'tsmc';
+export type SupplierDataSource = 'default' | 'tsmc' | 'materials';
 
 // 預設供應商數據（原有數據）
 const defaultSuppliers: Supplier[] = [
@@ -830,10 +830,586 @@ const tsmcSuppliers: Supplier[] = [
   }
 ];
 
+// Case 3: 材料製造業供應商數據
+const materialsSuppliers: Supplier[] = [
+  {
+    id: "materials-1",
+    name: "Formo Steel Materials Co.",
+    companyId: "TW30000001",
+    contact: "林建志",
+    email: "contact@formosteel.com",
+    phone: "04-2358-5555",
+    address: "台中市西屯區工業區38路168號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 892000,
+      productCarbonFootprint: 1890.5,
+      scope1Emissions: 534000,
+      scope2Emissions: 267600,
+      scope4Emissions: 45200,
+      scope5Emissions: 31680,
+      scope6Emissions: 13520
+    }
+  },
+  {
+    id: "materials-2",
+    name: "GreenAlu Metals Corp.",
+    companyId: "TW30000002",
+    contact: "王淑華",
+    email: "contact@greenalu.com",
+    phone: "07-351-8888",
+    address: "高雄市楠梓區興楠路105號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 345000,
+      productCarbonFootprint: 1245.8,
+      scope1Emissions: 172500,
+      scope2Emissions: 138000,
+      scope4Emissions: 17250,
+      scope5Emissions: 12075,
+      scope6Emissions: 5175
+    }
+  },
+  {
+    id: "materials-3",
+    name: "CopperLink Industries",
+    companyId: "TW30000003",
+    contact: "李明輝",
+    email: "contact@copperlink.com",
+    phone: "02-2658-7777",
+    address: "新北市樹林區俊英街86號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 567000,
+      productCarbonFootprint: 3456.2,
+      scope1Emissions: 283500,
+      scope2Emissions: 204120,
+      scope4Emissions: 28350,
+      scope5Emissions: 39690,
+      scope6Emissions: 11340
+    }
+  },
+  {
+    id: "materials-4",
+    name: "TitanMax Alloys Ltd.",
+    companyId: "TW30000004",
+    contact: "陳志銘",
+    email: "contact@titanmax.com",
+    phone: "03-452-9999",
+    address: "桃園市中壢區中華路二段568號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 1235000,
+      productCarbonFootprint: 8945.6,
+      scope1Emissions: 741000,
+      scope2Emissions: 371000,
+      scope4Emissions: 61750,
+      scope5Emissions: 43225,
+      scope6Emissions: 18525
+    }
+  },
+  {
+    id: "materials-5",
+    name: "NickelOne Resources",
+    companyId: "TW30000005",
+    contact: "黃美如",
+    email: "contact@nickelone.com",
+    phone: "06-298-5555",
+    address: "台南市安南區工業一路235號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 456000,
+      productCarbonFootprint: 2678.9,
+      scope1Emissions: 228000,
+      scope2Emissions: 164160,
+      scope4Emissions: 22800,
+      scope5Emissions: 31920,
+      scope6Emissions: 9120
+    }
+  },
+  {
+    id: "materials-6",
+    name: "RareEarth Elements Ltd.",
+    companyId: "TW30000006",
+    contact: "張國強",
+    email: "contact@rareearth.com",
+    phone: "037-582-6666",
+    address: "苗栗縣竹南鎮科學路158號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 234000,
+      productCarbonFootprint: 156.7,
+      scope1Emissions: 140400,
+      scope2Emissions: 70200,
+      scope4Emissions: 11700,
+      scope5Emissions: 8190,
+      scope6Emissions: 3510
+    }
+  },
+  {
+    id: "materials-7",
+    name: "LithoMet Mining Group",
+    companyId: "TW30000007",
+    contact: "劉建成",
+    email: "contact@lithomet.com",
+    phone: "05-552-7777",
+    address: "雲林縣斗六市工業路126號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 189000,
+      productCarbonFootprint: 4567.3,
+      scope1Emissions: 75600,
+      scope2Emissions: 83160,
+      scope4Emissions: 9450,
+      scope5Emissions: 13230,
+      scope6Emissions: 7560
+    }
+  },
+  {
+    id: "materials-8",
+    name: "CobaltCore Materials",
+    companyId: "TW30000008",
+    contact: "吳佳芬",
+    email: "contact@cobaltcore.com",
+    phone: "049-225-8888",
+    address: "南投縣南投市工業南路89號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 298000,
+      productCarbonFootprint: 7834.5,
+      scope1Emissions: 149000,
+      scope2Emissions: 107280,
+      scope4Emissions: 14900,
+      scope5Emissions: 20860,
+      scope6Emissions: 5960
+    }
+  },
+  {
+    id: "materials-9",
+    name: "Graphenex Advanced Carbon",
+    companyId: "TW30000009",
+    contact: "許志豪",
+    email: "contact@graphenex.com",
+    phone: "03-591-5555",
+    address: "新竹縣竹北市科技七路198號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 145000,
+      productCarbonFootprint: 89.3,
+      scope1Emissions: 58000,
+      scope2Emissions: 64120,
+      scope4Emissions: 7250,
+      scope5Emissions: 10150,
+      scope6Emissions: 5480
+    }
+  },
+  {
+    id: "materials-10",
+    name: "EverChem Petrochemicals Ltd.",
+    companyId: "TW30000010",
+    contact: "陳雅雯",
+    email: "contact@everchem.com",
+    phone: "07-781-9999",
+    address: "高雄市大寮區鳳林三路555號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 1456000,
+      productCarbonFootprint: 2345.7,
+      scope1Emissions: 728000,
+      scope2Emissions: 583680,
+      scope4Emissions: 72800,
+      scope5Emissions: 101920,
+      scope6Emissions: 29600
+    }
+  },
+  {
+    id: "materials-11",
+    name: "NovaPlas Polymers",
+    companyId: "TW30000011",
+    contact: "趙文傑",
+    email: "contact@novaplas.com",
+    phone: "04-835-7777",
+    address: "彰化縣和美鎮工業路268號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 678000,
+      productCarbonFootprint: 2890.4,
+      scope1Emissions: 339000,
+      scope2Emissions: 244080,
+      scope4Emissions: 33900,
+      scope5Emissions: 47460,
+      scope6Emissions: 13560
+    }
+  },
+  {
+    id: "materials-12",
+    name: "PolyCycle Replastics",
+    companyId: "TW30000012",
+    contact: "劉佳穎",
+    email: "contact@polycycle.com",
+    phone: "02-2999-8888",
+    address: "新北市新店區寶橋路165號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 234000,
+      productCarbonFootprint: 956.8,
+      scope1Emissions: 117000,
+      scope2Emissions: 84240,
+      scope4Emissions: 11700,
+      scope5Emissions: 16380,
+      scope6Emissions: 4680
+    }
+  },
+  {
+    id: "materials-13",
+    name: "CarbonFiber Advanced Materials",
+    companyId: "TW30000013",
+    contact: "邱維德",
+    email: "contact@carbonfiber.com",
+    phone: "03-378-6666",
+    address: "桃園市大園區航空城工業一路369號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 789000,
+      productCarbonFootprint: 67.9,
+      scope1Emissions: 394500,
+      scope2Emissions: 284040,
+      scope4Emissions: 39450,
+      scope5Emissions: 55230,
+      scope6Emissions: 15780
+    }
+  },
+  {
+    id: "materials-14",
+    name: "OptiGlass Technology Inc.",
+    companyId: "TW30000014",
+    contact: "楊智慧",
+    email: "contact@optiglass.com",
+    phone: "03-666-9999",
+    address: "新竹科學園區研發五路188號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 456000,
+      productCarbonFootprint: 45.6,
+      scope1Emissions: 228000,
+      scope2Emissions: 164160,
+      scope4Emissions: 22800,
+      scope5Emissions: 31920,
+      scope6Emissions: 9120
+    }
+  },
+  {
+    id: "materials-15",
+    name: "ClearSilica Mining Co.",
+    companyId: "TW30000015",
+    contact: "鄭承恩",
+    email: "contact@clearsilica.com",
+    phone: "037-485-7777",
+    address: "苗栗縣頭份市工業二路125號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 323000,
+      productCarbonFootprint: 567.3,
+      scope1Emissions: 161500,
+      scope2Emissions: 116280,
+      scope4Emissions: 16150,
+      scope5Emissions: 22610,
+      scope6Emissions: 6460
+    }
+  },
+  {
+    id: "materials-16",
+    name: "CeramiX Materials Group",
+    companyId: "TW30000016",
+    contact: "謝立民",
+    email: "contact@ceramix.com",
+    phone: "02-2696-5555",
+    address: "新北市汐止區康寧街268號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 398000,
+      productCarbonFootprint: 2456.7,
+      scope1Emissions: 199000,
+      scope2Emissions: 143280,
+      scope4Emissions: 19900,
+      scope5Emissions: 27860,
+      scope6Emissions: 7960
+    }
+  },
+  {
+    id: "materials-17",
+    name: "Silicore Semiconductor Materials",
+    companyId: "TW30000017",
+    contact: "林志華",
+    email: "contact@silicore.com",
+    phone: "03-563-8888",
+    address: "新竹科學園區工業東路88號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 867000,
+      productCarbonFootprint: 89.4,
+      scope1Emissions: 433500,
+      scope2Emissions: 312120,
+      scope4Emissions: 43350,
+      scope5Emissions: 60690,
+      scope6Emissions: 17340
+    }
+  },
+  {
+    id: "materials-18",
+    name: "WaferTech Materials Ltd.",
+    companyId: "TW30000018",
+    contact: "張美惠",
+    email: "contact@wafertech.com",
+    phone: "03-577-9999",
+    address: "新竹科學園區創新路168號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 654000,
+      productCarbonFootprint: 76.8,
+      scope1Emissions: 327000,
+      scope2Emissions: 235440,
+      scope4Emissions: 32700,
+      scope5Emissions: 45780,
+      scope6Emissions: 13080
+    }
+  },
+  {
+    id: "materials-19",
+    name: "InnoChip Substrates",
+    companyId: "TW30000019",
+    contact: "劉德華",
+    email: "contact@innochip.com",
+    phone: "03-578-7777",
+    address: "新竹科學園區力行路268號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 498000,
+      productCarbonFootprint: 124.6,
+      scope1Emissions: 249000,
+      scope2Emissions: 179280,
+      scope4Emissions: 24900,
+      scope5Emissions: 34860,
+      scope6Emissions: 9960
+    }
+  },
+  {
+    id: "materials-20",
+    name: "BondAlloy Solderworks",
+    companyId: "TW30000020",
+    contact: "王志明",
+    email: "contact@bondalloy.com",
+    phone: "02-2267-8888",
+    address: "新北市土城區工業一路89號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 287000,
+      productCarbonFootprint: 18.9,
+      scope1Emissions: 143500,
+      scope2Emissions: 103320,
+      scope4Emissions: 14350,
+      scope5Emissions: 20080,
+      scope6Emissions: 5750
+    }
+  },
+  {
+    id: "materials-21",
+    name: "FlexCopper Foils",
+    companyId: "TW30000021",
+    contact: "陳雅玲",
+    email: "contact@flexcopper.com",
+    phone: "03-486-9999",
+    address: "桃園市楊梅區工業三路168號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 432000,
+      productCarbonFootprint: 34.7,
+      scope1Emissions: 216000,
+      scope2Emissions: 155520,
+      scope4Emissions: 21600,
+      scope5Emissions: 30240,
+      scope6Emissions: 8640
+    }
+  },
+  {
+    id: "materials-22",
+    name: "AltiGlass Displays",
+    companyId: "TW30000022",
+    contact: "蘇建國",
+    email: "contact@altiglass.com",
+    phone: "04-2358-7777",
+    address: "台中市西屯區福科路268號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 598000,
+      productCarbonFootprint: 56.8,
+      scope1Emissions: 299000,
+      scope2Emissions: 215280,
+      scope4Emissions: 29900,
+      scope5Emissions: 41860,
+      scope6Emissions: 11960
+    }
+  },
+  {
+    id: "materials-23",
+    name: "NanoPowder Chemicals",
+    companyId: "TW30000023",
+    contact: "呂志成",
+    email: "contact@nanopowder.com",
+    phone: "07-695-8888",
+    address: "高雄市路竹區科學路189號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 167000,
+      productCarbonFootprint: 23.4,
+      scope1Emissions: 83500,
+      scope2Emissions: 60120,
+      scope4Emissions: 8350,
+      scope5Emissions: 11690,
+      scope6Emissions: 3340
+    }
+  },
+  {
+    id: "materials-24",
+    name: "ThermoResin Compounds",
+    companyId: "TW30000024",
+    contact: "徐雅婷",
+    email: "contact@thermoresin.com",
+    phone: "06-236-9999",
+    address: "台南市永康區環工路268號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 534000,
+      productCarbonFootprint: 3567.8,
+      scope1Emissions: 267000,
+      scope2Emissions: 192240,
+      scope4Emissions: 26700,
+      scope5Emissions: 37380,
+      scope6Emissions: 10680
+    }
+  },
+  {
+    id: "materials-25",
+    name: "BioPolymer Solutions",
+    companyId: "TW30000025",
+    contact: "朱美華",
+    email: "contact@biopolymer.com",
+    phone: "04-852-7777",
+    address: "彰化縣溪湖鎮工業東路198號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 156000,
+      productCarbonFootprint: 856.7,
+      scope1Emissions: 78000,
+      scope2Emissions: 56160,
+      scope4Emissions: 7800,
+      scope5Emissions: 10920,
+      scope6Emissions: 3120
+    }
+  },
+  {
+    id: "materials-26",
+    name: "GreenTex Fibers",
+    companyId: "TW30000026",
+    contact: "何志強",
+    email: "contact@greentex.com",
+    phone: "05-532-8888",
+    address: "雲林縣虎尾鎮工業路365號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 289000,
+      productCarbonFootprint: 1234.5,
+      scope1Emissions: 144500,
+      scope2Emissions: 104040,
+      scope4Emissions: 14450,
+      scope5Emissions: 20230,
+      scope6Emissions: 5780
+    }
+  },
+  {
+    id: "materials-27",
+    name: "HardCarb Industrial Minerals",
+    companyId: "TW30000027",
+    contact: "溫志偉",
+    email: "contact@hardcarb.com",
+    phone: "08-739-9999",
+    address: "屏東縣屏東市工業區路268號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 756000,
+      productCarbonFootprint: 4567.8,
+      scope1Emissions: 378000,
+      scope2Emissions: 272160,
+      scope4Emissions: 37800,
+      scope5Emissions: 52920,
+      scope6Emissions: 15120
+    }
+  },
+  {
+    id: "materials-28",
+    name: "ZircoMat Ceramics",
+    companyId: "TW30000028",
+    contact: "沈美玲",
+    email: "contact@zircomat.com",
+    phone: "03-495-7777",
+    address: "桃園市龍潭區工業一路168號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 445000,
+      productCarbonFootprint: 3245.6,
+      scope1Emissions: 222500,
+      scope2Emissions: 160200,
+      scope4Emissions: 22250,
+      scope5Emissions: 31150,
+      scope6Emissions: 8900
+    }
+  },
+  {
+    id: "materials-29",
+    name: "PhosChem Specialty Ltd.",
+    companyId: "TW30000029",
+    contact: "黃建民",
+    email: "contact@phoschem.com",
+    phone: "07-371-8888",
+    address: "高雄市仁武區工業三路89號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 234000,
+      productCarbonFootprint: 1567.9,
+      scope1Emissions: 117000,
+      scope2Emissions: 84240,
+      scope4Emissions: 11700,
+      scope5Emissions: 16380,
+      scope6Emissions: 4680
+    }
+  },
+  {
+    id: "materials-30",
+    name: "MagnetX Materials",
+    companyId: "TW30000030",
+    contact: "馬志豪",
+    email: "contact@magnetx.com",
+    phone: "02-2698-9999",
+    address: "新北市汐止區新台五路一段268號",
+    country: "台灣",
+    carbonData: {
+      organizationalGHG: 678000,
+      productCarbonFootprint: 234.5,
+      scope1Emissions: 339000,
+      scope2Emissions: 244080,
+      scope4Emissions: 33900,
+      scope5Emissions: 47460,
+      scope6Emissions: 13560
+    }
+  }
+];
+
 export function getSuppliers(source: SupplierDataSource): Supplier[] {
   switch (source) {
     case 'tsmc':
       return tsmcSuppliers;
+    case 'materials':
+      return materialsSuppliers;
     case 'default':
     default:
       return defaultSuppliers;
@@ -842,5 +1418,6 @@ export function getSuppliers(source: SupplierDataSource): Supplier[] {
 
 export const dataSourceOptions = [
   { value: 'default', label: 'Case1' },
-  { value: 'tsmc', label: 'Case2' }
+  { value: 'tsmc', label: 'Case2' },
+  { value: 'materials', label: 'Case3' }
 ] as const; 
