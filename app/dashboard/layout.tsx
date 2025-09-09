@@ -714,7 +714,7 @@ export default function DashboardLayout({
         </header>
 
         {/* 主要內容 */}
-        <main className="flex-1 professional-container compact-content ml-[72px]">{children}</main>
+        <main className="flex-1 compact-container ">{children}</main>
       </div>
     </div>
     </TooltipProvider>
