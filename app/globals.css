@@ -10,6 +10,38 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  /* 緊湊佈局工具 */
+  .compact-layout {
+    @apply space-y-4;
+  }
+  
+  .ultra-compact {
+    @apply space-y-2;
+  }
+  
+  .modern-spacing {
+    @apply space-y-6;
+  }
+  
+  /* 專業級陰影 */
+  .professional-shadow {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+  
+  .professional-shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* 現代化邊框 */
+  .modern-border {
+    @apply border border-gray-200/60;
+  }
+  
+  /* 專業級漸變 */
+  .professional-gradient {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  }
 }
 
 @layer base {
@@ -108,53 +140,100 @@ body {
 }
 
 @layer components {
-  .css-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.375rem;
-    font-weight: 500;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-    background-color: #3A81C5;
-    color: white;
-    padding: 0.5rem 1rem;
+  /* 專業級卡片設計 */
+  .professional-card {
+    @apply bg-white rounded-lg professional-shadow modern-border;
+    backdrop-filter: blur(8px);
   }
   
-  .css-primary:hover {
-    background-color: #3A81C5;
+  .compact-card {
+    @apply professional-card p-4;
   }
   
-  .css-primary:focus {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3);
+  .ultra-compact-card {
+    @apply professional-card p-3;
   }
   
-  .css-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    font-weight: 500;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-    background-color: transparent;
-    color: #3A81C5;
-    border: 1px solid #3A81C5;
-    padding: 0 12px;
-    height: 32px;
+  /* 現代化按鈕系統 */
+  .modern-button {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-all duration-200;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
   }
   
-  .css-secondary:hover {
-    background-color: rgba(58, 129, 197, 0.1);
+  .professional-button-primary {
+    @apply modern-button bg-slate-900 text-white hover:bg-slate-800 focus-visible:ring-slate-900;
+    @apply px-4 py-2 text-sm professional-shadow;
   }
   
-  .css-secondary:focus {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 2px rgba(58, 129, 197, 0.3);
+  .professional-button-secondary {
+    @apply modern-button bg-white text-slate-900 hover:bg-slate-50 focus-visible:ring-slate-900;
+    @apply px-4 py-2 text-sm modern-border professional-shadow;
+  }
+  
+  .compact-button {
+    @apply modern-button px-3 py-1.5 text-xs;
+  }
+  
+  /* 專業級輸入框 */
+  .professional-input {
+    @apply flex h-9 w-full rounded-md modern-border bg-white px-3 py-1;
+    @apply text-sm placeholder:text-slate-500 focus-visible:outline-none;
+    @apply focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  /* 現代化標籤頁 */
+  .professional-tabs {
+    @apply inline-flex h-9 items-center justify-center rounded-md bg-slate-100 p-1;
+  }
+  
+  .professional-tab {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded px-3 py-1;
+    @apply text-sm font-medium transition-all focus-visible:outline-none;
+    @apply focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+    @apply data-[state=active]:bg-white data-[state=active]:text-slate-900;
+    @apply data-[state=active]:professional-shadow;
+  }
+  
+  /* 專業級頁面佈局 */
+  .professional-layout {
+    @apply min-h-screen bg-slate-50/30;
+  }
+  
+  .professional-container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  
+  .compact-header {
+    @apply py-4 border-b border-slate-200/60 bg-white/80 backdrop-blur-sm;
+  }
+  
+  .compact-content {
+    @apply py-6 compact-layout;
+  }
+  
+  /* 現代化徽章 */
+  .professional-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+    @apply bg-slate-100 text-slate-800 ring-1 ring-inset ring-slate-200/50;
+  }
+  
+  /* 專業級表格 */
+  .professional-table {
+    @apply min-w-full divide-y divide-slate-200/60;
+  }
+  
+  .professional-table-header {
+    @apply bg-slate-50/80;
+  }
+  
+  .professional-table-cell {
+    @apply px-4 py-3 text-sm font-medium text-slate-900;
+  }
+  
+  .professional-table-data {
+    @apply px-4 py-3 text-sm text-slate-600;
   }
 }

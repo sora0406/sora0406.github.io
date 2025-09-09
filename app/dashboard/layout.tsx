@@ -405,13 +405,12 @@ export default function DashboardLayout({
 
   return (
     <TooltipProvider>
-    <div className="flex min-h-screen">
-        {/* 桌面側邊欄 - 固定寬度80px */}
+    <div className="flex min-h-screen professional-layout">
+        {/* 桌面側邊欄 - 現代化專業設計 */}
       <aside
-          className="fixed left-0 top-0 z-20 h-full border-r w-[80px] hidden lg:block pt-3"
-        style={{ backgroundColor: "#000000" }}
+          className="fixed left-0 top-0 z-20 h-full border-r border-slate-200/60 w-[72px] hidden lg:block bg-white/95 backdrop-blur-sm professional-shadow"
       >
-        <div className="flex h-16 items-center justify-center border-b" style={{ borderColor: "#333333" }}>
+        <div className="flex h-14 items-center justify-center border-b border-slate-200/60">
             <div 
               className="flex items-center justify-center cursor-pointer"
               onClick={() => handleNavigate("/dashboard/survey-results")}
@@ -427,7 +426,7 @@ export default function DashboardLayout({
               {/* 移除展開時顯示文字邏輯 */}
             </div>
         </div>
-        <div className="flex flex-col gap-2 p-2">
+        <div className="flex flex-col gap-1 p-2">
             {routes.filter(route => !route.hideInMainNav && !route.hidden).map((route) => {
               // 調整路徑匹配邏輯，考慮語言前綴
               const routePath = route.path;
@@ -474,12 +473,12 @@ export default function DashboardLayout({
                       <TooltipTrigger asChild>
                         <div
                           className={cn(
-                            "flex flex-col gap-2 rounded-[8px] transition-colors",
+                            "flex flex-col gap-1 rounded-md transition-all duration-200",
                             "items-center justify-center text-center cursor-pointer",
-                            "p-2 self-stretch",
+                            "p-2 self-stretch group",
                             isActive
-                  ? "text-[#F2A900]" 
-                              : "text-gray-400 hover:bg-[rgba(255,255,255,0.16)]"
+                              ? "text-slate-900 bg-slate-100 professional-shadow" 
+                              : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                           )}
                           onClick={() => {
                             // 直接導航到路徑，不管是否有子路由
@@ -710,7 +709,7 @@ export default function DashboardLayout({
         </header>
 
         {/* 主要內容 */}
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        <main className="flex-1 professional-container compact-content ml-[72px]">{children}</main>
       </div>
     </div>
     </TooltipProvider>

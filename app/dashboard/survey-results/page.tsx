@@ -1212,14 +1212,15 @@ export default function WarRoomPage({
   }, [topEmitters.product, selectedYear, tWarRoom]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">{tWarRoom?.('title') || '戰情室'}</h1>
-          <p className="text-sm text-muted-foreground">
-            {tWarRoom?.('subtitle') || '監控供應鏈碳排放狀況，追蹤減碳進度'}
-          </p>
-        </div>
+    <div className="compact-layout">
+      <div className="compact-header -mx-4 -mt-6 px-4 mb-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-xl font-semibold text-slate-900">{tWarRoom?.('title') || '戰情室'}</h1>
+            <p className="text-sm text-slate-600 mt-1">
+              {tWarRoom?.('subtitle') || '監控供應鏈碳排放狀況，追蹤減碳進度'}
+            </p>
+          </div>
         
         {/* 數據源和年份選擇 */}
         <div className="flex items-center gap-4">
@@ -1261,86 +1262,97 @@ export default function WarRoomPage({
       </div>
       
       {/* 數據儀表板 */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {tWarRoom?.('statistics.total_responses') || '總回覆數'}
-            </CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalResponses}</div>
-            <p className="text-xs text-muted-foreground">
-              {selectedYear ? `${selectedYear}${tWarRoom?.('tags.data_year', {year: selectedYear}) || '年度數據'}` : tWarRoom?.('tags.all_years') || '所有年度'}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {tWarRoom?.('statistics.carbon_footprint') || '產品總碳足跡'}
-            </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.productTotalFootprint} kgCO2e</div>
-            <p className="text-xs text-muted-foreground">
-              {tWarRoom?.('summary.product_suppliers') || '產品碳足跡供應商'}: {stats.productCount}
-            </p>
-          </CardContent>
-        </Card>
-      <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {tWarRoom?.('statistics.total_emission') || '組織總排放量'}
-          </CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-            <div className="text-2xl font-bold">{stats.orgTotalEmission} tCO2e</div>
-            <p className="text-xs text-muted-foreground">
-              {tWarRoom?.('summary.org_suppliers') || '組織排放供應商'}: {stats.orgCount}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {tWarRoom?.('scope_distribution') || '排放類別分佈'}
-            </CardTitle>
-            <PieChart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div>
-                <div className="mb-1 flex items-center">
-                  <div className="h-2 w-2 rounded-full bg-blue-500 mr-1"></div>
-                  <span className="text-xs">{tWarRoom?.('scope1') || '範疇 1'}</span>
-                  <span className="ml-auto text-xs">{scopePercentages.scope1.toFixed(1)}%</span>
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+        <div className="ultra-compact-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-slate-600">
+                {tWarRoom?.('statistics.total_responses') || '總回覆數'}
+              </p>
+              <p className="text-xl font-semibold text-slate-900">{stats.totalResponses}</p>
+              <p className="text-xs text-slate-500">
+                {selectedYear ? `${selectedYear}年度數據` : '所有年度'}
+              </p>
+            </div>
+            <div className="p-2 bg-slate-100 rounded-md">
+              <BarChart3 className="h-4 w-4 text-slate-600" />
+            </div>
+          </div>
+        </div>
+        <div className="ultra-compact-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-slate-600">
+                {tWarRoom?.('statistics.carbon_footprint') || '產品總碳足跡'}
+              </p>
+              <p className="text-xl font-semibold text-slate-900">
+                {stats.productTotalFootprint} <span className="text-sm font-normal text-slate-500">kgCO2e</span>
+              </p>
+              <p className="text-xs text-slate-500">
+                產品碳足跡: {stats.productCount}家
+              </p>
+            </div>
+            <div className="p-2 bg-slate-100 rounded-md">
+              <TrendingUp className="h-4 w-4 text-slate-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="ultra-compact-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-slate-600">
+                {tWarRoom?.('statistics.total_emission') || '組織總排放量'}
+              </p>
+              <p className="text-xl font-semibold text-slate-900">
+                {stats.orgTotalEmission} <span className="text-sm font-normal text-slate-500">tCO2e</span>
+              </p>
+              <p className="text-xs text-slate-500">
+                組織排放: {stats.orgCount}家
+              </p>
+            </div>
+            <div className="p-2 bg-slate-100 rounded-md">
+              <Target className="h-4 w-4 text-slate-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="ultra-compact-card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-slate-600">
+                {tWarRoom?.('scope_distribution') || '排放類別分佈'}
+              </p>
+              <div className="space-y-1 mt-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-1"></div>
+                    <span className="text-xs text-slate-600">範疇 1</span>
+                  </div>
+                  <span className="text-xs font-medium">{scopePercentages.scope1.toFixed(1)}%</span>
                 </div>
-                <Progress value={scopePercentages.scope1} className="h-1 bg-slate-200" />
-              </div>
-              <div>
-                <div className="mb-1 flex items-center">
-                  <div className="h-2 w-2 rounded-full bg-indigo-500 mr-1"></div>
-                  <span className="text-xs">{tWarRoom?.('scope2') || '範疇 2'}</span>
-                  <span className="ml-auto text-xs">{scopePercentages.scope2.toFixed(1)}%</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="h-1.5 w-1.5 rounded-full bg-indigo-500 mr-1"></div>
+                    <span className="text-xs text-slate-600">範疇 2</span>
+                  </div>
+                  <span className="text-xs font-medium">{scopePercentages.scope2.toFixed(1)}%</span>
                 </div>
-                <Progress value={scopePercentages.scope2} className="h-1 bg-slate-200" />
-              </div>
-              <div>
-                <div className="mb-1 flex items-center">
-                  <div className="h-2 w-2 rounded-full bg-slate-500 mr-1"></div>
-                  <span className="text-xs">{tWarRoom?.('scope3') || '範疇 3'}</span>
-                  <span className="ml-auto text-xs">{scopePercentages.scope3.toFixed(1)}%</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="h-1.5 w-1.5 rounded-full bg-slate-500 mr-1"></div>
+                    <span className="text-xs text-slate-600">範疇 3</span>
+                  </div>
+                  <span className="text-xs font-medium">{scopePercentages.scope3.toFixed(1)}%</span>
                 </div>
-                <Progress value={scopePercentages.scope3} className="h-1 bg-slate-200" />
               </div>
             </div>
-          </CardContent>
-        </Card>
-                    </div>
+            <div className="p-2 bg-slate-100 rounded-md">
+              <PieChart className="h-4 w-4 text-slate-600" />
+            </div>
+          </div>
+        </div>
+      </div>
                     
       {/* 數據可視化圖表 */}
       <Card>
@@ -1440,7 +1452,7 @@ export default function WarRoomPage({
                         <p className="text-muted-foreground">沒有可用數據</p>
                         </div>
                     )}
-            </div>
+                  </div>
             
                   {/* 前五大產品碳足跡列表 */}
                   <Card className="mt-4">
@@ -1468,9 +1480,9 @@ export default function WarRoomPage({
                       </Table>
                     </CardContent>
                   </Card>
-                        </div>
-                        </div>
-                      </div>
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center">
@@ -1576,167 +1588,7 @@ export default function WarRoomPage({
         </CardContent>
       </Card>
       
-      {/* 主要資料卡 */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle>{tWarRoom?.('supplier_carbon_data') || '供應商碳排放資料'}</CardTitle>
-            <div className="flex items-center gap-2">
-              <div className="relative w-60">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder={tWarRoom?.('filters.search') || '搜尋供應商...'}
-                  className="pl-8"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                />
-              </div>
-              <Button variant="outline" size="sm" onClick={() => setShowDate(!showDate)}>
-                <Clock className="h-4 w-4 mr-1" />
-                {showDate ? (tWarRoom?.('filters.hide_date') || '隱藏日期') : (tWarRoom?.('filters.toggle_date') || '顯示日期')}
-              </Button>
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-1" />
-                {tWarRoom?.('filters.export') || '匯出'}
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <Tabs value={tabValue} onValueChange={handleTabChange}>
-              <TabsList>
-                <TabsTrigger value="product" className="relative">
-                  {tWarRoom?.('data_table.product_carbon_footprint') || '產品碳足跡'}
-                  <Badge className="ml-2 bg-blue-500">{filteredResponses.filter(r => r.type === "product").length}</Badge>
-                    </TabsTrigger>
-                <TabsTrigger value="organization">
-                  {tWarRoom?.('data_table.org_ghg_emission') || '組織溫室氣體排放'}
-                  <Badge className="ml-2 bg-slate-500">{filteredResponses.filter(r => r.type === "organization").length}</Badge>
-                </TabsTrigger>
-                </TabsList>
-                
-              <div className="mt-4">
-                {/* 無論產品或組織都使用單一整合表格 */}
-                <TabsContent value={tabValue}>
-                  <div className="flex justify-end mb-2">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1">
-                          <Filter className="h-4 w-4" />
-                          {tWarRoom?.('filters.display_fields') || '顯示欄位'}
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuLabel>{tWarRoom?.('filters.select_fields') || '選擇要顯示的欄位'}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        {(tabValue === "organization" ? organizationFields : productFields).map((field) => (
-                          <DropdownMenuCheckboxItem
-                            key={`${field.category}-${field.field}`}
-                            checked={allFields.find(f => f.category === field.category && f.field === field.field)?.selected}
-                            onCheckedChange={(checked) => {
-                              // 更新欄位選擇
-                              if (tabValue === "organization") {
-                                setOrgFields(prev => 
-                                  prev.map(f => 
-                                    f.category === field.category && f.field === field.field 
-                                      ? { ...f, selected: !!checked } 
-                                      : f
-                                  )
-                                );
-                              } else {
-                                setProductFields(prev => 
-                                  prev.map(f => 
-                                    f.category === field.category && f.field === field.field 
-                                      ? { ...f, selected: !!checked } 
-                                      : f
-                                  )
-                                );
-                              }
-                            }}
-                          >
-                            {field.field}
-                          </DropdownMenuCheckboxItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                        </div>
-                  <div className="rounded-md border">
-                          <div className="overflow-x-auto">
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                            <TableHead className="w-[180px]">{tWarRoom?.('data_table.supplier') || '供應商'}</TableHead>
-                            
-                            {selectedFields.map((fieldInfo) => (
-                                    <TableHead key={fieldInfo.id} className="whitespace-nowrap">
-                                {fieldInfo.field}
-                                    </TableHead>
-                                  ))}
-                                  
-                            {showDate && (
-                              <TableHead className="whitespace-nowrap">{tWarRoom?.('data_table.completion_date') || '完成日期'}</TableHead>
-                            )}
-                            
-                            <TableHead className="text-right">{tWarRoom?.('data_table.actions') || '操作'}</TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {filteredResponses.length === 0 ? (
-                                  <TableRow>
-                              <TableCell 
-                                colSpan={selectedFields.length + 3} 
-                                className="h-24 text-center"
-                              >
-                                {tWarRoom?.('data_table.no_data') || '沒有符合條件的數據'}
-                                    </TableCell>
-                                  </TableRow>
-                                ) : (
-                                  filteredResponses.map((response) => (
-                                    <TableRow key={response.id}>
-                                <TableCell className="font-medium">
-                                        {response.supplierName}
-                                  <div className="text-xs text-muted-foreground">
-                                            {response.respondentName}
-                                  </div>
-                                          </TableCell>
-                                      
-                                {selectedFields.map((fieldInfo) => (
-                                        <TableCell key={fieldInfo.id} className="whitespace-nowrap">
-                                          {response.answers[fieldInfo.category]?.[fieldInfo.field] || "-"}
-                                        </TableCell>
-                                      ))}
-                                      
-                                      {showDate && (
-                                        <TableCell className="whitespace-nowrap">
-                                    {format(response.completedDate, "yyyy-MM-dd")}
-                                        </TableCell>
-                                      )}
-                                      
-                                <TableCell className="text-right">
-                                        <Button 
-                                          variant="ghost" 
-                                          size="sm"
-                                          onClick={() => viewOriginalSurvey(response.id)}
-                                        >
-                                          <BarChart3 className="h-4 w-4 mr-1" />
-                                    {tWarRoom?.('data_table.view_survey') || '查看詳情'}
-                                        </Button>
-                                      </TableCell>
-                                    </TableRow>
-                                  ))
-                                )}
-                              </TableBody>
-                            </Table>
-                          </div>
-                        </div>
-                    </TabsContent>
-              </div>
-              </Tabs>
-          </div>
-        </CardContent>
-      </Card>
     </div>
+  </div>
   );
-} 
+}
