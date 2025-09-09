@@ -468,7 +468,7 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
     t = (key) => key;
   }
   
-  const [caseType, setCaseType] = useState<SupplierDataSource>("default")
+  const [caseType, setCaseType] = useState<SupplierDataSource>("materials")
   const { surveyData, dataSource, switchDataSource } = useSurveyData()
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState<"overview" | "requests">("overview")

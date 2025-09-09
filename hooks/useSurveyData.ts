@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { getSurveyData, getSurveyDataSourceOptions, type SurveyResponse, type SurveyDataSource } from '@/lib/mocks/survey-data';
 
 export function useSurveyData() {
-  const [dataSource, setDataSource] = useState<SurveyDataSource>('default');
+  const [dataSource, setDataSource] = useState<SurveyDataSource>('materials');
   const [surveyData, setSurveyData] = useState<SurveyResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

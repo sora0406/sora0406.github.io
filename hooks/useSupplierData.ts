@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { getSuppliers, type Supplier, type SupplierDataSource } from '@/lib/mocks/suppliers';
 
 export function useSupplierData() {
-  const [dataSource, setDataSource] = useState<SupplierDataSource>('default');
+  const [dataSource, setDataSource] = useState<SupplierDataSource>('materials');
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
