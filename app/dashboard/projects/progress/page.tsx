@@ -32,54 +32,54 @@ interface Columns {
 const initialColumns: Columns = {
   "not-started": {
     id: "not-started",
-    title: "未開始",
+    title: "To Do",
     color: "bg-gray-500/10 text-gray-500",
     items: [
       {
         id: "task-1",
-        title: "供應商碳盤查問卷",
-        description: "收集供應商的碳排放數據",
+        title: "Organizational GHG Inventory Project",
+        description: "Build a database covering Scope 1, Scope 2, and Scope 3 (Cat.1–8) emissions, while collecting Scope 1 & 2 activity data and renewable energy usage, to ensure completeness and traceability of organizational GHG inventory.",
         dueDate: "2024-04-15",
-        assignee: "王小明",
-        priority: "高",
+        assignee: "Amy",
+        priority: "High",
       },
       {
         id: "task-2",
-        title: "數據分析報告",
-        description: "分析供應商的碳排放趨勢",
+        title: "Product Carbon Footprint Project",
+        description: "Collect emission factors and supplier-measured data for major raw materials (aluminum, copper, plastics) corresponding to the LCA raw material stage; analyze manufacturing energy use, yield, and renewable energy share to create unit process emission lists that support multi-product and multi-site carbon footprint calculations.",
         dueDate: "2024-04-20",
-        assignee: "李小華",
-        priority: "中",
+        assignee: "Molly",
+        priority: "Medium",
       },
     ],
   },
   "in-progress": {
     id: "in-progress",
-    title: "進行中",
+    title: "In Progress",
     color: "bg-yellow-500/10 text-yellow-500",
     items: [
       {
         id: "task-3",
-        title: "供應商訪談",
-        description: "與主要供應商進行面對面訪談",
+        title: "Supply Chain Renewable Energy Tracking Project",
+        description: "Consolidate suppliers’ renewable energy usage ratio and sources (self-generation, direct purchase, green electricity/certificates), recording supporting evidence (certificate ID, validity period, region) to establish measurable renewable energy coverage indicators.",
         dueDate: "2024-04-10",
-        assignee: "張大明",
-        priority: "高",
+        assignee: "Lily",
+        priority: "High",
       },
     ],
   },
   "completed": {
     id: "completed",
-    title: "已完成",
+    title: "completed",
     color: "bg-green-500/10 text-green-500",
     items: [
       {
         id: "task-4",
-        title: "問卷設計",
-        description: "設計供應商碳盤查問卷",
+        title: "PACT Data Exchange Project",
+        description: "Organize key PCF data fields (boundaries, methodology, allocation, data sources, QA status) in line with PACT 3.x standards, and conduct data exchange and verification with upstream customers and suppliers to enhance transparency and consistency.",
         dueDate: "2024-03-25",
-        assignee: "陳小美",
-        priority: "高",
+        assignee: "Tony",
+        priority: "High",
       },
     ],
   },
@@ -146,9 +146,9 @@ export function ProjectProgressPage({ t }: ProjectProgressPageProps = {}) {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "高":
+      case "High":
         return "bg-red-500/10 text-red-500"
-      case "中":
+      case "Medium":
         return "bg-yellow-500/10 text-yellow-500"
       case "低":
         return "bg-green-500/10 text-green-500"
