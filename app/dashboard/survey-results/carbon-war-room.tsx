@@ -49,20 +49,20 @@ interface CarbonOverviewProps {
 // 1. 碳排放總覽儀表板元件
 const CarbonOverviewDashboard = ({ stats, selectedYear, tWarRoom }: CarbonOverviewProps) => {
   return (
-    <div className="dashboard-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
       {/* 總排放量 */}
       <Card className="modern-card border-l-4 border-l-red-500 hover:shadow-md transition-shadow">
-        <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium text-foreground">
             總碳排放量
           </CardTitle>
-          <div className="p-2 bg-red-50 rounded-lg">
+          <div className="p-1.5 bg-red-50 rounded-md">
             <Factory className="h-4 w-4 text-red-600" />
           </div>
         </CardHeader>
-        <CardContent className="pt-0">
-          <div className="text-2xl font-bold text-foreground">{stats.orgTotalEmission} <span className="text-sm font-normal text-muted-foreground">tCO2e</span></div>
-          <p className="text-xs text-muted-foreground mt-1">
+        <CardContent className="pt-0 pb-3">
+          <div className="text-xl font-bold text-foreground">{stats.orgTotalEmission} <span className="text-sm font-normal text-muted-foreground">tCO2e</span></div>
+          <p className="text-xs text-muted-foreground mt-0.5">
             {selectedYear ? `${selectedYear}年度數據` : '所有年度'}
           </p>
         </CardContent>
@@ -70,17 +70,17 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, tWarRoom }: CarbonOvervi
 
       {/* 關鍵供應商數量 */}
       <Card className="modern-card border-l-4 border-l-orange-500 hover:shadow-md transition-shadow">
-        <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium text-foreground">
             關鍵供應商
           </CardTitle>
-          <div className="p-2 bg-orange-50 rounded-lg">
+          <div className="p-1.5 bg-orange-50 rounded-md">
             <Users className="h-4 w-4 text-orange-600" />
           </div>
         </CardHeader>
-        <CardContent className="pt-0">
-          <div className="text-2xl font-bold text-foreground">{Math.round(stats.orgCount * 0.2)} <span className="text-sm font-normal text-muted-foreground">家</span></div>
-          <p className="text-xs text-muted-foreground mt-1">
+        <CardContent className="pt-0 pb-3">
+          <div className="text-xl font-bold text-foreground">{Math.round(stats.orgCount * 0.2)} <span className="text-sm font-normal text-muted-foreground">家</span></div>
+          <p className="text-xs text-muted-foreground mt-0.5">
             佔總數20% (帕雷托原則)
           </p>
         </CardContent>
@@ -88,20 +88,20 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, tWarRoom }: CarbonOvervi
 
       {/* 排放強度 */}
       <Card className="modern-card border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
-        <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium text-foreground">
             平均排放強度
           </CardTitle>
-          <div className="p-2 bg-blue-50 rounded-lg">
+          <div className="p-1.5 bg-blue-50 rounded-md">
             <TrendingUp className="h-4 w-4 text-blue-600" />
           </div>
         </CardHeader>
-        <CardContent className="pt-0">
-          <div className="text-2xl font-bold text-foreground">
+        <CardContent className="pt-0 pb-3">
+          <div className="text-xl font-bold text-foreground">
             {stats.orgCount > 0 ? (parseFloat(stats.orgTotalEmission) / stats.orgCount).toFixed(1) : '0'} 
             <span className="text-sm font-normal text-muted-foreground ml-1">tCO2e/家</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-0.5">
             每家供應商平均
           </p>
         </CardContent>
@@ -109,19 +109,19 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, tWarRoom }: CarbonOvervi
 
       {/* 數據覆蓋率 */}
       <Card className="modern-card border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
-        <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium text-foreground">
             數據覆蓋率
           </CardTitle>
-          <div className="p-2 bg-green-50 rounded-lg">
+          <div className="p-1.5 bg-green-50 rounded-md">
             <Shield className="h-4 w-4 text-green-600" />
           </div>
         </CardHeader>
-        <CardContent className="pt-0">
-          <div className="text-2xl font-bold text-foreground">
+        <CardContent className="pt-0 pb-3">
+          <div className="text-xl font-bold text-foreground">
             {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}<span className="text-sm font-normal text-muted-foreground">%</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-0.5">
             {stats.totalResponses} / {stats.totalResponses + 5} 供應商
           </p>
         </CardContent>
@@ -698,7 +698,7 @@ export default function CarbonWarRoomPage({
     <div className="min-h-screen bg-background">
       <div className="compact-container max-w-7xl mx-auto">
         {/* 頁面標題與控制項 */}
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-5">
           <div className="flex items-center gap-4">
       
             <div>
@@ -790,7 +790,7 @@ export default function CarbonWarRoomPage({
           </TabsList>
 
           {/* 總覽頁籤 */}
-          <TabsContent value="overview" className="compact-spacing mt-6">
+          <TabsContent value="overview" className="mt-4 space-y-4">
             {/* 核心KPI儀表板 */}
             <CarbonOverviewDashboard 
               stats={stats} 
@@ -799,7 +799,7 @@ export default function CarbonWarRoomPage({
             />
 
             {/* 關鍵分析區塊 */}
-            <div className="dashboard-grid grid-cols-1 lg:grid-cols-3">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <AlertManagementPanel tWarRoom={tWarRoom} />
               <div className="lg:col-span-2">
                 <TrendAnalysisPanel data={organizationResponses} tWarRoom={tWarRoom} />
@@ -808,7 +808,7 @@ export default function CarbonWarRoomPage({
           </TabsContent>
 
           {/* 帕雷托分析頁籤 */}
-          <TabsContent value="pareto" className="compact-spacing mt-6">
+          <TabsContent value="pareto" className="mt-4 space-y-4">
             <ParetoAnalysisWidget 
               organizationResponses={organizationResponses}
               selectedYear={selectedYear}
@@ -817,7 +817,7 @@ export default function CarbonWarRoomPage({
           </TabsContent>
 
           {/* 地理分析頁籤 */}
-          <TabsContent value="geography" className="compact-spacing mt-6">
+          <TabsContent value="geography" className="mt-4 space-y-4">
             <HotspotMapComponent 
               supplierData={organizationResponses}
               tWarRoom={tWarRoom}
@@ -825,23 +825,23 @@ export default function CarbonWarRoomPage({
           </TabsContent>
 
           {/* 趨勢分析頁籤 */}
-          <TabsContent value="trend" className="compact-spacing mt-6">
+          <TabsContent value="trend" className="mt-4 space-y-4">
             <TrendAnalysisPanel data={organizationResponses} tWarRoom={tWarRoom} />
           </TabsContent>
 
           {/* 情境模擬頁籤 */}
-          <TabsContent value="simulation" className="compact-spacing mt-6">
+          <TabsContent value="simulation" className="mt-4 space-y-4">
             <ScenarioSimulator tWarRoom={tWarRoom} />
           </TabsContent>
 
           {/* 基準比較頁籤 */}
-          <TabsContent value="benchmarking" className="compact-spacing mt-6">
+          <TabsContent value="benchmarking" className="mt-4 space-y-4">
             <BenchmarkingModule tWarRoom={tWarRoom} />
           </TabsContent>
         </Tabs>
 
         {/* 狀態列 */}
-        <div className="border-t border-border mt-8 pt-4">
+        <div className="border-t border-border mt-6 pt-3">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs text-muted-foreground">
             <div className="flex flex-wrap items-center gap-3">
               <span>更新時間: {format(new Date(), 'MM-dd HH:mm')}</span>

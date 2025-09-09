@@ -211,7 +211,7 @@ body {
   
   /* 緊湊間距容器 */
   .compact-container {
-    @apply space-y-4 p-4;
+    @apply space-y-3 p-3;
   }
   
   /* 專業級卡片設計 */
