@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation" 
-import { CalendarIcon, Eye, Plus, Search, MessageSquare } from "lucide-react"
+import { CalendarIcon, Eye, Plus, Search, MessageSquare, BarChart3, TrendingUp, Target, PieChart, Clock, Download, Filter, BarChart2, MapPin } from "lucide-react"
 import { format } from "date-fns"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
+import dynamic from 'next/dynamic'
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,7 +15,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { CircleIcon } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Progress } from "@/components/ui/progress"
 import { getSuppliers, dataSourceOptions } from "@/lib/mocks/suppliers"
+import { useSurveyData } from "@/hooks/useSurveyData"
+import { cn } from "@/lib/utils"
+
+// 動態載入 ApexCharts
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 // 預設 Case 的數據要求
 const defaultRequests = [
@@ -224,6 +233,132 @@ const tsmcRequests = [
   }
 ];
 
+// 供應商碳排放數據結構
+interface CarbonAnswer {
+  [key: string]: string;
+}
+
+interface CarbonAnswerCategory {
+  [category: string]: CarbonAnswer;
+}
+
+interface CarbonResponse {
+  id: string;
+  surveyTitle: string;
+  supplierName: string;
+  respondentName: string;
+  respondentEmail: string;
+  completedDate: Date;
+  answers: CarbonAnswerCategory;
+  type: "organization" | "product";
+}
+
+// 模擬碳排放數據
+const carbonResponses: CarbonResponse[] = [
+  {
+    id: "carbon1",
+    surveyTitle: "企業碳排放評估問卷",
+    supplierName: "應用材料股份有限公司",
+    respondentName: "Michael Johnson",
+    respondentEmail: "mjohnson@appliedmaterials.com",
+    completedDate: new Date("2023-12-01"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "排放量資料": {
+        "總排放量": "5850.000",
+        "類別1排放量": "1250.000",
+        "類別2排放量": "3500.000",
+        "類別3排放量": "1100.000"
+      }
+    }
+  },
+  {
+    id: "carbon2", 
+    surveyTitle: "產品碳足跡評估",
+    supplierName: "台積電設備",
+    respondentName: "張志偉",
+    respondentEmail: "chang@tsmc-equipment.com",
+    completedDate: new Date("2023-12-05"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "晶圓製程設備",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "52.3 kgCO2e/單位"
+      }
+    }
+  },
+  {
+    id: "carbon3",
+    surveyTitle: "組織溫室氣體盤查",
+    supplierName: "旭化成株式會社",
+    respondentName: "田中太郎",
+    respondentEmail: "tanaka@asahi-kasei.com",
+    completedDate: new Date("2023-12-08"),
+    type: "organization",
+    answers: {
+      "基本資訊": {
+        "盤查期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "排放量資料": {
+        "總排放量": "2870.000",
+        "類別1排放量": "850.000",
+        "類別2排放量": "1650.000",
+        "類別3排放量": "370.000"
+      }
+    }
+  },
+  {
+    id: "carbon4",
+    surveyTitle: "產品碳足跡調查",
+    supplierName: "矽品精密工業",
+    respondentName: "李明華",
+    respondentEmail: "li@spil.com.tw",
+    completedDate: new Date("2023-12-10"),
+    type: "product",
+    answers: {
+      "產品資訊": {
+        "產品名稱": "IC封裝測試服務",
+        "報導期間": "2023年1月1日 至 2023年12月31日"
+      },
+      "碳足跡數據": {
+        "產品碳足跡": "22.8 kgCO2e/單位"
+      }
+    }
+  }
+];
+
+// 計算碳排放統計
+const calculateCarbonStats = (responses: CarbonResponse[]) => {
+  const orgResponses = responses.filter(r => r.type === "organization");
+  const productResponses = responses.filter(r => r.type === "product");
+  
+  const orgTotalEmission = orgResponses.reduce((total, response) => {
+    const emissionStr = response.answers["排放量資料"]?.["總排放量"] || "0";
+    const emission = parseFloat(emissionStr.split(" ")[0]) || 0;
+    return total + emission;
+  }, 0);
+
+  const productTotalFootprint = productResponses.reduce((total, response) => {
+    const footprintStr = response.answers["碳足跡數據"]?.["產品碳足跡"] || "0";
+    const footprint = parseFloat(footprintStr.split(" ")[0]) || 0;
+    return total + footprint;
+  }, 0);
+
+  return {
+    orgTotalEmission: orgTotalEmission.toFixed(2),
+    productTotalFootprint: productTotalFootprint.toFixed(2),
+    orgCount: orgResponses.length,
+    productCount: productResponses.length,
+    totalResponses: responses.length
+  };
+};
+
 export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<string, any>) => string }) {
   if (!t) {
     t = (key) => key;
@@ -231,7 +366,28 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
   
   const [caseType, setCaseType] = useState<"default" | "tsmc">("default")
   const [searchTerm, setSearchTerm] = useState("")
+  const [activeTab, setActiveTab] = useState<"overview" | "requests">("overview")
+  const [carbonSearchTerm, setCarbonSearchTerm] = useState("")
+  const [selectedDataType, setSelectedDataType] = useState<"organization" | "product">("organization")
   const router = useRouter()
+  
+  // 計算碳排放統計數據
+  const carbonStats = useMemo(() => calculateCarbonStats(carbonResponses), [])
+  
+  // 過濾碳排放數據
+  const filteredCarbonData = useMemo(() => {
+    let data = carbonResponses.filter(response => response.type === selectedDataType)
+    
+    if (carbonSearchTerm) {
+      const searchLower = carbonSearchTerm.toLowerCase()
+      data = data.filter(response => 
+        response.supplierName.toLowerCase().includes(searchLower) ||
+        response.respondentName.toLowerCase().includes(searchLower)
+      )
+    }
+    
+    return data
+  }, [selectedDataType, carbonSearchTerm])
   
   const handleNavigate = (path: string) => {
     console.log("Navigating to:", path);
@@ -268,14 +424,15 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
 
   return (
     <TooltipProvider>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold tracking-tight">{t('title')}</h2>
-            <p className="text-muted-foreground">
-              {t('description')}
-            </p>
-          </div>
+      <div className="compact-layout">
+        <div className="compact-header -mx-4 -mt-6 px-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-slate-900">{t('title')}</h1>
+              <p className="text-sm text-slate-600 mt-1">
+                {t('description')}
+              </p>
+            </div>
           <div className="flex items-center gap-4">
             <Select value={caseType} onValueChange={(value: "default" | "tsmc") => setCaseType(value)}>
               <SelectTrigger className="w-[120px]">
@@ -289,118 +446,341 @@ export function RequestsPageComponent({ t }: { t: (key: string, params?: Record<
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={() => handleNavigate("/dashboard/requests/new")}>
-              <Plus className="mr-2 h-4 w-4" /> {t('create_new')}
-            </Button>
+            {activeTab === "requests" && (
+              <Button onClick={() => handleNavigate("/dashboard/requests/new")} className="professional-button-primary">
+                <Plus className="mr-2 h-4 w-4" /> {t('create_new')}
+              </Button>
+            )}
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <Input
-            placeholder={t('search')}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
-          />
+        {/* 標籤頁導航 */}
+        <div className="professional-tabs mb-6">
+            <button
+              className={cn("professional-tab", activeTab === "overview" && "data-[state=active]:bg-white")}
+              onClick={() => setActiveTab("overview")}
+              data-state={activeTab === "overview" ? "active" : "inactive"}
+            >
+              <BarChart3 className="mr-2 h-4 w-4" />
+              總覽檢視
+            </button>
+            <button
+              className={cn("professional-tab", activeTab === "requests" && "data-[state=active]:bg-white")}
+              onClick={() => setActiveTab("requests")}
+              data-state={activeTab === "requests" ? "active" : "inactive"}
+            >
+              <MessageSquare className="mr-2 h-4 w-4" />
+              數據要求
+            </button>
         </div>
 
-        <div className="border rounded-lg overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[300px]">{t('request_name')}</TableHead>
-                <TableHead className="w-[300px]">{t('supplier')}</TableHead>
-                <TableHead className="w-[240px]">{t('request_type')}</TableHead>
-                <TableHead className="w-[150px]">{t('deadline')}</TableHead>
-                <TableHead className="w-[120px]">{t('status')}</TableHead>
-                <TableHead className="text-right">{t('action')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredRequests.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center">
-                    {t('no_requests_found')}
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredRequests.flatMap((request) => {
-                  const requestSuppliers = request.suppliers
-                    .map(id => suppliers.find(s => s.id === id))
-                    .filter(s => s !== undefined);
+          {/* 總覽頁籤 */}
+          {activeTab === "overview" && (
+            <div className="ultra-compact">
+              {/* 統計卡片 */}
+              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+                <div className="ultra-compact-card">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-slate-600">總回覆數</p>
+                      <p className="text-xl font-semibold text-slate-900">{carbonStats.totalResponses}</p>
+                      <p className="text-xs text-slate-500">供應商問卷回覆</p>
+                    </div>
+                    <div className="p-2 bg-slate-100 rounded-md">
+                      <BarChart3 className="h-4 w-4 text-slate-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="ultra-compact-card">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-slate-600">組織總排放量</p>
+                      <p className="text-xl font-semibold text-slate-900">
+                        {carbonStats.orgTotalEmission} <span className="text-sm font-normal text-slate-500">tCO2e</span>
+                      </p>
+                      <p className="text-xs text-slate-500">組織溫室氣體排放: {carbonStats.orgCount}家</p>
+                    </div>
+                    <div className="p-2 bg-slate-100 rounded-md">
+                      <Target className="h-4 w-4 text-slate-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="ultra-compact-card">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-slate-600">產品總碳足跡</p>
+                      <p className="text-xl font-semibold text-slate-900">
+                        {carbonStats.productTotalFootprint} <span className="text-sm font-normal text-slate-500">kgCO2e</span>
+                      </p>
+                      <p className="text-xs text-slate-500">產品碳足跡: {carbonStats.productCount}家</p>
+                    </div>
+                    <div className="p-2 bg-slate-100 rounded-md">
+                      <TrendingUp className="h-4 w-4 text-slate-600" />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="ultra-compact-card">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-slate-600">覆蓋率</p>
+                      <p className="text-xl font-semibold text-slate-900">100%</p>
+                      <p className="text-xs text-slate-500">數據收集完整度</p>
+                    </div>
+                    <div className="p-2 bg-slate-100 rounded-md">
+                      <PieChart className="h-4 w-4 text-slate-600" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 供應商碳排放資料表格 */}
+              <div className="professional-card">
+                <div className="p-4 border-b border-slate-200/60">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold text-slate-900">供應商碳排放資料</h2>
+                    <div className="flex items-center gap-2">
+                      <div className="relative w-60">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                        <input
+                          type="search"
+                          placeholder="搜尋供應商..."
+                          className="professional-input pl-8"
+                          value={carbonSearchTerm}
+                          onChange={(e) => setCarbonSearchTerm(e.target.value)}
+                        />
+                      </div>
+                      <button className="professional-button-secondary compact-button">
+                        <Download className="h-4 w-4 mr-1" />
+                        匯出
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <div className="professional-tabs mb-4">
+                    <button
+                      className={cn("professional-tab", selectedDataType === "organization" && "data-[state=active]:bg-white")}
+                      onClick={() => setSelectedDataType("organization")}
+                      data-state={selectedDataType === "organization" ? "active" : "inactive"}
+                    >
+                      組織溫室氣體排放
+                      <span className="ml-2 professional-badge">{carbonResponses.filter(r => r.type === "organization").length}</span>
+                    </button>
+                    <button
+                      className={cn("professional-tab", selectedDataType === "product" && "data-[state=active]:bg-white")}
+                      onClick={() => setSelectedDataType("product")}
+                      data-state={selectedDataType === "product" ? "active" : "inactive"}
+                    >
+                      產品碳足跡
+                      <span className="ml-2 professional-badge">{carbonResponses.filter(r => r.type === "product").length}</span>
+                    </button>
+                  </div>
                   
-                  return requestSuppliers.map((supplier) => (
-                    <TableRow key={`${request.id}-${supplier?.id}`}>
-                      <TableCell>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className="text-sm font-medium cursor-help">
-                              {request.title}
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="max-w-xs text-sm">{request.description}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm font-medium">{supplier?.name}</div>
-                        <div className="text-sm text-gray-400">{supplier?.id}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          {request.requestedData.join(", ")}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-sm">
-                        {format(request.deadline, "yyyy-MM-dd")}
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          {getStatusBadge(request.status)}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Link href={`/dashboard/requests/${request.id}?supplier=${supplier?.id}`} passHref>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button variant="outline" size="sm" className="h-8 w-8 p-1 border-[#3A81C5]/30">
-                                  <div className="flex items-center justify-center">
-                                    <Eye className="h-3.5 w-3.5 text-[#3A81C5]" />
-                                    <span className="sr-only">{t('view')}</span>
+                  <div className="modern-border rounded-lg overflow-hidden">
+                    <table className="professional-table">
+                      <thead className="professional-table-header">
+                        <tr>
+                          <th className="professional-table-cell w-[200px]">供應商</th>
+                          {selectedDataType === "organization" ? (
+                            <>
+                              <th className="professional-table-cell w-[120px]">類別1排放量</th>
+                              <th className="professional-table-cell w-[120px]">類別2排放量</th>
+                              <th className="professional-table-cell w-[120px]">類別3排放量</th>
+                              <th className="professional-table-cell w-[120px]">完成日期</th>
+                              <th className="professional-table-cell text-right">操作</th>
+                            </>
+                          ) : (
+                            <>
+                              <th className="professional-table-cell w-[200px]">產品名稱</th>
+                              <th className="professional-table-cell w-[180px]">報導期間</th>
+                              <th className="professional-table-cell w-[150px]">產品碳足跡</th>
+                              <th className="professional-table-cell w-[120px]">完成日期</th>
+                              <th className="professional-table-cell text-right">操作</th>
+                            </>
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredCarbonData.length === 0 ? (
+                          <tr>
+                            <td colSpan={selectedDataType === "organization" ? 6 : 6} className="professional-table-data text-center py-8">
+                              沒有符合條件的數據
+                            </td>
+                          </tr>
+                        ) : (
+                          filteredCarbonData.map((response) => (
+                            <tr key={response.id} className="hover:bg-slate-50/50">
+                              <td className="professional-table-data">
+                                <div className="font-medium text-slate-900">{response.supplierName}</div>
+                                <div className="text-xs text-slate-500">{response.respondentName}</div>
+                              </td>
+                              
+                              {selectedDataType === "organization" ? (
+                                <>
+                                  <td className="professional-table-data">
+                                    {response.answers["排放量資料"]?.["類別1排放量"]?.replace(".000", "") || "0"} tCO2e
+                                  </td>
+                                  <td className="professional-table-data">
+                                    {response.answers["排放量資料"]?.["類別2排放量"]?.replace(".000", "") || "0"} tCO2e
+                                  </td>
+                                  <td className="professional-table-data">
+                                    {response.answers["排放量資料"]?.["類別3排放量"]?.replace(".000", "") || "0"} tCO2e
+                                  </td>
+                                  <td className="professional-table-data">
+                                    {format(response.completedDate, "yyyy-MM-dd")}
+                                  </td>
+                                  <td className="professional-table-data text-right">
+                                    <button className="professional-button-secondary compact-button">
+                                      <BarChart3 className="h-4 w-4 mr-1" />
+                                      查看問卷
+                                    </button>
+                                  </td>
+                                </>
+                              ) : (
+                                <>
+                                  <td className="professional-table-data">
+                                    {response.answers["產品資訊"]?.["產品名稱"] || "-"}
+                                  </td>
+                                  <td className="professional-table-data">
+                                    {response.answers["產品資訊"]?.["報導期間"] || "-"}
+                                  </td>
+                                  <td className="professional-table-data">
+                                    {response.answers["碳足跡數據"]?.["產品碳足跡"] || "-"}
+                                  </td>
+                                  <td className="professional-table-data">
+                                    {format(response.completedDate, "yyyy-MM-dd")}
+                                  </td>
+                                  <td className="professional-table-data text-right">
+                                    <button className="professional-button-secondary compact-button">
+                                      <BarChart3 className="h-4 w-4 mr-1" />
+                                      查看問卷
+                                    </button>
+                                  </td>
+                                </>
+                              )}
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 數據要求頁籤 */}
+          {activeTab === "requests" && (
+            <div className="ultra-compact">
+              <div className="flex items-center gap-4 mb-4">
+                <input
+                  type="search"
+                  placeholder={t('search')}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="professional-input max-w-sm"
+                />
+              </div>
+
+              <div className="modern-border rounded-lg overflow-hidden">
+                <table className="professional-table">
+                  <thead className="professional-table-header">
+                    <tr>
+                      <th className="professional-table-cell w-[300px]">{t('request_name')}</th>
+                      <th className="professional-table-cell w-[300px]">{t('supplier')}</th>
+                      <th className="professional-table-cell w-[240px]">{t('request_type')}</th>
+                      <th className="professional-table-cell w-[150px]">{t('deadline')}</th>
+                      <th className="professional-table-cell w-[120px]">{t('status')}</th>
+                      <th className="professional-table-cell text-right">{t('action')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredRequests.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="professional-table-data text-center py-8">
+                          {t('no_requests_found')}
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredRequests.flatMap((request) => {
+                        const requestSuppliers = request.suppliers
+                          .map(id => suppliers.find(s => s.id === id))
+                          .filter(s => s !== undefined);
+                        
+                        return requestSuppliers.map((supplier) => (
+                          <tr key={`${request.id}-${supplier?.id}`} className="hover:bg-slate-50/50">
+                            <td className="professional-table-data">
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div className="text-sm font-medium cursor-help">
+                                    {request.title}
                                   </div>
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>{t('view')}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </Link>
-                          <Link href={`/dashboard/requests/responses?request=${request.id}`} passHref>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button variant="outline" size="sm" className="h-8 w-8 p-1 border-[#3A81C5]/30">
-                                  <div className="flex items-center justify-center">
-                                    <MessageSquare className="h-3.5 w-3.5 text-[#3A81C5]" />
-                                    <span className="sr-only">{t('view_responses')}</span>
-                                  </div>
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>{t('view_responses')}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </Link>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ));
-                })
-              )}
-            </TableBody>
-          </Table>
-        </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="max-w-xs text-sm">{request.description}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </td>
+                            <td className="professional-table-data">
+                              <div className="text-sm font-medium text-slate-900">{supplier?.name}</div>
+                              <div className="text-xs text-slate-500">{supplier?.id}</div>
+                            </td>
+                            <td className="professional-table-data">
+                              <div className="text-sm">
+                                {request.requestedData.join(", ")}
+                              </div>
+                            </td>
+                            <td className="professional-table-data text-sm">
+                              {format(request.deadline, "yyyy-MM-dd")}
+                            </td>
+                            <td className="professional-table-data">
+                              <div className="text-sm">
+                                {getStatusBadge(request.status)}
+                              </div>
+                            </td>
+                            <td className="professional-table-data text-right">
+                              <div className="flex justify-end gap-2">
+                                <Link href={`/dashboard/requests/${request.id}?supplier=${supplier?.id}`} passHref>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <button className="professional-button-secondary compact-button h-8 w-8 p-1">
+                                        <Eye className="h-3.5 w-3.5" />
+                                        <span className="sr-only">{t('view')}</span>
+                                      </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>{t('view')}</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </Link>
+                                <Link href={`/dashboard/requests/responses?request=${request.id}`} passHref>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <button className="professional-button-secondary compact-button h-8 w-8 p-1">
+                                        <MessageSquare className="h-3.5 w-3.5" />
+                                        <span className="sr-only">{t('view_responses')}</span>
+                                      </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>{t('view_responses')}</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </Link>
+                              </div>
+                            </td>
+                          </tr>
+                        ));
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
       </div>
     </TooltipProvider>
   )

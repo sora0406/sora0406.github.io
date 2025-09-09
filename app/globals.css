@@ -16,6 +16,7 @@ body {
     text-wrap: balance;
   }
   
+<<<<<<< HEAD
   /* 緊湊間距工具類 */
   .compact-spacing {
     @apply space-y-3;
@@ -39,6 +40,38 @@ body {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+=======
+  /* 緊湊佈局工具 */
+  .compact-layout {
+    @apply space-y-4;
+  }
+  
+  .ultra-compact {
+    @apply space-y-2;
+  }
+  
+  .modern-spacing {
+    @apply space-y-6;
+  }
+  
+  /* 專業級陰影 */
+  .professional-shadow {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+  
+  .professional-shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* 現代化邊框 */
+  .modern-border {
+    @apply border border-gray-200/60;
+  }
+  
+  /* 專業級漸變 */
+  .professional-gradient {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+>>>>>>> 064f4cc (新增專業級樣式和佈局，包含緊湊佈局、專業級陰影、現代化邊框及按鈕設計，並更新儀表板和數據要求頁面以使用新樣式，改善用戶界面和可讀性。)
   }
 }
 
@@ -153,6 +186,7 @@ body {
 }
 
 @layer components {
+<<<<<<< HEAD
   /* 現代化卡片樣式 */
   .modern-card {
     @apply bg-card border-border rounded-xl border modern-shadow;
@@ -214,5 +248,102 @@ body {
   .modern-badge {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
     @apply transition-colors focus:outline-none focus:ring-2 focus:ring-ring;
+=======
+  /* 專業級卡片設計 */
+  .professional-card {
+    @apply bg-white rounded-lg professional-shadow modern-border;
+    backdrop-filter: blur(8px);
+  }
+  
+  .compact-card {
+    @apply professional-card p-4;
+  }
+  
+  .ultra-compact-card {
+    @apply professional-card p-3;
+  }
+  
+  /* 現代化按鈕系統 */
+  .modern-button {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-all duration-200;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+  }
+  
+  .professional-button-primary {
+    @apply modern-button bg-slate-900 text-white hover:bg-slate-800 focus-visible:ring-slate-900;
+    @apply px-4 py-2 text-sm professional-shadow;
+  }
+  
+  .professional-button-secondary {
+    @apply modern-button bg-white text-slate-900 hover:bg-slate-50 focus-visible:ring-slate-900;
+    @apply px-4 py-2 text-sm modern-border professional-shadow;
+  }
+  
+  .compact-button {
+    @apply modern-button px-3 py-1.5 text-xs;
+  }
+  
+  /* 專業級輸入框 */
+  .professional-input {
+    @apply flex h-9 w-full rounded-md modern-border bg-white px-3 py-1;
+    @apply text-sm placeholder:text-slate-500 focus-visible:outline-none;
+    @apply focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  /* 現代化標籤頁 */
+  .professional-tabs {
+    @apply inline-flex h-9 items-center justify-center rounded-md bg-slate-100 p-1;
+  }
+  
+  .professional-tab {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded px-3 py-1;
+    @apply text-sm font-medium transition-all focus-visible:outline-none;
+    @apply focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+    @apply data-[state=active]:bg-white data-[state=active]:text-slate-900;
+    @apply data-[state=active]:professional-shadow;
+  }
+  
+  /* 專業級頁面佈局 */
+  .professional-layout {
+    @apply min-h-screen bg-slate-50/30;
+  }
+  
+  .professional-container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  
+  .compact-header {
+    @apply py-4 border-b border-slate-200/60 bg-white/80 backdrop-blur-sm;
+  }
+  
+  .compact-content {
+    @apply py-6 compact-layout;
+  }
+  
+  /* 現代化徽章 */
+  .professional-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+    @apply bg-slate-100 text-slate-800 ring-1 ring-inset ring-slate-200/50;
+  }
+  
+  /* 專業級表格 */
+  .professional-table {
+    @apply min-w-full divide-y divide-slate-200/60;
+  }
+  
+  .professional-table-header {
+    @apply bg-slate-50/80;
+  }
+  
+  .professional-table-cell {
+    @apply px-4 py-3 text-sm font-medium text-slate-900;
+  }
+  
+  .professional-table-data {
+    @apply px-4 py-3 text-sm text-slate-600;
+>>>>>>> 064f4cc (新增專業級樣式和佈局，包含緊湊佈局、專業級陰影、現代化邊框及按鈕設計，並更新儀表板和數據要求頁面以使用新樣式，改善用戶界面和可讀性。)
   }
 }

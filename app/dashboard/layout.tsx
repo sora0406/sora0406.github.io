@@ -409,12 +409,21 @@ export default function DashboardLayout({
 
   return (
     <TooltipProvider>
+<<<<<<< HEAD
     <div className="flex min-h-screen bg-background">
         {/* 桌面側邊欄 - 現代化設計 */}
       <aside
           className="fixed left-0 top-0 z-20 h-full border-r border-border w-[80px] hidden lg:block bg-card/50 backdrop-blur-sm"
       >
         <div className="flex h-16 items-center justify-center border-b border-border">
+=======
+    <div className="flex min-h-screen professional-layout">
+        {/* 桌面側邊欄 - 現代化專業設計 */}
+      <aside
+          className="fixed left-0 top-0 z-20 h-full border-r border-slate-200/60 w-[72px] hidden lg:block bg-white/95 backdrop-blur-sm professional-shadow"
+      >
+        <div className="flex h-14 items-center justify-center border-b border-slate-200/60">
+>>>>>>> 064f4cc (新增專業級樣式和佈局，包含緊湊佈局、專業級陰影、現代化邊框及按鈕設計，並更新儀表板和數據要求頁面以使用新樣式，改善用戶界面和可讀性。)
             <div 
               className="flex items-center justify-center cursor-pointer"
               onClick={() => handleNavigate("/dashboard/survey-results")}
@@ -430,7 +439,7 @@ export default function DashboardLayout({
               {/* 移除展開時顯示文字邏輯 */}
             </div>
         </div>
-        <div className="flex flex-col gap-2 p-2">
+        <div className="flex flex-col gap-1 p-2">
             {routes.filter(route => !route.hideInMainNav && !route.hidden).map((route) => {
               // 調整路徑匹配邏輯，考慮語言前綴
               const routePath = route.path;
@@ -477,12 +486,21 @@ export default function DashboardLayout({
                       <TooltipTrigger asChild>
                         <div
                           className={cn(
+<<<<<<< HEAD
                             "flex flex-col gap-2 rounded-lg transition-all duration-200",
                             "items-center justify-center text-center cursor-pointer",
                             "p-3 self-stretch group",
                             isActive
                               ? "text-primary bg-primary/10 shadow-sm" 
                               : "text-muted-foreground hover:text-foreground hover:bg-accent"
+=======
+                            "flex flex-col gap-1 rounded-md transition-all duration-200",
+                            "items-center justify-center text-center cursor-pointer",
+                            "p-2 self-stretch group",
+                            isActive
+                              ? "text-slate-900 bg-slate-100 professional-shadow" 
+                              : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+>>>>>>> 064f4cc (新增專業級樣式和佈局，包含緊湊佈局、專業級陰影、現代化邊框及按鈕設計，並更新儀表板和數據要求頁面以使用新樣式，改善用戶界面和可讀性。)
                           )}
                           onClick={() => {
                             // 直接導航到路徑，不管是否有子路由
@@ -713,7 +731,11 @@ export default function DashboardLayout({
         </header>
 
         {/* 主要內容 */}
+<<<<<<< HEAD
         <main className="flex-1 bg-background min-h-screen p-2 md:p-4">{children}</main>
+=======
+        <main className="flex-1 professional-container compact-content ml-[72px]">{children}</main>
+>>>>>>> 064f4cc (新增專業級樣式和佈局，包含緊湊佈局、專業級陰影、現代化邊框及按鈕設計，並更新儀表板和數據要求頁面以使用新樣式，改善用戶界面和可讀性。)
       </div>
     </div>
     </TooltipProvider>
