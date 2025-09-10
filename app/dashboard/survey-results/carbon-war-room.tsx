@@ -658,7 +658,7 @@ const DataCoveragePanel = ({ stats, t }: { stats: any, t: any }) => {
             ></div>
           </div>
           <div className="text-[9px] text-muted-foreground">
-            {t('dataCoverage.pending')}: {coverageData.pendingTasks} 項目
+            {t('dataCoverage.pending')}: {coverageData.pendingTasks}
           </div>
         </div>
       </CardContent>
@@ -697,7 +697,7 @@ const KeySupplierStructurePanel = ({ stats, t }: { stats: any, t: (key: string, 
                 </div>
               </div>
         <div className="pt-2 border-t border-border">
-          <div className="text-[10px] text-muted-foreground mb-1">結構分布</div>
+          <div className="text-[10px] text-muted-foreground mb-1">Structural Distribution</div>
           <div className="grid grid-cols-3 gap-1 text-center">
             <div className="bg-blue-50 border-l-2 border-blue-500 p-1">
               <div className="text-xs font-bold text-foreground">{structureData.smeCount}</div>
@@ -928,7 +928,7 @@ const CarbonReductionPanel = ({ t }: { t: (key: string, params?: Record<string, 
           </div>
         </div>
         <div className="pt-2 border-t border-border">
-          <div className="text-[10px] text-muted-foreground mb-1">成效追蹤</div>
+          <div className="text-[10px] text-muted-foreground mb-1">Effectiveness Tracking</div>
           <div className="grid grid-cols-2 gap-1 text-center">
             <div className="bg-orange-50 border-l-2 border-orange-500 p-1">
               <div className="text-xs font-bold text-foreground">{reductionData.reductionTarget}%</div>
@@ -1202,10 +1202,10 @@ export default function CarbonWarRoomPage({
                     </div>
                   </div>
                   <div className="pt-2 border-t border-border">
-                    <div className="flex justify-between items-center mb-1">
+                    {/* <div className="flex justify-between items-center mb-1">
                       <span className="text-[10px] text-muted-foreground">Cat 1-8</span>
                       <button className="text-[9px] text-blue-600 hover:text-blue-800">View Categories</button>
-                    </div>
+                    </div> */}
                     <div className="text-[9px] text-muted-foreground">
                     Classified: 85% | Unclassified: 15%
                     </div>
