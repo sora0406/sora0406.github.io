@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import { 
   BarChart3, ChevronDown, Download, Filter, Search, PieChart, Clock, Calendar,
   TrendingUp, Target, BarChart, AlertTriangle, Truck, Factory, Shield, Users,
@@ -28,11 +28,35 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
 import { Slider } from "@/components/ui/slider"
+import * as SliderPrimitive from "@radix-ui/react-slider"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 
 // 動態載入 ApexCharts
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
+
+// 自定義彩色 Slider 組件
+const ColoredSlider = React.forwardRef<
+  React.ElementRef<typeof SliderPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
+    trackColor?: string;
+    rangeColor?: string;
+    thumbColor?: string;
+    thumbBorderColor?: string;
+  }
+>(({ className, trackColor = "bg-secondary", rangeColor = "bg-primary", thumbColor = "bg-background", thumbBorderColor = "border-primary", ...props }, ref) => (
+  <SliderPrimitive.Root
+    ref={ref}
+    className={`relative flex w-full touch-none select-none items-center ${className}`}
+    {...props}
+  >
+    <SliderPrimitive.Track className={`relative h-2 w-full grow overflow-hidden rounded-full ${trackColor}`}>
+      <SliderPrimitive.Range className={`absolute h-full ${rangeColor}`} />
+    </SliderPrimitive.Track>
+    <SliderPrimitive.Thumb className={`block h-5 w-5 rounded-full border-2 ${thumbBorderColor} ${thumbColor} ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50`} />
+  </SliderPrimitive.Root>
+))
+ColoredSlider.displayName = SliderPrimitive.Root.displayName
 
 // 導入數據源Hook
 import { useSurveyData } from "@/hooks/useSurveyData"
@@ -812,13 +836,17 @@ const FilterPanel = ({
             <Label className="text-[10px] text-muted-foreground">
               {t('filters.spendingRange')} ({filters.spendingRange[0]}-{filters.spendingRange[1]}M)
             </Label>
-            <Slider
+            <ColoredSlider
               value={filters.spendingRange}
               onValueChange={(value: any) => onFiltersChange({...filters, spendingRange: value})}
               max={1000}
               min={0}
               step={10}
               className="w-full"
+              trackColor="bg-blue-100"
+              rangeColor="bg-blue-500"
+              thumbColor="bg-white"
+              thumbBorderColor="border-blue-500"
             />
           </div>
 
@@ -827,13 +855,17 @@ const FilterPanel = ({
             <Label className="text-[10px] text-muted-foreground">
               {t('filters.emissionRange')} ({filters.emissionRange[0]}-{filters.emissionRange[1]} tCO2e)
             </Label>
-            <Slider
+            <ColoredSlider
               value={filters.emissionRange}
               onValueChange={(value: any) => onFiltersChange({...filters, emissionRange: value})}
               max={5000}
               min={0}
               step={100}
               className="w-full"
+              trackColor="bg-green-100"
+              rangeColor="bg-green-500"
+              thumbColor="bg-white"
+              thumbBorderColor="border-green-500"
             />
           </div>
 
