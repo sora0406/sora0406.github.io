@@ -5,11 +5,13 @@ import CarbonWarRoomPage from './carbon-war-room'
 export default function WarRoomPage({ 
   tDashboard, 
   tWarRoom, 
-  tCommon 
+  tCommon,
+  getYearTranslation 
 }: { 
   tDashboard?: any, 
   tWarRoom?: any, 
-  tCommon?: any 
+  tCommon?: any,
+  getYearTranslation?: (year: number) => string
 }) {
   // 使用新的War Room頁面
   return (
@@ -17,6 +19,7 @@ export default function WarRoomPage({
       tDashboard={tDashboard}
       tWarRoom={tWarRoom}
       tCommon={tCommon}
+      getYearTranslation={getYearTranslation}
     />
   )
 }

@@ -38,7 +38,7 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 import { useSurveyData } from "@/hooks/useSurveyData"
 
 // 導入i18n翻譯Hook
-import { useTranslations } from "@/lib/i18n/use-translations"
+// import { useTranslations } from "@/lib/i18n/use-translations"
 
 // 導入分析工具元件
 import ScenarioSimulator from "./components/scenario-simulator"
@@ -947,17 +947,32 @@ const CarbonReductionPanel = ({ tWarRoom }: { tWarRoom: any }) => {
 };
 
 // 主要War Room頁面元件
+interface CarbonWarRoomPageProps {
+  tDashboard?: any;
+  tWarRoom?: any;
+  tCommon?: any;
+  getYearTranslation?: (year: number) => string;
+}
+
 export default function CarbonWarRoomPage({ 
   tDashboard, 
   tWarRoom, 
-  tCommon 
-}: { 
-  tDashboard?: any, 
-  tWarRoom?: any, 
-  tCommon?: any 
-}) {
-  // 翻譯Hook
-  const { t } = useTranslations('warRoom');
+  tCommon,
+  getYearTranslation
+}: CarbonWarRoomPageProps = {}) {
+  // 翻譯函數 - 使用傳入的 tWarRoom 或提供預設值
+  const t = (key: string, params?: Record<string, string | number>) => {
+    if (tWarRoom) {
+      try {
+        return tWarRoom(key, params);
+      } catch (error) {
+        console.warn(`Missing translation for warRoom.${key}`);
+        return key;
+      }
+    }
+    // 如果沒有傳入翻譯函數，返回預設值
+    return key;
+  };
   // 數據源Hook
   const { 
     dataSource, 
