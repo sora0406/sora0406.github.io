@@ -29,13 +29,13 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
   const [isSimulating, setIsSimulating] = useState(false);
   const [simulationResults, setSimulationResults] = useState<any>(null);
 
-  // 情境類型選項
-  const scenarioTypes = [
-    { value: "baseline", label: "基準情境", description: "維持現狀不變" },
-    { value: "aggressive_reduction", label: "積極減碳", description: "大幅投資減碳技術" },
-    { value: "technology_breakthrough", label: "技術突破", description: "採用突破性技術" },
-    { value: "policy_impact", label: "政策衝擊", description: "強化政策要求" }
-  ];
+    // 情境類型選項
+    const scenarioTypes = [
+      { value: "baseline", label: t('scenarioSimulator.basicSettings.scenarioTypes.baseline.label'), description: t('scenarioSimulator.basicSettings.scenarioTypes.baseline.description') },
+      { value: "aggressive_reduction", label: t('scenarioSimulator.basicSettings.scenarioTypes.aggressiveReduction.label'), description: t('scenarioSimulator.basicSettings.scenarioTypes.aggressiveReduction.description') },
+      { value: "technology_breakthrough", label: t('scenarioSimulator.basicSettings.scenarioTypes.technologyBreakthrough.label'), description: t('scenarioSimulator.basicSettings.scenarioTypes.technologyBreakthrough.description') },
+      { value: "policy_impact", label: t('scenarioSimulator.basicSettings.scenarioTypes.policyImpact.label'), description: t('scenarioSimulator.basicSettings.scenarioTypes.policyImpact.description') }
+    ];
 
   // 執行模擬
   const runSimulation = async () => {
@@ -59,7 +59,11 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
       yearlyProjections: generateYearlyProjections(baselineEmission, targetYear, reductionTarget[0]),
       riskAnalysis: {
         implementationProbability: 0.75,
-        keyRiskFactors: ["技術成熟度", "資本投入", "供應商配合度"]
+        keyRiskFactors: [
+          t('scenarioSimulator.results.riskFactors.technologyMaturity'),
+          t('scenarioSimulator.results.riskFactors.capitalInvestment'),
+          t('scenarioSimulator.results.riskFactors.supplierCooperation')
+        ]
       }
     };
     
@@ -106,11 +110,11 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
     },
     yaxis: {
       title: {
-        text: '排放量 (tCO2e)'
+        text: t('scenarioSimulator.chart.yAxisTitle')
       }
     },
     title: {
-      text: '減碳情境比較分析',
+      text: t('scenarioSimulator.chart.title'),
       align: 'center',
       style: {
         fontSize: '14px',
@@ -130,15 +134,15 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
     
     return [
       {
-        name: '基準情境',
+        name: t('scenarioSimulator.chart.baselineScenario'),
         data: simulationResults.yearlyProjections.map((p: any) => p.baselineEmission)
       },
       {
-        name: '減碳情境',
+        name: t('scenarioSimulator.chart.reductionScenario'),
         data: simulationResults.yearlyProjections.map((p: any) => p.projectedEmission)
       },
       {
-        name: '目標路徑',
+        name: t('scenarioSimulator.chart.targetPath'),
         data: simulationResults.yearlyProjections.map((p: any) => p.baselineEmission * (1 - (reductionTarget[0] / 100)))
       }
     ];
@@ -148,29 +152,29 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-xl">
             <Calculator className="h-5 w-5 text-blue-600" />
-            情境模擬器
+            {t('scenarioSimulator.title')}
           </CardTitle>
           <CardDescription>
-            建立減碳情境模型，評估不同策略的成本效益與可行性
+            {t('scenarioSimulator.description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="parameters">
             <TabsList>
-              <TabsTrigger value="parameters">參數設定</TabsTrigger>
-              <TabsTrigger value="results">模擬結果</TabsTrigger>
+              <TabsTrigger value="parameters">{t('scenarioSimulator.tabs.parameters')}</TabsTrigger>
+              <TabsTrigger value="results">{t('scenarioSimulator.tabs.results')}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="parameters" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* 基本參數 */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">基本設定</h3>
+                  <h3 className="text-lg font-semibold">{t('scenarioSimulator.basicSettings.title')}</h3>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="scenario-type">情境類型</Label>
+                    <Label htmlFor="scenario-type">{t('scenarioSimulator.basicSettings.scenarioType')}</Label>
                     <Select value={scenarioType} onValueChange={setScenarioType}>
                       <SelectTrigger>
                         <SelectValue />
@@ -178,9 +182,9 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                       <SelectContent>
                         {scenarioTypes.map((type) => (
                           <SelectItem key={type.value} value={type.value}>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col text-left">
                               <span>{type.label}</span>
-                              <span className="text-xs text-muted-foreground">{type.description}</span>
+                              {/* <span className="text-xs text-muted-foreground">{type.description}</span> */}
                             </div>
                           </SelectItem>
                         ))}
@@ -189,22 +193,22 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="target-year">目標年份</Label>
+                    <Label htmlFor="target-year">{t('scenarioSimulator.basicSettings.targetYear.label')}</Label>
                     <Select value={targetYear.toString()} onValueChange={(value) => setTargetYear(parseInt(value))}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="2027">2027年</SelectItem>
-                        <SelectItem value="2030">2030年</SelectItem>
-                        <SelectItem value="2035">2035年</SelectItem>
-                        <SelectItem value="2050">2050年</SelectItem>
-                      </SelectContent>
+                        <SelectContent>
+                          <SelectItem value="2027">{t('scenarioSimulator.basicSettings.targetYear.2027')}</SelectItem>
+                          <SelectItem value="2030">{t('scenarioSimulator.basicSettings.targetYear.2030')}</SelectItem>
+                          <SelectItem value="2035">{t('scenarioSimulator.basicSettings.targetYear.2035')}</SelectItem>
+                          <SelectItem value="2050">{t('scenarioSimulator.basicSettings.targetYear.2050')}</SelectItem>
+                        </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
-                    <Label>減排目標: {reductionTarget[0]}%</Label>
+                    <Label>{t('scenarioSimulator.basicSettings.reductionTarget')}: {reductionTarget[0]}%</Label>
                     <Slider
                       value={reductionTarget}
                       onValueChange={setReductionTarget}
@@ -218,10 +222,10 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
 
                 {/* 技術參數 */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">技術參數</h3>
+                  <h3 className="text-lg font-semibold">{t('scenarioSimulator.technicalParameters.title')}</h3>
                   
                   <div className="space-y-2">
-                    <Label>再生能源採用率: {renewableAdoption[0]}%</Label>
+                    <Label>{t('scenarioSimulator.technicalParameters.renewableAdoption')}: {renewableAdoption[0]}%</Label>
                     <Slider
                       value={renewableAdoption}
                       onValueChange={setRenewableAdoption}
@@ -233,7 +237,7 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <Label>能效改善幅度: {efficiencyImprovement[0]}%</Label>
+                    <Label>{t('scenarioSimulator.technicalParameters.efficiencyImprovement')}: {efficiencyImprovement[0]}%</Label>
                     <Slider
                       value={efficiencyImprovement}
                       onValueChange={setEfficiencyImprovement}
@@ -245,7 +249,7 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <Label>碳價格: ${carbonPrice[0]}/tCO2e</Label>
+                    <Label>{t('scenarioSimulator.technicalParameters.carbonPrice')}: ${carbonPrice[0]}/tCO2e</Label>
                     <Slider
                       value={carbonPrice}
                       onValueChange={setCarbonPrice}
@@ -265,7 +269,7 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                   className="flex items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  {isSimulating ? "模擬中..." : "執行模擬"}
+                  {isSimulating ? t('scenarioSimulator.actions.simulating') : t('scenarioSimulator.actions.runSimulation')}
                 </Button>
               </div>
             </TabsContent>
@@ -280,7 +284,7 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                         <div className="text-2xl font-bold text-blue-700">
                           {(simulationResults.totalReduction / 1000).toFixed(1)}k
                         </div>
-                        <div className="text-sm text-blue-600">減排量 (tCO2e)</div>
+                        <div className="text-sm text-blue-600">{t('scenarioSimulator.results.reductionAmount')}</div>
                       </CardContent>
                     </Card>
                     
@@ -289,7 +293,7 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                         <div className="text-2xl font-bold text-green-700">
                           {simulationResults.reductionPercentage}%
                         </div>
-                        <div className="text-sm text-green-600">減排比例</div>
+                        <div className="text-sm text-green-600">{t('scenarioSimulator.results.reductionPercentage')}</div>
                       </CardContent>
                     </Card>
                     
@@ -298,16 +302,16 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                         <div className="text-2xl font-bold text-orange-700">
                           ${(simulationResults.costEstimate / 1000000).toFixed(1)}M
                         </div>
-                        <div className="text-sm text-orange-600">投資成本</div>
+                        <div className="text-sm text-orange-600">{t('scenarioSimulator.results.investmentCost')}</div>
                       </CardContent>
                     </Card>
                     
                     <Card className="bg-purple-50 border-purple-200">
                       <CardContent className="p-4 text-center">
                         <div className="text-2xl font-bold text-purple-700">
-                          {simulationResults.paybackPeriod.toFixed(1)}年
+                          {simulationResults.paybackPeriod.toFixed(1)}
                         </div>
-                        <div className="text-sm text-purple-600">投資回收期</div>
+                        <div className="text-sm text-purple-600">{t('scenarioSimulator.results.paybackPeriod')}</div>
                       </CardContent>
                     </Card>
                   </div>
@@ -315,7 +319,7 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                   {/* 趨勢圖表 */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>情境分析結果</CardTitle>
+                      <CardTitle>{t('scenarioSimulator.results.title')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="h-80">
@@ -334,13 +338,13 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                   {/* 風險評估 */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>風險評估</CardTitle>
+                      <CardTitle>{t('scenarioSimulator.results.riskAssessment')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm font-medium">實施可能性</span>
+                            <span className="text-sm font-medium">{t('scenarioSimulator.results.implementationProbability')}</span>
                             <span className="text-sm">{(simulationResults.riskAnalysis.implementationProbability * 100).toFixed(0)}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -352,7 +356,7 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                         </div>
                         
                         <div>
-                          <span className="text-sm font-medium">關鍵風險因子</span>
+                          <span className="text-sm font-medium">{t('scenarioSimulator.results.keyRiskFactors')}</span>
                           <div className="flex flex-wrap gap-2 mt-2">
                             {simulationResults.riskAnalysis.keyRiskFactors.map((factor: string, index: number) => (
                               <Badge key={index} variant="outline">{factor}</Badge>
@@ -366,7 +370,7 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
               ) : (
                 <div className="text-center py-12">
                   <Settings className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">請先設定參數並執行模擬</p>
+                  <p className="text-muted-foreground">{t('scenarioSimulator.actions.pleaseSetParameters')}</p>
                 </div>
               )}
             </TabsContent>

@@ -188,6 +188,77 @@
     },
     "status": {
       "filterResults": "筛选结果"
+    },
+    "scenarioSimulator": {
+      "title": "情景模拟器",
+      "description": "建立减碳情景模型，评估不同策略的成本效益与可行性",
+      "tabs": {
+        "parameters": "参数设置",
+        "results": "模拟结果"
+      },
+      "basicSettings": {
+        "title": "基本设置",
+        "scenarioType": "情景类型",
+        "targetYear": {
+          "label": "目标年份",
+          "2027": "2027年",
+          "2030": "2030年", 
+          "2035": "2035年",
+          "2050": "2050年"
+        },
+        "reductionTarget": "减排目标",
+        "scenarioTypes": {
+          "baseline": {
+            "label": "基准情景",
+            "description": "维持现状不变"
+          },
+          "aggressiveReduction": {
+            "label": "积极减碳",
+            "description": "大幅投资减碳技术"
+          },
+          "technologyBreakthrough": {
+            "label": "技术突破",
+            "description": "采用突破性技术"
+          },
+          "policyImpact": {
+            "label": "政策冲击",
+            "description": "强化政策要求"
+          }
+        }
+      },
+      "technicalParameters": {
+        "title": "技术参数",
+        "renewableAdoption": "可再生能源采用率",
+        "efficiencyImprovement": "能效改善幅度",
+        "carbonPrice": "碳价格"
+      },
+      "actions": {
+        "runSimulation": "执行模拟",
+        "simulating": "模拟中...",
+        "pleaseSetParameters": "请先设置参数并执行模拟"
+      },
+      "results": {
+        "title": "情景分析结果",
+        "reductionAmount": "减排量 (tCO2e)",
+        "reductionPercentage": "减排比例",
+        "investmentCost": "投资成本",
+        "paybackPeriod": "投资回收期 (年)",
+        "riskAssessment": "风险评估",
+        "implementationProbability": "实施可能性",
+        "keyRiskFactors": "关键风险因子",
+        "riskFactors": {
+          "technologyMaturity": "技术成熟度",
+          "capitalInvestment": "资本投入",
+          "supplierCooperation": "供应商配合度"
+        }
+      },
+      "chart": {
+        "title": "减碳情景比较分析",
+        "yAxisTitle": "排放量 (tCO2e)",
+        "baselineScenario": "基准情景",
+        "reductionScenario": "减碳情景",
+        "targetPath": "目标路径"
+      }
     }
   },
   "surveys": {

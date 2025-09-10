@@ -940,7 +940,7 @@ const CarbonReductionPanel = ({ t }: { t: (key: string, params?: Record<string, 
             </div>
           </div>
           <div className="text-[9px] text-muted-foreground mt-1">
-            節省: {reductionData.estimatedSaving} tCO2e
+            Save: {reductionData.estimatedSaving} tCO2e
           </div>
         </div>
       </CardContent>
@@ -1257,16 +1257,16 @@ export default function CarbonWarRoomPage({
         <div className="border-t border-border mt-6 pt-3">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs text-muted-foreground">
             <div className="flex flex-wrap items-center gap-3">
-              <span>更新時間: {format(new Date(), 'MM-dd HH:mm')}</span>
+              <span>Updated Time: {format(new Date(), 'MM-dd HH:mm')}</span>
               <span className="hidden sm:inline">•</span>
               <span>{t('status.filterResults')}: {filteredOrganizationResponses.length}/{organizationResponses.length}{t('overview.suppliers')}</span>
               <span className="hidden sm:inline">•</span>
               <span>{t('overview.coverage')}: {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}%</span>
             </div>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <div className="h-1.5 w-1.5 bg-green-500 rounded-full animate-pulse"></div>
               <span>系統正常</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

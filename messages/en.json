@@ -395,6 +395,77 @@
     "status": {
       "filterResults": "Filter Results"
     },
+    "scenarioSimulator": {
+      "title": "Scenario Simulator",
+      "description": "Build carbon reduction scenario models to evaluate cost-effectiveness and feasibility of different strategies",
+      "tabs": {
+        "parameters": "Parameter Settings",
+        "results": "Simulation Results"
+      },
+      "basicSettings": {
+        "title": "Basic Settings",
+        "scenarioType": "Scenario Type",
+        "targetYear": {
+          "label": "Target Year",
+          "2027": "2027",
+          "2030": "2030", 
+          "2035": "2035",
+          "2050": "2050"
+        },
+        "reductionTarget": "Reduction Target",
+        "scenarioTypes": {
+          "baseline": {
+            "label": "Baseline Scenario",
+            "description": "Maintain current status"
+          },
+          "aggressiveReduction": {
+            "label": "Aggressive Reduction",
+            "description": "Significant investment in carbon reduction technologies"
+          },
+          "technologyBreakthrough": {
+            "label": "Technology Breakthrough",
+            "description": "Adopt breakthrough technologies"
+          },
+          "policyImpact": {
+            "label": "Policy Impact",
+            "description": "Strengthened policy requirements"
+          }
+        }
+      },
+      "technicalParameters": {
+        "title": "Technical Parameters",
+        "renewableAdoption": "Renewable Energy Adoption Rate",
+        "efficiencyImprovement": "Energy Efficiency Improvement",
+        "carbonPrice": "Carbon Price"
+      },
+      "actions": {
+        "runSimulation": "Run Simulation",
+        "simulating": "Simulating...",
+        "pleaseSetParameters": "Please set parameters and run simulation first"
+      },
+      "results": {
+        "title": "Scenario Analysis Results",
+        "reductionAmount": "Reduction Amount (tCO2e)",
+        "reductionPercentage": "Reduction Percentage",
+        "investmentCost": "Investment Cost",
+        "paybackPeriod": "Payback Period (years)",
+        "riskAssessment": "Risk Assessment",
+        "implementationProbability": "Implementation Probability",
+        "keyRiskFactors": "Key Risk Factors",
+        "riskFactors": {
+          "technologyMaturity": "Technology Maturity",
+          "capitalInvestment": "Capital Investment",
+          "supplierCooperation": "Supplier Cooperation"
+        }
+      },
+      "chart": {
+        "title": "Carbon Reduction Scenario Comparison Analysis",
+        "yAxisTitle": "Emissions (tCO2e)",
+        "baselineScenario": "Baseline Scenario",
+        "reductionScenario": "Reduction Scenario",
+        "targetPath": "Target Path"
+      }
+    },
     "tags": {
       "all_years": "All Years Data",
       "data_year": "{{year}} Data",

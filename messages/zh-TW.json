@@ -99,9 +99,8 @@
     "requests_count": "數據要求總數",
     "pending_count": "待處理請求",
     "completed_count": "已完成請求",
-    "view_all": "查看所有",
-    "recent_activity": "近期活動",
-    "quick_actions": "快速操作"
+    "view_all": "查看所有"
+   
   },
   "messages": {
     "success": "操作成功",
@@ -189,6 +188,77 @@
     },
     "status": {
       "filterResults": "篩選結果"
+    },
+    "scenarioSimulator": {
+      "title": "情境模擬器",
+      "description": "建立減碳情境模型，評估不同策略的成本效益與可行性",
+      "tabs": {
+        "parameters": "參數設定",
+        "results": "模擬結果"
+      },
+      "basicSettings": {
+        "title": "基本設定",
+        "scenarioType": "情境類型",
+        "targetYear": {
+          "label": "目標年份",
+          "2027": "2027年",
+          "2030": "2030年", 
+          "2035": "2035年",
+          "2050": "2050年"
+        },
+        "reductionTarget": "減排目標",
+        "scenarioTypes": {
+          "baseline": {
+            "label": "基準情境",
+            "description": "維持現狀不變"
+          },
+          "aggressiveReduction": {
+            "label": "積極減碳",
+            "description": "大幅投資減碳技術"
+          },
+          "technologyBreakthrough": {
+            "label": "技術突破",
+            "description": "採用突破性技術"
+          },
+          "policyImpact": {
+            "label": "政策衝擊",
+            "description": "強化政策要求"
+          }
+        }
+      },
+      "technicalParameters": {
+        "title": "技術參數",
+        "renewableAdoption": "再生能源採用率",
+        "efficiencyImprovement": "能效改善幅度",
+        "carbonPrice": "碳價格"
+      },
+      "actions": {
+        "runSimulation": "執行模擬",
+        "simulating": "模擬中...",
+        "pleaseSetParameters": "請先設定參數並執行模擬"
+      },
+      "results": {
+        "title": "情境分析結果",
+        "reductionAmount": "減排量 (tCO2e)",
+        "reductionPercentage": "減排比例",
+        "investmentCost": "投資成本",
+        "paybackPeriod": "投資回收期 (年)",
+        "riskAssessment": "風險評估",
+        "implementationProbability": "實施可能性",
+        "keyRiskFactors": "關鍵風險因子",
+        "riskFactors": {
+          "technologyMaturity": "技術成熟度",
+          "capitalInvestment": "資本投入",
+          "supplierCooperation": "供應商配合度"
+        }
+      },
+      "chart": {
+        "title": "減碳情境比較分析",
+        "yAxisTitle": "排放量 (tCO2e)",
+        "baselineScenario": "基準情境",
+        "reductionScenario": "減碳情境",
+        "targetPath": "目標路徑"
+      }
     }
   },
   "surveys": {
