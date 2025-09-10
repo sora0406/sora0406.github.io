@@ -688,7 +688,7 @@ const KeySupplierStructurePanel = ({ stats, t }: { stats: any, t: (key: string, 
         <div className="grid grid-cols-2 gap-2 mb-2">
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{structureData.keySuppliers}</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.keySuppliers')}<br/>數量</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.keySuppliers')}</div>
                   </div>
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">        {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}%</div>
@@ -709,7 +709,7 @@ const KeySupplierStructurePanel = ({ stats, t }: { stats: any, t: (key: string, 
         </div>
             <div className="bg-green-50 border-l-2 border-green-500 p-1">
               <div className="text-xs font-bold text-foreground">{structureData.directCount}</div>
-              <div className="text-[9px] text-muted-foreground">直接供應</div>
+              <div className="text-[9px] text-muted-foreground">Direct Procurement</div>
             </div>
           </div>
         </div>
@@ -1194,20 +1194,20 @@ export default function CarbonWarRoomPage({
                   <div className="grid grid-cols-2 gap-2 mb-2">
                     <div className="text-center">
                       <div className="text-sm font-bold text-foreground">456.8K</div>
-                      <div className="text-[10px] text-muted-foreground leading-tight">總支出<br/>(萬元)</div>
+                      <div className="text-[10px] text-muted-foreground leading-tight">Total Spending<br/>(M)</div>
               </div>
                     <div className="text-center">
                       <div className="text-sm font-bold text-foreground">892</div>
-                      <div className="text-[10px] text-muted-foreground leading-tight">推估排碳<br/>(tCO2e)</div>
+                      <div className="text-[10px] text-muted-foreground leading-tight">Estimated Emissions<br/>(tCO2e)</div>
                     </div>
                   </div>
                   <div className="pt-2 border-t border-border">
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-[10px] text-muted-foreground">Cat 1-8分類</span>
-                      <button className="text-[9px] text-blue-600 hover:text-blue-800">檢視分類</button>
+                      <span className="text-[10px] text-muted-foreground">Cat 1-8</span>
+                      <button className="text-[9px] text-blue-600 hover:text-blue-800">View Categories</button>
                     </div>
                     <div className="text-[9px] text-muted-foreground">
-                      已分類: 85% | 待分類: 15%
+                    Classified: 85% | Unclassified: 15%
                     </div>
                   </div>
                 </CardContent>
