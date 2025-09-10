@@ -472,8 +472,8 @@ const TrendAnalysisPanel = ({ data, t }: { data: any[], t: (key: string, params?
     return {
       categories: months,
       series: [
-        { name: '2023年實際', data: currentYear },
-        { name: '2022年', data: previousYear },
+        { name: '2023 ', data: currentYear },
+        { name: '2022', data: previousYear },
         { name: t('overview.reductionTarget'), data: target }
       ]
     };
@@ -532,15 +532,15 @@ const TrendAnalysisPanel = ({ data, t }: { data: any[], t: (key: string, params?
           <div className="space-y-1">
             <div className="bg-green-50 border-l-2 border-green-500 p-1 text-center">
               <div className="text-sm font-bold text-foreground">-8.5%</div>
-              <div className="text-[9px] text-muted-foreground">年度減排率</div>
+              <div className="text-[9px] text-muted-foreground">Annual Reduction Rate</div>
             </div>
             <div className="bg-blue-50 border-l-2 border-blue-500 p-1 text-center">
               <div className="text-sm font-bold text-foreground">76%</div>
-              <div className="text-[9px] text-muted-foreground">目標達成率</div>
+              <div className="text-[9px] text-muted-foreground">Target Achievement Rate</div>
             </div>
             <div className="bg-orange-50 border-l-2 border-orange-500 p-1 text-center">
               <div className="text-sm font-bold text-foreground">-15%</div>
-              <div className="text-[9px] text-muted-foreground">預計年底減排</div>
+              <div className="text-[9px] text-muted-foreground">Estimated Reduction by End of Year</div>
             </div>
           </div>
 
@@ -920,11 +920,11 @@ const CarbonReductionPanel = ({ t }: { t: (key: string, params?: Record<string, 
         <div className="grid grid-cols-2 gap-2 mb-2">
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{reductionData.hasActionPlan}</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">有計畫<br/>供應商</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">Planned Suppliers</div>
           </div>
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{((reductionData.hasActionPlan/reductionData.totalSuppliers)*100).toFixed(0)}%</div>
-            <div className="text-[10px] text-muted-foreground">計畫{t('overview.coverage')}</div>
+            <div className="text-[10px] text-muted-foreground"> {t('overview.coverage')}</div>
           </div>
         </div>
         <div className="pt-2 border-t border-border">
@@ -932,11 +932,11 @@ const CarbonReductionPanel = ({ t }: { t: (key: string, params?: Record<string, 
           <div className="grid grid-cols-2 gap-1 text-center">
             <div className="bg-orange-50 border-l-2 border-orange-500 p-1">
               <div className="text-xs font-bold text-foreground">{reductionData.reductionTarget}%</div>
-              <div className="text-[9px] text-muted-foreground">目標減排</div>
+              <div className="text-[9px] text-muted-foreground">Target Reduction</div>
             </div>
             <div className="bg-blue-50 border-l-2 border-blue-500 p-1">
               <div className="text-xs font-bold text-foreground">{reductionData.actualReduction}%</div>
-              <div className="text-[9px] text-muted-foreground">實際減排</div>
+              <div className="text-[9px] text-muted-foreground">Actual Reduction</div>
             </div>
           </div>
           <div className="text-[9px] text-muted-foreground mt-1">
