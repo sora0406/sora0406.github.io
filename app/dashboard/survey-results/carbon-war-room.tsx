@@ -44,7 +44,7 @@ const ColoredSlider = React.forwardRef<
     thumbColor?: string;
     thumbBorderColor?: string;
   }
->(({ className, trackColor = "bg-secondary", rangeColor = "bg-primary", thumbColor = "bg-background", thumbBorderColor = "border-primary", ...props }, ref) => (
+>(({ className, trackColor = "bg-primary", rangeColor = "bg-secondary", thumbColor = "bg-background", thumbBorderColor = "border-primary", ...props }, ref) => (
   <SliderPrimitive.Root
     ref={ref}
     className={`relative flex w-full touch-none select-none items-center ${className}`}
@@ -843,8 +843,8 @@ const FilterPanel = ({
               min={0}
               step={10}
               className="w-full"
-              trackColor="bg-blue-100"
-              rangeColor="bg-blue-500"
+              trackColor="bg-blue-500"
+              rangeColor="bg-blue-100"
               thumbColor="bg-white"
               thumbBorderColor="border-blue-500"
             />
@@ -862,10 +862,10 @@ const FilterPanel = ({
               min={0}
               step={100}
               className="w-full"
-              trackColor="bg-green-100"
-              rangeColor="bg-green-500"
+          trackColor="bg-blue-500"
+              rangeColor="bg-blue-100"
               thumbColor="bg-white"
-              thumbBorderColor="border-green-500"
+              thumbBorderColor="border-blue-500"
             />
           </div>
 
