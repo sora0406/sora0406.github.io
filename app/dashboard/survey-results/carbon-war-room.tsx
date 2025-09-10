@@ -586,7 +586,7 @@ const CompliancePanel = ({ t }: { t: any }) => {
         <div className="grid grid-cols-2 gap-2 mb-2">
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{complianceData.isoCompliant}</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">{t('compliance.isoCertification')}<br/>({complianceData.isoTotal}{t('overview.suppliers')})</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('compliance.certifiedSuppliersCount')}<br/>({complianceData.isoTotal}{t('overview.suppliers')})</div>
           </div>
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{((complianceData.isoCompliant/complianceData.isoTotal)*100).toFixed(0)}%</div>
@@ -791,7 +791,7 @@ const FilterPanel = ({
           
           {/* 1. {t('compliance.isoCertification')}狀態 */}
           <div className="space-y-1 ">
-            <Label className="text-[10px] text-muted-foreground">{t('compliance.isoCertification')}狀態</Label>
+            <Label className="text-[10px] text-muted-foreground">{t('compliance.isoCertification')}</Label>
             <Select 
               value={filters.isoStatus} 
               onValueChange={(value: any) => onFiltersChange({...filters, isoStatus: value})}

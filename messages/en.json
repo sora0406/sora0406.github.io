@@ -376,7 +376,8 @@
     },
     "compliance": {
       "title": "Compliance & Rating Status",
-      "isoCertification": "ISO Certification",
+      "certifiedSuppliersCount": "Certified Suppliers Count",
+      "isoCertification": "Certification Status",
       "certificationRate": "Certification Rate",
       "esgRating": "ESG Rating Status",
       "excellent": "Excellent",
