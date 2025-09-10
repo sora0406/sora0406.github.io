@@ -1432,7 +1432,7 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
               {translate('importSuppliers', '導入供應商')}
             </Button>
                {/* 數據源選擇器 */}
-               <div className="flex items-center gap-2 mr-4 ">
+               {/* <div className="flex items-center gap-2 mr-4 ">
               <Select value={dataSource} onValueChange={switchDataSource}>
                 <SelectTrigger className="h-6 px-4 py-3 text-xs text-gray-300 bg-white  border-none rounded-md hover:bg-accent focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 min-w-[120px]">
                   <SelectValue />
@@ -1445,10 +1445,10 @@ export function SuppliersPage({ t }: TranslationProps = {}) {
                   ))}
                 </SelectContent>
               </Select>
-              {/* <span className="text-xs text-muted-foreground">
+             <span className="text-xs text-muted-foreground">
                 ({suppliers.length} {translate('suppliersCount', '個供應商')})
-              </span> */}
-            </div>
+              </span> *
+            </div> */}
           </div>
         </div>
 

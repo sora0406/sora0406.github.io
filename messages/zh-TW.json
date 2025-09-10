@@ -435,6 +435,74 @@
       "product_footprint": "產品碳足跡 (kgCO2e)"
     }
   },
+  "warRoom": {
+    "title": "碳排放戰情室",
+    "subtitle": "實時監控供應鏈碳排放狀況，智能分析減碳機會與風險",
+    "tabs": {
+      "overview": "總覽儀表板",
+      "overviewShort": "總覽",
+      "hotspot": "熱點分析",
+      "hotspotShort": "熱點",
+      "trend": "趨勢分析",
+      "trendShort": "趨勢",
+      "simulation": "情境模擬",
+      "simulationShort": "模擬",
+      "benchmarking": "基準比較",
+      "benchmarkingShort": "基準"
+    },
+    "filters": {
+      "title": "篩選條件",
+      "isoStatus": "ISO認證狀態",
+      "spendingRange": "支出金額範圍",
+      "emissionRange": "排放量範圍",
+      "carbonAction": "減碳作為",
+      "supplierType": "供應商類型",
+      "all": "全部",
+      "certified": "已認證",
+      "nonCertified": "未認證",
+      "implemented": "已執行",
+      "planning": "規劃中",
+      "notImplemented": "未執行",
+      "largeEnterprise": "大型企業",
+      "sme": "中小企業",
+      "agent": "代理商",
+      "reset": "重置篩選"
+    },
+    "overview": {
+      "carbonAnalysis": "碳排放量分析",
+      "scope1": "範疇1",
+      "scope2": "範疇2",
+      "scope3": "範疇3",
+      "totalEmissions": "總排放量",
+      "supplierOverview": "供應商概況",
+      "keySuppliers": "關鍵供應商",
+      "totalSuppliers": "總供應商數",
+      "coverage": "覆蓋率",
+      "performanceMetrics": "排放績效指標",
+      "avgIntensity": "平均強度",
+      "perSupplier": "家",
+      "percentage": "占比",
+      "reductionTarget": "減排目標",
+      "suppliers": "家"
+    },
+    "compliance": {
+      "title": "合規與評比狀況",
+      "isoCertification": "ISO認證",
+      "certificationRate": "認證比率",
+      "esgRating": "ESG評比狀況",
+      "excellent": "優良",
+      "average": "普通",
+      "needsImprovement": "待改善"
+    },
+    "dataCoverage": {
+      "title": "數據覆蓋率",
+      "emissionData": "排放數據",
+      "financialData": "金額數據",
+      "coverage": "覆蓋率",
+      "completeness": "完成度",
+      "pending": "待完成項目"
+    }
+  },
   "surveys": {
     "title": "問卷模板管理",
     "create_new": "創建問卷",

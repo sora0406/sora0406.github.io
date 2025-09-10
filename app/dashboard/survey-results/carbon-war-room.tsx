@@ -27,6 +27,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
+import { Slider } from "@/components/ui/slider"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 
@@ -36,9 +37,21 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 // 導入數據源Hook
 import { useSurveyData } from "@/hooks/useSurveyData"
 
+// 導入i18n翻譯Hook
+import { useTranslations } from "@/lib/i18n/use-translations"
+
 // 導入分析工具元件
 import ScenarioSimulator from "./components/scenario-simulator"
 import BenchmarkingModule from "./components/benchmarking-module"
+
+// 篩選器介面定義
+interface FilterState {
+  isoStatus: 'all' | 'certified' | 'non-certified'; // ISO認證狀態
+  spendingRange: [number, number]; // 支出金額範圍
+  emissionRange: [number, number]; // 排放量範圍 (tCO2e)
+  carbonAction: 'all' | 'implemented' | 'planning' | 'not-implemented'; // 減碳作為
+  supplierType: 'all' | 'large-enterprise' | 'sme' | 'agent'; // 供應商類型
+}
 
 interface CarbonOverviewProps {
   stats: any;
@@ -47,7 +60,7 @@ interface CarbonOverviewProps {
 }
 
 // 1. 碳排放總覽儀表板元件
-const CarbonOverviewDashboard = ({ stats, selectedYear, tWarRoom }: CarbonOverviewProps) => {
+const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selectedYear: string | null; t: any }) => {
   // 模擬範疇1-3排放量數據（實際應從stats中計算）
   const scopeEmissions = useMemo(() => {
     const totalEmission = parseFloat(stats.orgTotalEmission) || 0;
@@ -59,118 +72,102 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, tWarRoom }: CarbonOvervi
   }, [stats.orgTotalEmission]);
 
   return (
-    <div className="space-y-4 mb-4">
+    <div className="space-y-3 mb-3">
       {/* 整合的核心指標區塊 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         {/* 整合的範疇1-3排放量 */}
-        <Card className="modern-card border-l-4 border-l-red-500 hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-foreground">
-              碳排放量分析
-            </CardTitle>
-            <div className="p-1.5 bg-red-50 rounded-md">
-              <Factory className="h-4 w-4 text-red-600" />
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0 pb-3">
-            <div className="grid grid-cols-3 gap-4 mb-3">
-              <div>
-                <div className="text-lg font-bold text-foreground">{scopeEmissions.scope1}</div>
-                <div className="text-xs text-muted-foreground">範疇1排放量<br/>(tCO2e)</div>
+        <Card className="border border-border bg-card">
+          <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+            <CardTitle className="text-xs font-medium text-foreground">
+              {t('overview.carbonAnalysis')}
+          </CardTitle>
+            <Factory className="h-3 w-3 text-red-600" />
+        </CardHeader>
+          <CardContent className="px-3 pb-2">
+            <div className="grid grid-cols-3 gap-2 mb-2">
+              <div className="text-center">
+                <div className="text-sm font-bold text-foreground">{scopeEmissions.scope1}</div>
+                <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.scope1')}<br/>(tCO2e)</div>
+          </div>
+              <div className="text-center">
+                <div className="text-sm font-bold text-foreground">{scopeEmissions.scope2}</div>
+                <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.scope2')}<br/>(tCO2e)</div>
               </div>
-              <div>
-                <div className="text-lg font-bold text-foreground">{scopeEmissions.scope2}</div>
-                <div className="text-xs text-muted-foreground">範疇2排放量<br/>(tCO2e)</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold text-foreground">{scopeEmissions.scope3}</div>
-                <div className="text-xs text-muted-foreground">範疇3排放量<br/>(tCO2e)</div>
+              <div className="text-center">
+                <div className="text-sm font-bold text-foreground">{scopeEmissions.scope3}</div>
+                <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.scope3')}<br/>(tCO2e)</div>
               </div>
             </div>
-            <div className="pt-3 border-t border-border">
+            <div className="pt-2 border-t border-border">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-muted-foreground">總排放量</span>
-                <span className="text-sm font-medium text-foreground">
-                  {stats.orgTotalEmission} tCO2e
-                </span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                {selectedYear ? `${selectedYear}年度數據` : '所有年度數據'}
+                <span className="text-[10px] text-muted-foreground">{t('overview.totalEmissions')}</span>
+                <span className="text-xs font-medium text-foreground">{stats.orgTotalEmission} tCO2e</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
+
         {/* 整合的關鍵供應商與數據覆蓋率 */}
-        <Card className="modern-card border-l-4 border-l-green-500 hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-foreground">
-              供應商概況
-            </CardTitle>
-            <div className="p-1.5 bg-green-50 rounded-md">
-              <Users className="h-4 w-4 text-green-600" />
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0 pb-3">
-            <div className="grid grid-cols-2 gap-4 mb-3">
-              <div>
-                <div className="text-lg font-bold text-foreground">{Math.round(stats.orgCount * 0.2)}</div>
-                <div className="text-xs text-muted-foreground">關鍵供應商</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold text-foreground">{stats.orgCount}</div>
-                <div className="text-xs text-muted-foreground">總供應商數</div>
+        <Card className="border border-border bg-card">
+          <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+            <CardTitle className="text-xs font-medium text-foreground">
+              {t('overview.supplierOverview')}
+          </CardTitle>
+            <Users className="h-3 w-3 text-green-600" />
+        </CardHeader>
+          <CardContent className="px-3 pb-2">
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              <div className="text-center">
+                <div className="text-sm font-bold text-foreground">{Math.round(stats.orgCount * 0.2)}</div>
+                <div className="text-[10px] text-muted-foreground">{t('overview.keySuppliers')}</div>
+          </div>
+              <div className="text-center">
+                <div className="text-sm font-bold text-foreground">{stats.orgCount}</div>
+                <div className="text-[10px] text-muted-foreground">{t('overview.totalSuppliers')}</div>
               </div>
             </div>
-            <div className="pt-3 border-t border-border">
+            <div className="pt-2 border-t border-border">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-muted-foreground">數據覆蓋率</span>
-                <span className="text-sm font-medium text-foreground">
+                <span className="text-[10px] text-muted-foreground">{t('overview.coverage')}</span>
+                <span className="text-xs font-medium text-foreground">
                   {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}%
                 </span>
               </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                {stats.totalResponses} / {stats.totalResponses + 5} 已回應
-              </div>
             </div>
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
 
         {/* 排放績效指標 */}
-        <Card className="modern-card border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-foreground">
-              排放績效指標
-            </CardTitle>
-            <div className="p-1.5 bg-blue-50 rounded-md">
-              <TrendingUp className="h-4 w-4 text-blue-600" />
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0 pb-3">
-            <div className="grid grid-cols-2 gap-4 mb-3">
-              <div>
-                <div className="text-lg font-bold text-foreground">
-                  {stats.orgCount > 0 ? (parseFloat(stats.orgTotalEmission) / stats.orgCount).toFixed(1) : '0'}
-                </div>
-                <div className="text-xs text-muted-foreground">平均排放強度<br/>(tCO2e/家)</div>
+        <Card className="border border-border bg-card">
+          <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+            <CardTitle className="text-xs font-medium text-foreground">
+              {t('overview.performanceMetrics')}
+          </CardTitle>
+            <TrendingUp className="h-3 w-3 text-blue-600" />
+        </CardHeader>
+          <CardContent className="px-3 pb-2">
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              <div className="text-center">
+                <div className="text-sm font-bold text-foreground">
+            {stats.orgCount > 0 ? (parseFloat(stats.orgTotalEmission) / stats.orgCount).toFixed(1) : '0'} 
+          </div>
+                <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.avgIntensity')}<br/>(tCO2e/{t('overview.perSupplier')})</div>
               </div>
-              <div>
-                <div className="text-lg font-bold text-foreground">
+              <div className="text-center">
+                <div className="text-sm font-bold text-foreground">
                   {((parseFloat(stats.orgTotalEmission) / parseFloat(scopeEmissions.scope2)) * 100).toFixed(1)}%
                 </div>
-                <div className="text-xs text-muted-foreground">範疇2占比<br/>(%)</div>
+                <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.scope2')}<br/>{t('overview.percentage')}(%)</div>
               </div>
             </div>
-            <div className="pt-3 border-t border-border">
+            <div className="pt-2 border-t border-border">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-muted-foreground">年度減排目標</span>
-                <span className="text-sm font-medium text-foreground">-10%</span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                相較前一年度
+                <span className="text-[10px] text-muted-foreground">{t('overview.reductionTarget')}</span>
+                <span className="text-xs font-medium text-foreground">-10%</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
       </div>
     </div>
   );
@@ -289,61 +286,59 @@ const ParetoAnalysisWidget = ({ organizationResponses, selectedYear, tWarRoom }:
   ];
 
   return (
-    <Card className="modern-card">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            <BarChart3 className="h-5 w-5 text-primary" />
-          </div>
+    <Card className="border border-border bg-card">
+      <CardHeader className="pb-1 px-3 pt-2">
+        <CardTitle className="flex items-center gap-2">
+          <BarChart3 className="h-3 w-3 text-primary" />
           <div>
-            <h3 className="text-lg font-semibold">供應商排放熱點</h3>
-            <p className="text-sm text-muted-foreground font-normal">20/80法則識別關鍵供應商</p>
+            <h3 className="text-xs font-medium">供應商排放熱點</h3>
+            <p className="text-[10px] text-muted-foreground">20/80法則識別關鍵供應商</p>
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0">
-        {/* 關鍵指標 */}
-        <div className="grid grid-cols-3 gap-3 mb-4">
-          <div className="compact-card text-center border-l-4 border-l-blue-500">
-            <div className="text-xl font-bold text-foreground">{keySuppliers.length}</div>
-            <div className="text-xs text-muted-foreground">關鍵供應商</div>
-          </div>
-          <div className="compact-card text-center border-l-4 border-l-orange-500">
-            <div className="text-xl font-bold text-foreground">{keyEmissionPercentage.toFixed(1)}%</div>
-            <div className="text-xs text-muted-foreground">排放貢獻度</div>
-          </div>
-          <div className="compact-card text-center border-l-4 border-l-green-500">
-            <div className="text-xl font-bold text-foreground">
-              {paretoData.length > 0 ? ((keySuppliers.length / paretoData.length) * 100).toFixed(1) : 0}%
+      <CardContent className="px-3 pb-2">
+          {/* 關鍵指標 */}
+        <div className="grid grid-cols-3 gap-1 mb-2">
+          <div className="bg-blue-50 border-l-2 border-blue-500 p-1 text-center">
+            <div className="text-sm font-bold text-foreground">{keySuppliers.length}</div>
+            <div className="text-[9px] text-muted-foreground">關鍵供應商</div>
             </div>
-            <div className="text-xs text-muted-foreground">供應商比例</div>
+          <div className="bg-orange-50 border-l-2 border-orange-500 p-1 text-center">
+            <div className="text-sm font-bold text-foreground">{keyEmissionPercentage.toFixed(1)}%</div>
+            <div className="text-[9px] text-muted-foreground">排放貢獻度</div>
+            </div>
+          <div className="bg-green-50 border-l-2 border-green-500 p-1 text-center">
+            <div className="text-sm font-bold text-foreground">
+                {paretoData.length > 0 ? ((keySuppliers.length / paretoData.length) * 100).toFixed(1) : 0}%
+              </div>
+            <div className="text-[9px] text-muted-foreground">供應商比例</div>
+            </div>
           </div>
-        </div>
 
-        {/* 帕雷托圖表 */}
-        <div className="h-64 mb-4">
-          {typeof window !== 'undefined' && paretoData.length > 0 && (
-            <ReactApexChart 
-              options={chartOptions} 
-              series={series} 
-              type="line" 
-              height={240} 
-            />
-          )}
-        </div>
+          {/* 帕雷托圖表 */}
+        <div className="h-48 mb-2">
+              {typeof window !== 'undefined' && paretoData.length > 0 && (
+                <ReactApexChart 
+                  options={chartOptions} 
+                  series={series} 
+                  type="line" 
+              height={180} 
+                />
+              )}
+            </div>
 
         {/* 前5名供應商列表 */}
-        <div className="space-y-2">
-          <h4 className="text-sm font-medium text-foreground mb-2">排放量前5名供應商</h4>
+        <div className="space-y-1">
+          <h4 className="text-[10px] font-medium text-foreground mb-1">排放量前5名供應商</h4>
           {paretoData.slice(0, 5).map((supplier, index) => (
-            <div key={supplier.name} className="flex justify-between items-center py-2 px-3 bg-muted/50 rounded-md">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-muted-foreground w-4">#{index + 1}</span>
-                <span className="text-sm text-foreground">{supplier.name}</span>
-              </div>
+            <div key={supplier.name} className="flex justify-between items-center py-1 px-2 bg-muted/30">
+              <div className="flex items-center gap-1">
+                <span className="text-[9px] font-medium text-muted-foreground w-3">#{index + 1}</span>
+                <span className="text-[10px] text-foreground">{supplier.name}</span>
+          </div>
               <div className="text-right">
-                <div className="text-sm font-medium text-foreground">{supplier.emission.toFixed(1)} tCO2e</div>
-                <div className="text-xs text-muted-foreground">{supplier.individualPercentage.toFixed(1)}%</div>
+                <div className="text-[10px] font-medium text-foreground">{supplier.emission.toFixed(1)} tCO2e</div>
+                <div className="text-[9px] text-muted-foreground">{supplier.individualPercentage.toFixed(1)}%</div>
               </div>
             </div>
           ))}
@@ -367,29 +362,27 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
   }, [supplierData]);
 
   return (
-    <Card className="modern-card">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-3">
-          <div className="p-2 bg-green-500/10 rounded-lg">
-            <MapPin className="h-5 w-5 text-green-600" />
-          </div>
+    <Card className="border border-border bg-card">
+      <CardHeader className="pb-1 px-3 pt-2">
+        <CardTitle className="flex items-center gap-2">
+          <MapPin className="h-3 w-3 text-green-600" />
           <div>
-            <h3 className="text-lg font-semibold">地理熱點分析</h3>
-            <p className="text-sm text-muted-foreground font-normal">供應商地理分布與排放量熱點識別</p>
+            <h3 className="text-xs font-medium">地理熱點分析</h3>
+            <p className="text-[10px] text-muted-foreground">供應商地理分布與排放量熱點識別</p>
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-3 pb-2">
         {/* 簡化的台灣地圖視覺化 */}
-        <div className="relative w-full h-[300px] bg-gradient-to-b from-blue-50 to-green-50 rounded-lg overflow-hidden mb-4">
-          <div className="absolute inset-0 p-4 flex items-center justify-center">
-            <svg viewBox="0 0 400 500" className="w-full h-full max-w-sm">
+        <div className="relative w-full h-[200px] bg-gradient-to-b from-blue-50 to-green-50 overflow-hidden mb-2">
+          <div className="absolute inset-0 p-2 flex items-center justify-center">
+            <svg viewBox="0 0 400 500" className="w-full h-full max-w-32">
               {/* 台灣輪廓 */}
               <path
                 d="M200,80 C280,100 320,180 310,260 C300,340 250,420 200,460 C150,420 100,340 90,260 C80,180 120,100 200,80"
                 fill="#e2e8f0"
                 stroke="#64748b"
-                strokeWidth="2"
+                strokeWidth="1"
               />
               
               {/* 區域熱點標記 */}
@@ -403,7 +396,7 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
                 ];
                 
                 const pos = positions[index];
-                const size = Math.max(20, Math.min(50, region.count * 5));
+                const size = Math.max(15, Math.min(35, region.count * 3));
                 const color = region.risk === 'high' ? '#ef4444' : 
                             region.risk === 'medium' ? '#f59e0b' : '#10b981';
 
@@ -415,7 +408,7 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
                       r={size}
                       fill={`${color}80`}
                       stroke={color}
-                      strokeWidth="2"
+                      strokeWidth="1"
                     />
                     <text
                       x={pos.x}
@@ -423,18 +416,18 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fill="white"
-                      fontSize="12"
+                      fontSize="10"
                       fontWeight="bold"
                     >
                       {region.count}
                     </text>
                     <text
                       x={pos.x}
-                      y={pos.y + size + 15}
+                      y={pos.y + size + 10}
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fill="#1e293b"
-                      fontSize="11"
+                      fontSize="8"
                       fontWeight="medium"
                     >
                       {region.name}
@@ -447,18 +440,18 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
         </div>
 
         {/* 區域統計 */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-1">
           {regionData.map((region) => (
-            <div key={region.name} className="compact-card text-center hover:shadow-md transition-shadow">
-              <div className="font-semibold text-foreground">{region.name}</div>
-              <div className="text-sm text-muted-foreground">{region.count} 家</div>
-              <div className="text-xs text-muted-foreground">{region.emission.toFixed(0)} tCO2e</div>
-              <Badge 
-                variant={region.risk === 'high' ? 'destructive' : region.risk === 'medium' ? 'default' : 'secondary'}
-                className="modern-badge text-xs mt-2"
-              >
+            <div key={region.name} className="bg-muted/30 p-1 text-center">
+              <div className="text-[10px] font-medium text-foreground">{region.name}</div>
+              <div className="text-[9px] text-muted-foreground">{region.count} 家</div>
+              <div className="text-[8px] text-muted-foreground">{region.emission.toFixed(0)} tCO2e</div>
+              <div className={`text-[8px] px-1 mt-1 inline-block ${
+                region.risk === 'high' ? 'bg-red-100 text-red-800' : 
+                region.risk === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+              }`}>
                 {region.risk === 'high' ? '高風險' : region.risk === 'medium' ? '中風險' : '低風險'}
-              </Badge>
+              </div>
             </div>
           ))}
         </div>
@@ -523,45 +516,43 @@ const TrendAnalysisPanel = ({ data, tWarRoom }: { data: any[], tWarRoom: any }) 
   };
 
   return (
-    <Card className="modern-card col-span-2">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-3">
-          <div className="p-2 bg-green-500/10 rounded-lg">
-            <TrendingUp className="h-5 w-5 text-green-600" />
-          </div>
+    <Card className="border border-border bg-card">
+      <CardHeader className="pb-1 px-3 pt-2">
+        <CardTitle className="flex items-center gap-2">
+          <TrendingUp className="h-3 w-3 text-green-600" />
           <div>
-            <h3 className="text-lg font-semibold">趨勢分析與預測</h3>
-            <p className="text-sm text-muted-foreground font-normal">時間序列分析、同期比較與減排進度追蹤</p>
+            <h3 className="text-xs font-medium">趨勢分析與預測</h3>
+            <p className="text-[10px] text-muted-foreground">時間序列分析、同期比較與減排進度追蹤</p>
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <CardContent className="px-3 pb-2">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
           {/* 關鍵指標 */}
-          <div className="tight-spacing">
-            <div className="compact-card text-center border-l-4 border-l-green-500">
-              <div className="text-xl font-bold text-foreground">-8.5%</div>
-              <div className="text-sm text-muted-foreground">年度減排率</div>
+          <div className="space-y-1">
+            <div className="bg-green-50 border-l-2 border-green-500 p-1 text-center">
+              <div className="text-sm font-bold text-foreground">-8.5%</div>
+              <div className="text-[9px] text-muted-foreground">年度減排率</div>
             </div>
-            <div className="compact-card text-center border-l-4 border-l-blue-500">
-              <div className="text-xl font-bold text-foreground">76%</div>
-              <div className="text-sm text-muted-foreground">目標達成率</div>
+            <div className="bg-blue-50 border-l-2 border-blue-500 p-1 text-center">
+              <div className="text-sm font-bold text-foreground">76%</div>
+              <div className="text-[9px] text-muted-foreground">目標達成率</div>
             </div>
-            <div className="compact-card text-center border-l-4 border-l-orange-500">
-              <div className="text-xl font-bold text-foreground">-15%</div>
-              <div className="text-sm text-muted-foreground">預計年底減排</div>
+            <div className="bg-orange-50 border-l-2 border-orange-500 p-1 text-center">
+              <div className="text-sm font-bold text-foreground">-15%</div>
+              <div className="text-[9px] text-muted-foreground">預計年底減排</div>
             </div>
           </div>
 
           {/* 趨勢圖表 */}
           <div className="lg:col-span-3">
-            <div className="h-64">
+            <div className="h-48">
               {typeof window !== 'undefined' && (
                 <ReactApexChart 
                   options={chartOptions} 
                   series={trendData.series} 
                   type="line" 
-                  height={250} 
+                  height={180} 
                 />
               )}
             </div>
@@ -572,103 +563,382 @@ const TrendAnalysisPanel = ({ data, tWarRoom }: { data: any[], tWarRoom: any }) 
   );
 };
 
-// 5. 異常警示管理面板
-const AlertManagementPanel = ({ tWarRoom }: { tWarRoom: any }) => {
-  const alerts = [
-    {
-      id: 1,
-      supplier: '新竹物流',
-      type: 'anomaly',
-      severity: 'high',
-      message: '排放量較上月增長35%，超出預期範圍',
-      timestamp: new Date('2024-01-15T10:30:00'),
-      status: 'new'
-    },
-    {
-      id: 2,
-      supplier: '統一速達',
-      type: 'threshold',
-      severity: 'medium',
-      message: '範疇二排放量接近預設閾值',
-      timestamp: new Date('2024-01-14T14:22:00'),
-      status: 'investigating'
-    },
-    {
-      id: 3,
-      supplier: '台塑汽車貨運',
-      type: 'data_quality',
-      severity: 'low',
-      message: '數據完整度低於90%',
-      timestamp: new Date('2024-01-13T09:15:00'),
-      status: 'resolved'
-    }
-  ];
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'high': return 'text-red-600 bg-red-50 border-red-200';
-      case 'medium': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'new': return 'bg-red-100 text-red-800';
-      case 'investigating': return 'bg-yellow-100 text-yellow-800';
-      case 'resolved': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
+// 5. 合規與評比分析面板
+const CompliancePanel = ({ t }: { t: any }) => {
+  const complianceData = {
+    isoTotal: 20,
+    isoCompliant: 14,
+    esgTotal: 20,
+    esgGood: 8,
+    esgFair: 7,
+    esgPoor: 5
   };
 
   return (
-    <Card className="modern-card">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-3">
-          <div className="p-2 bg-red-500/10 rounded-lg">
-            <AlertCircle className="h-5 w-5 text-red-600" />
+    <Card className="border border-border bg-card">
+      <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+        <CardTitle className="text-xs font-medium text-foreground">
+          {t('compliance.title')}
+        </CardTitle>
+        <Shield className="h-3 w-3 text-blue-600" />
+      </CardHeader>
+      <CardContent className="px-3 pb-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{complianceData.isoCompliant}</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('compliance.isoCertification')}<br/>({complianceData.isoTotal}{t('overview.suppliers')})</div>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold">異常警示管理</h3>
-            <p className="text-sm text-muted-foreground font-normal">自動檢測異常排放模式與數據品質問題</p>
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{((complianceData.isoCompliant/complianceData.isoTotal)*100).toFixed(0)}%</div>
+            <div className="text-[10px] text-muted-foreground">{t('compliance.certificationRate')}</div>
           </div>
+        </div>
+        <div className="pt-2 border-t border-border">
+          <div className="text-[10px] text-muted-foreground mb-1">{t('compliance.esgRating')}</div>
+          <div className="grid grid-cols-3 gap-1 text-center">
+            <div className="bg-green-50 border-l-2 border-green-500 p-1">
+              <div className="text-xs font-bold text-foreground">{complianceData.esgGood}</div>
+              <div className="text-[9px] text-muted-foreground">{t('compliance.excellent')}</div>
+            </div>
+            <div className="bg-yellow-50 border-l-2 border-yellow-500 p-1">
+              <div className="text-xs font-bold text-foreground">{complianceData.esgFair}</div>
+              <div className="text-[9px] text-muted-foreground">{t('compliance.average')}</div>
+            </div>
+            <div className="bg-red-50 border-l-2 border-red-500 p-1">
+              <div className="text-xs font-bold text-foreground">{complianceData.esgPoor}</div>
+              <div className="text-[9px] text-muted-foreground">{t('compliance.needsImprovement')}</div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+// 6. 數據與覆蓋率分析面板
+const DataCoveragePanel = ({ stats, t }: { stats: any, t: any }) => {
+  const coverageData = {
+    emissionCoverage: 85.3,
+    financialCoverage: 78.2,
+    completedTasks: 156,
+    totalTasks: 200,
+    pendingTasks: 44
+  };
+
+  return (
+    <Card className="border border-border bg-card">
+      <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+        <CardTitle className="text-xs font-medium text-foreground">
+          {t('dataCoverage.title')}
+        </CardTitle>
+        <BarChart2 className="h-3 w-3 text-green-600" />
+      </CardHeader>
+      <CardContent className="px-3 pb-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{coverageData.emissionCoverage}%</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('dataCoverage.emissionData')}<br/>{t('dataCoverage.coverage')}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{coverageData.financialCoverage}%</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('dataCoverage.financialData')}<br/>{t('dataCoverage.coverage')}</div>
+          </div>
+        </div>
+        <div className="pt-2 border-t border-border">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[10px] text-muted-foreground">{t('dataCoverage.completeness')}</span>
+            <span className="text-xs font-medium text-foreground">
+              {coverageData.completedTasks}/{coverageData.totalTasks}
+            </span>
+          </div>
+          <div className="w-full bg-muted h-1 mb-1">
+            <div 
+              className="bg-green-500 h-1" 
+              style={{ width: `${(coverageData.completedTasks/coverageData.totalTasks)*100}%` }}
+            ></div>
+          </div>
+          <div className="text-[9px] text-muted-foreground">
+            {t('dataCoverage.pending')}: {coverageData.pendingTasks} 項目
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+// 7. 關鍵供應商與結構分析面板
+const KeySupplierStructurePanel = ({ stats, tWarRoom }: { stats: any, tWarRoom: any }) => {
+  const structureData = {
+    keySuppliers: Math.round(stats.orgCount * 0.2),
+    keyEmission: parseFloat(stats.orgTotalEmission) * 0.8,
+    smeCount: Math.round(stats.orgCount * 0.6),
+    agentCount: Math.round(stats.orgCount * 0.25),
+    directCount: Math.round(stats.orgCount * 0.15)
+  };
+
+  return (
+    <Card className="border border-border bg-card">
+      <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+        <CardTitle className="text-xs font-medium text-foreground">
+          關鍵供應商結構
+        </CardTitle>
+        <Users className="h-3 w-3 text-purple-600" />
+      </CardHeader>
+      <CardContent className="px-3 pb-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{structureData.keySuppliers}</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">關鍵供應商<br/>數量</div>
+                  </div>
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{structureData.keyEmission.toFixed(0)}</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">排放量<br/>(tCO2e)</div>
+                </div>
+              </div>
+        <div className="pt-2 border-t border-border">
+          <div className="text-[10px] text-muted-foreground mb-1">結構分布</div>
+          <div className="grid grid-cols-3 gap-1 text-center">
+            <div className="bg-blue-50 border-l-2 border-blue-500 p-1">
+              <div className="text-xs font-bold text-foreground">{structureData.smeCount}</div>
+              <div className="text-[9px] text-muted-foreground">中小企業</div>
+            </div>
+            <div className="bg-orange-50 border-l-2 border-orange-500 p-1">
+              <div className="text-xs font-bold text-foreground">{structureData.agentCount}</div>
+              <div className="text-[9px] text-muted-foreground">代理商</div>
+        </div>
+            <div className="bg-green-50 border-l-2 border-green-500 p-1">
+              <div className="text-xs font-bold text-foreground">{structureData.directCount}</div>
+              <div className="text-[9px] text-muted-foreground">直接供應</div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+// 8. 能源使用與細節分析面板
+const EnergyUsagePanel = ({ tWarRoom }: { tWarRoom: any }) => {
+  const energyData = {
+    renewableRate: 42.6,
+    totalEnergy: 1247,
+    renewableEnergy: 530,
+    gridEnergy: 717
+  };
+
+  return (
+    <Card className="border border-border bg-card">
+      <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+        <CardTitle className="text-xs font-medium text-foreground">
+          能源使用狀況
+        </CardTitle>
+        <Zap className="h-3 w-3 text-yellow-600" />
+      </CardHeader>
+      <CardContent className="px-3 pb-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{energyData.renewableRate}%</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">再生能源<br/>使用率</div>
+          </div>
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{energyData.totalEnergy}</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">總用電量<br/>(MWh)</div>
+          </div>
+        </div>
+        <div className="pt-2 border-t border-border">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[10px] text-muted-foreground">用電結構</span>
+            <button className="text-[9px] text-blue-600 hover:text-blue-800">檢視細項</button>
+          </div>
+          <div className="grid grid-cols-2 gap-1 text-center">
+            <div className="bg-green-50 border-l-2 border-green-500 p-1">
+              <div className="text-xs font-bold text-foreground">{energyData.renewableEnergy}</div>
+              <div className="text-[9px] text-muted-foreground">再生能源</div>
+            </div>
+            <div className="bg-gray-50 border-l-2 border-gray-500 p-1">
+              <div className="text-xs font-bold text-foreground">{energyData.gridEnergy}</div>
+              <div className="text-[9px] text-muted-foreground">電網用電</div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+// 篩選器元件
+const FilterPanel = ({ 
+  filters, 
+  onFiltersChange,
+  t 
+}: { 
+  filters: FilterState; 
+  onFiltersChange: (filters: FilterState) => void;
+  t: any;
+}) => {
+  return (
+    <Card className="border border-border bg-card">
+      <CardHeader className="pb-1 px-3 pt-2">
+        <CardTitle className="flex items-center gap-2">
+          <Filter className="h-3 w-3 text-primary" />
+          <span className="text-xs font-medium">{t('filters.title')}</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0">
-        <div className="tight-spacing">
-          {alerts.map((alert) => (
-            <div key={alert.id} className={`compact-card border-l-4 ${getSeverityColor(alert.severity).includes('red') ? 'border-l-red-500' : getSeverityColor(alert.severity).includes('orange') ? 'border-l-orange-500' : 'border-l-blue-500'}`}>
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="font-medium text-foreground">{alert.supplier}</span>
-                    <Badge className={getStatusColor(alert.status) + ' modern-badge'}>
-                      {alert.status === 'new' ? '新增' : 
-                       alert.status === 'investigating' ? '調查中' : '已處理'}
-                    </Badge>
-                    <Badge variant="outline" className="modern-badge text-xs">
-                      {alert.type === 'anomaly' ? '異常檢測' :
-                       alert.type === 'threshold' ? '閾值警告' : '數據品質'}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{alert.message}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {format(alert.timestamp, 'MM-dd HH:mm')}
-                  </p>
-                </div>
-                <Button variant="ghost" size="sm" className="compact-button h-8 w-8 p-0">
-                  <Eye className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          ))}
+      <CardContent className="px-3 pb-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 items-center">
+          
+          {/* 1. ISO認證狀態 */}
+          <div className="space-y-1 ">
+            <Label className="text-[10px] text-muted-foreground">{t('filters.isoStatus')}</Label>
+            <Select 
+              value={filters.isoStatus} 
+              onValueChange={(value: any) => onFiltersChange({...filters, isoStatus: value})}
+            >
+              <SelectTrigger className="h-7 text-[10px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('filters.all')}</SelectItem>
+                <SelectItem value="certified">{t('filters.certified')}</SelectItem>
+                <SelectItem value="non-certified">{t('filters.nonCertified')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* 2. 支出金額範圍 */}
+          <div className="space-y-1">
+            <Label className="text-[10px] text-muted-foreground">
+              {t('filters.spendingRange')} ({filters.spendingRange[0]}-{filters.spendingRange[1]}萬元)
+            </Label>
+            <Slider
+              value={filters.spendingRange}
+              onValueChange={(value: any) => onFiltersChange({...filters, spendingRange: value})}
+              max={1000}
+              min={0}
+              step={10}
+              className="w-full"
+            />
+          </div>
+
+          {/* 3. 排放量範圍 */}
+          <div className="space-y-1">
+            <Label className="text-[10px] text-muted-foreground">
+              {t('filters.emissionRange')} ({filters.emissionRange[0]}-{filters.emissionRange[1]} tCO2e)
+            </Label>
+            <Slider
+              value={filters.emissionRange}
+              onValueChange={(value: any) => onFiltersChange({...filters, emissionRange: value})}
+              max={5000}
+              min={0}
+              step={100}
+              className="w-full"
+            />
+          </div>
+
+          {/* 4. 減碳作為 */}
+          <div className="space-y-1">
+            <Label className="text-[10px] text-muted-foreground">{t('filters.carbonAction')}</Label>
+            <Select 
+              value={filters.carbonAction} 
+              onValueChange={(value: any) => onFiltersChange({...filters, carbonAction: value})}
+            >
+              <SelectTrigger className="h-7 text-[10px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('filters.all')}</SelectItem>
+                <SelectItem value="implemented">{t('filters.implemented')}</SelectItem>
+                <SelectItem value="planning">{t('filters.planning')}</SelectItem>
+                <SelectItem value="not-implemented">{t('filters.notImplemented')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* 5. 供應商類型 */}
+          <div className="space-y-1">
+            <Label className="text-[10px] text-muted-foreground">{t('filters.supplierType')}</Label>
+            <Select 
+              value={filters.supplierType} 
+              onValueChange={(value: any) => onFiltersChange({...filters, supplierType: value})}
+            >
+              <SelectTrigger className="h-7 text-[10px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('filters.all')}</SelectItem>
+                <SelectItem value="large-enterprise">{t('filters.largeEnterprise')}</SelectItem>
+                <SelectItem value="sme">{t('filters.sme')}</SelectItem>
+                <SelectItem value="agent">{t('filters.agent')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        
-        <div className="mt-4 pt-4 border-t border-border">
-          <div className="flex justify-between text-sm text-muted-foreground">
-            <span>活躍警示: <span className="font-medium text-red-600">2</span></span>
-            <span>本週已處理: <span className="font-medium text-green-600">5</span></span>
+
+        {/* 重置按鈕 */}
+        <div className="mt-2 pt-2 border-t border-border">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-6 text-[10px] px-2"
+            onClick={() => onFiltersChange({
+              isoStatus: 'all',
+              spendingRange: [0, 1000],
+              emissionRange: [0, 5000],
+              carbonAction: 'all',
+              supplierType: 'all'
+            })}
+          >
+            {t('filters.reset')}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+// 9. 減碳作為與成效分析面板
+const CarbonReductionPanel = ({ tWarRoom }: { tWarRoom: any }) => {
+  const reductionData = {
+    hasActionPlan: 12,
+    totalSuppliers: 20,
+    reductionTarget: -8.5,
+    actualReduction: -6.2,
+    estimatedSaving: 456.8
+  };
+
+  return (
+    <Card className="border border-border bg-card">
+      <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+        <CardTitle className="text-xs font-medium text-foreground">
+          減碳作為與成效
+        </CardTitle>
+        <TrendingDown className="h-3 w-3 text-green-600" />
+      </CardHeader>
+      <CardContent className="px-3 pb-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{reductionData.hasActionPlan}</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">有計畫<br/>供應商</div>
+          </div>
+          <div className="text-center">
+            <div className="text-sm font-bold text-foreground">{((reductionData.hasActionPlan/reductionData.totalSuppliers)*100).toFixed(0)}%</div>
+            <div className="text-[10px] text-muted-foreground">計畫覆蓋率</div>
+          </div>
+        </div>
+        <div className="pt-2 border-t border-border">
+          <div className="text-[10px] text-muted-foreground mb-1">成效追蹤</div>
+          <div className="grid grid-cols-2 gap-1 text-center">
+            <div className="bg-orange-50 border-l-2 border-orange-500 p-1">
+              <div className="text-xs font-bold text-foreground">{reductionData.reductionTarget}%</div>
+              <div className="text-[9px] text-muted-foreground">目標減排</div>
+            </div>
+            <div className="bg-blue-50 border-l-2 border-blue-500 p-1">
+              <div className="text-xs font-bold text-foreground">{reductionData.actualReduction}%</div>
+              <div className="text-[9px] text-muted-foreground">實際減排</div>
+            </div>
+          </div>
+          <div className="text-[9px] text-muted-foreground mt-1">
+            節省: {reductionData.estimatedSaving} tCO2e
           </div>
         </div>
       </CardContent>
@@ -686,6 +956,8 @@ export default function CarbonWarRoomPage({
   tWarRoom?: any, 
   tCommon?: any 
 }) {
+  // 翻譯Hook
+  const { t } = useTranslations('warRoom');
   // 數據源Hook
   const { 
     dataSource, 
@@ -699,12 +971,44 @@ export default function CarbonWarRoomPage({
   const [selectedYear, setSelectedYear] = useState<string | null>("2023");
   const [activeTab, setActiveTab] = useState<string>("overview");
   const [refreshing, setRefreshing] = useState(false);
+  
+  // 篩選器狀態
+  const [filters, setFilters] = useState<FilterState>({
+    isoStatus: 'all',
+    spendingRange: [0, 1000],
+    emissionRange: [0, 5000],
+    carbonAction: 'all',
+    supplierType: 'all'
+  });
 
   // 從surveyData分離組織和產品數據
   const organizationResponses = useMemo(() => 
     surveyData.filter(response => response.type === "organization"), 
     [surveyData]
   );
+
+  // 篩選邏輯
+  const filteredOrganizationResponses = useMemo(() => {
+    return organizationResponses.filter(response => {
+      // 模擬供應商數據（實際應從response中獲取）
+      const mockSupplierData = {
+        isoStatus: Math.random() > 0.3 ? 'certified' : 'non-certified',
+        spending: Math.floor(Math.random() * 1000),
+        emission: parseFloat(response.answers["排放量資料"]?.["總排放量"]?.split(" ")[0] || "0"),
+        carbonAction: ['implemented', 'planning', 'not-implemented'][Math.floor(Math.random() * 3)],
+        supplierType: ['large-enterprise', 'sme', 'agent'][Math.floor(Math.random() * 3)]
+      };
+
+      // 應用篩選條件
+      if (filters.isoStatus !== 'all' && mockSupplierData.isoStatus !== filters.isoStatus) return false;
+      if (mockSupplierData.spending < filters.spendingRange[0] || mockSupplierData.spending > filters.spendingRange[1]) return false;
+      if (mockSupplierData.emission < filters.emissionRange[0] || mockSupplierData.emission > filters.emissionRange[1]) return false;
+      if (filters.carbonAction !== 'all' && mockSupplierData.carbonAction !== filters.carbonAction) return false;
+      if (filters.supplierType !== 'all' && mockSupplierData.supplierType !== filters.supplierType) return false;
+
+      return true;
+    });
+  }, [organizationResponses, filters]);
 
   // 計算統計數據
   const stats = useMemo(() => {
@@ -739,8 +1043,8 @@ export default function CarbonWarRoomPage({
       };
     };
 
-    return calculateStats(surveyData, selectedYear);
-  }, [surveyData, selectedYear]);
+    return calculateStats(filteredOrganizationResponses, selectedYear);
+  }, [filteredOrganizationResponses, selectedYear]);
 
   // 處理數據刷新
   const handleRefresh = async () => {
@@ -757,23 +1061,20 @@ export default function CarbonWarRoomPage({
     <div className="min-h-screen bg-background">
       <div className="compact-container max-w-7xl mx-auto">
         {/* 頁面標題與控制項 */}
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-5">
+        <div className="flex flex-col lg:flex-row lg:justify-start lg:items-center gap-4 mb-5">
           <div className="flex items-center gap-4">
       
             <div>
-
-
-            
-              <h2 className="  text-xl font-bold tracking-tight">碳排放戰情室</h2>
-              <p className="text-sm text-muted-foreground">
+              {/* <h5 className="  text-md  tracking-tight">Carbon War Room</h5> */}
+              {/* <p className="text-sm text-muted-foreground">
                 實時監控供應鏈碳排放狀況，智能分析減碳機會與風險
-              </p>
+              </p> */}
             </div>
           </div>
           
           <div className="flex items-center gap-3">
             {/* 數據源選擇 */}
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <label className="text-sm font-medium text-muted-foreground">數據源</label>
               <Select value={dataSource} onValueChange={switchDataSource}>
                 <SelectTrigger className="w-[140px] h-9 modern-input">
@@ -787,11 +1088,11 @@ export default function CarbonWarRoomPage({
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
 
             {/* 年份選擇 */}
             <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-muted-foreground">年度</label>
+              {/* <label className="text-sm font-medium text-muted-foreground">年度</label> */}
               <Select value={selectedYear || "all"} onValueChange={(value) => setSelectedYear(value === "all" ? null : value)}>
                 <SelectTrigger className="w-[120px] h-9 modern-input">
                   <SelectValue />
@@ -799,7 +1100,7 @@ export default function CarbonWarRoomPage({
                 <SelectContent>
                   <SelectItem value="all">所有年份</SelectItem>
                   {availableYears.map(year => (
-                    <SelectItem key={year} value={year}>{year}年</SelectItem>
+                    <SelectItem key={year} value={year}>{year}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -814,7 +1115,7 @@ export default function CarbonWarRoomPage({
               className="compact-button"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-              刷新
+               
             </Button>
           </div>
         </div>
@@ -823,74 +1124,114 @@ export default function CarbonWarRoomPage({
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="modern-tabs h-auto p-1 grid w-full grid-cols-3 lg:grid-cols-5 gap-1">
             <TabsTrigger value="overview" className="modern-tab">
-              <span className="hidden sm:inline">總覽儀表板</span>
-              <span className="sm:hidden">總覽</span>
+              <span className="hidden sm:inline">{t('tabs.overview')}</span>
+              <span className="sm:hidden">{t('tabs.overviewShort')}</span>
             </TabsTrigger>
             <TabsTrigger value="hotspot" className="modern-tab">
-              <span className="hidden sm:inline">熱點分析</span>
-              <span className="sm:hidden">熱點</span>
+              <span className="hidden sm:inline">{t('tabs.hotspot')}</span>
+              <span className="sm:hidden">{t('tabs.hotspotShort')}</span>
             </TabsTrigger>
             <TabsTrigger value="trend" className="modern-tab">
-              <span className="hidden sm:inline">趨勢分析</span>
-              <span className="sm:hidden">趨勢</span>
+              <span className="hidden sm:inline">{t('tabs.trend')}</span>
+              <span className="sm:hidden">{t('tabs.trendShort')}</span>
             </TabsTrigger>
             <TabsTrigger value="simulation" className="modern-tab">
-              <span className="hidden sm:inline">情境模擬</span>
-              <span className="sm:hidden">模擬</span>
+              <span className="hidden sm:inline">{t('tabs.simulation')}</span>
+              <span className="sm:hidden">{t('tabs.simulationShort')}</span>
             </TabsTrigger>
             <TabsTrigger value="benchmarking" className="modern-tab">
-              <span className="hidden sm:inline">基準比較</span>
-              <span className="sm:hidden">基準</span>
+              <span className="hidden sm:inline">{t('tabs.benchmarking')}</span>
+              <span className="sm:hidden">{t('tabs.benchmarkingShort')}</span>
             </TabsTrigger>
+
+            
           </TabsList>
 
           {/* 總覽頁籤 */}
-          <TabsContent value="overview" className="mt-4 space-y-4">
+          <TabsContent value="overview" className="mt-2 space-y-2">
+            {/* 篩選器 */}
+            <FilterPanel filters={filters} onFiltersChange={setFilters} t={t} />
+            
             {/* 核心KPI儀表板 */}
             <CarbonOverviewDashboard 
               stats={stats} 
               selectedYear={selectedYear} 
-              tWarRoom={tWarRoom} 
+              t={t} 
             />
 
-            {/* 關鍵分析區塊 */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <AlertManagementPanel tWarRoom={tWarRoom} />
-              <div className="lg:col-span-2">
-                <TrendAnalysisPanel data={organizationResponses} tWarRoom={tWarRoom} />
+            {/* 新的分析維度區塊 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              <CompliancePanel t={t} />
+              <DataCoveragePanel stats={stats} t={t} />
+              <KeySupplierStructurePanel stats={stats} tWarRoom={tWarRoom} />
+              <EnergyUsagePanel tWarRoom={tWarRoom} />
+              <CarbonReductionPanel tWarRoom={tWarRoom} />
+              <Card className="border border-border bg-card">
+                <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
+                  <CardTitle className="text-xs font-medium text-foreground">
+                    支出與排碳分析
+                  </CardTitle>
+                  <Globe className="h-3 w-3 text-indigo-600" />
+                </CardHeader>
+                <CardContent className="px-3 pb-2">
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-foreground">456.8K</div>
+                      <div className="text-[10px] text-muted-foreground leading-tight">總支出<br/>(萬元)</div>
               </div>
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-foreground">892</div>
+                      <div className="text-[10px] text-muted-foreground leading-tight">推估排碳<br/>(tCO2e)</div>
+                    </div>
+                  </div>
+                  <div className="pt-2 border-t border-border">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-[10px] text-muted-foreground">Cat 1-8分類</span>
+                      <button className="text-[9px] text-blue-600 hover:text-blue-800">檢視分類</button>
+                    </div>
+                    <div className="text-[9px] text-muted-foreground">
+                      已分類: 85% | 待分類: 15%
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* 趨勢分析區塊 */}
+            <div className="mt-3">
+              <TrendAnalysisPanel data={filteredOrganizationResponses} tWarRoom={tWarRoom} />
             </div>
           </TabsContent>
 
           {/* 熱點分析頁籤 */}
-          <TabsContent value="hotspot" className="mt-4 space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <TabsContent value="hotspot" className="mt-2 space-y-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
               {/* 帕雷托分析 */}
-              <ParetoAnalysisWidget 
-                organizationResponses={organizationResponses}
-                selectedYear={selectedYear}
-                tWarRoom={tWarRoom}
-              />
+            <ParetoAnalysisWidget 
+                organizationResponses={filteredOrganizationResponses}
+              selectedYear={selectedYear}
+              tWarRoom={tWarRoom}
+            />
               {/* 地理熱點分析 */}
-              <HotspotMapComponent 
-                supplierData={organizationResponses}
-                tWarRoom={tWarRoom}
-              />
+            <HotspotMapComponent 
+                supplierData={filteredOrganizationResponses}
+              tWarRoom={tWarRoom}
+            />
             </div>
           </TabsContent>
 
           {/* 趨勢分析頁籤 */}
-          <TabsContent value="trend" className="mt-4 space-y-4">
-            <TrendAnalysisPanel data={organizationResponses} tWarRoom={tWarRoom} />
+          <TabsContent value="trend" className="mt-2 space-y-2">
+            <TrendAnalysisPanel data={filteredOrganizationResponses} tWarRoom={tWarRoom} />
           </TabsContent>
 
           {/* 情境模擬頁籤 */}
-          <TabsContent value="simulation" className="mt-4 space-y-4">
+          <TabsContent value="simulation" className="mt-2 space-y-2">
             <ScenarioSimulator tWarRoom={tWarRoom} />
           </TabsContent>
 
           {/* 基準比較頁籤 */}
-          <TabsContent value="benchmarking" className="mt-4 space-y-4">
+          <TabsContent value="benchmarking" className="mt-2 space-y-2">
             <BenchmarkingModule tWarRoom={tWarRoom} />
           </TabsContent>
         </Tabs>
@@ -901,7 +1242,7 @@ export default function CarbonWarRoomPage({
             <div className="flex flex-wrap items-center gap-3">
               <span>更新時間: {format(new Date(), 'MM-dd HH:mm')}</span>
               <span className="hidden sm:inline">•</span>
-              <span>供應商: {stats.orgCount}家</span>
+              <span>篩選結果: {filteredOrganizationResponses.length}/{organizationResponses.length}家</span>
               <span className="hidden sm:inline">•</span>
               <span>覆蓋率: {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}%</span>
             </div>

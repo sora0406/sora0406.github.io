@@ -392,7 +392,7 @@ export default function ResponsesPage({ t }: { t?: any }) {
               : t?.('responses_for_all_requests') || `所有要求的回應`}
           </p>
         </div>
-        <div className="ml-auto">
+        {/* <div className="ml-auto">
           <Select value={caseType} onValueChange={(value: "default" | "tsmc") => setCaseType(value)}>
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="選擇 Case" />
@@ -405,7 +405,7 @@ export default function ResponsesPage({ t }: { t?: any }) {
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
       </div>
       
       {/* 狀態統計卡片 */}

@@ -34,23 +34,24 @@ const initialColumns: Columns = {
     id: "not-started",
     title: "To Do",
     color: "bg-gray-500/10 text-gray-500",
-    items: [
-      {
-        id: "task-1",
-        title: "Organizational GHG Inventory Project",
-        description: "Build a database covering Scope 1, Scope 2, and Scope 3 (Cat.1–8) emissions, while collecting Scope 1 & 2 activity data and renewable energy usage, to ensure completeness and traceability of organizational GHG inventory.",
-        dueDate: "2024-04-15",
-        assignee: "Amy",
-        priority: "High",
-      },
-      {
-        id: "task-2",
-        title: "Product Carbon Footprint Project",
-        description: "Collect emission factors and supplier-measured data for major raw materials (aluminum, copper, plastics) corresponding to the LCA raw material stage; analyze manufacturing energy use, yield, and renewable energy share to create unit process emission lists that support multi-product and multi-site carbon footprint calculations.",
-        dueDate: "2024-04-20",
-        assignee: "Molly",
-        priority: "Medium",
-      },
+    items: [ 
+    {
+      id: "task-5",
+      title: "Supplier Decarbonization Commitment Tracking Project",
+      description: "Systematically track suppliers’ decarbonization commitments and progress to align with the company’s pathway.",
+      dueDate: "2024-04-15",
+      assignee: "Amy",
+      priority: "High",
+    },
+    {
+      id: "task-6",
+      title: "Key Supplier Decarbonization Program",
+      description: "Focus on top 20 suppliers to drive renewable energy, process improvements, and material substitution, with scenario modeling for reduction potential.",
+      dueDate: "2024-04-20",
+      assignee: "Molly",
+      priority: "Medium",
+    },
+    
     ],
   },
   "in-progress": {
@@ -61,7 +62,7 @@ const initialColumns: Columns = {
       {
         id: "task-3",
         title: "Supply Chain Renewable Energy Tracking Project",
-        description: "Consolidate suppliers’ renewable energy usage ratio and sources (self-generation, direct purchase, green electricity/certificates), recording supporting evidence (certificate ID, validity period, region) to establish measurable renewable energy coverage indicators.",
+        description: "Aggregate suppliers’ renewable energy ratios, sources, and certificates to build measurable coverage indicators.",
         dueDate: "2024-04-10",
         assignee: "Lily",
         priority: "High",
@@ -72,15 +73,31 @@ const initialColumns: Columns = {
     id: "completed",
     title: "completed",
     color: "bg-green-500/10 text-green-500",
-    items: [
+    items: [    {
+      id: "task-1",
+      title: "Organizational GHG Inventory Project",
+      description: "Build a Scope 1–3 emissions database with activity data and renewable energy usage to ensure completeness and traceability.",
+      dueDate: "2024-04-15",
+      assignee: "Amy",
+      priority: "High",
+    },
+    {
+      id: "task-2",
+      title: "Product Carbon Footprint Project",
+      description: "Integrate raw material emission factors and process energy data to create unit process lists for multi-product and multi-site carbon footprinting.",
+      dueDate: "2024-04-20",
+      assignee: "Molly",
+      priority: "Medium",
+    },
       {
         id: "task-4",
         title: "PACT Data Exchange Project",
-        description: "Organize key PCF data fields (boundaries, methodology, allocation, data sources, QA status) in line with PACT 3.x standards, and conduct data exchange and verification with upstream customers and suppliers to enhance transparency and consistency.",
+        description: "Align key PCF data fields with PACT 3.x and conduct exchange/verification with value chain partners to enhance transparency and consistency.",
         dueDate: "2024-03-25",
         assignee: "Tony",
         priority: "High",
       },
+  
     ],
   },
 }

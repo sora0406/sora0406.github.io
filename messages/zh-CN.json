@@ -326,5 +326,73 @@
     "history": "问卷历史",
     "edit": "编辑问卷",
     "details": "问卷详情"
+  },
+  "warRoom": {
+    "title": "碳排放战情室",
+    "subtitle": "实时监控供应链碳排放状况，智能分析减碳机会与风险",
+    "tabs": {
+      "overview": "总览仪表板",
+      "overviewShort": "总览",
+      "hotspot": "热点分析",
+      "hotspotShort": "热点",
+      "trend": "趋势分析",
+      "trendShort": "趋势",
+      "simulation": "情境模拟",
+      "simulationShort": "模拟",
+      "benchmarking": "基准比较",
+      "benchmarkingShort": "基准"
+    },
+    "filters": {
+      "title": "筛选条件",
+      "isoStatus": "ISO认证状态",
+      "spendingRange": "支出金额范围",
+      "emissionRange": "排放量范围",
+      "carbonAction": "减碳作为",
+      "supplierType": "供应商类型",
+      "all": "全部",
+      "certified": "已认证",
+      "nonCertified": "未认证",
+      "implemented": "已执行",
+      "planning": "规划中",
+      "notImplemented": "未执行",
+      "largeEnterprise": "大型企业",
+      "sme": "中小企业",
+      "agent": "代理商",
+      "reset": "重置筛选"
+    },
+    "overview": {
+      "carbonAnalysis": "碳排放量分析",
+      "scope1": "范畴1",
+      "scope2": "范畴2",
+      "scope3": "范畴3",
+      "totalEmissions": "总排放量",
+      "supplierOverview": "供应商概况",
+      "keySuppliers": "关键供应商",
+      "totalSuppliers": "总供应商数",
+      "coverage": "覆盖率",
+      "performanceMetrics": "排放绩效指标",
+      "avgIntensity": "平均强度",
+      "perSupplier": "家",
+      "percentage": "占比",
+      "reductionTarget": "减排目标",
+      "suppliers": "家"
+    },
+    "compliance": {
+      "title": "合规与评比状况",
+      "isoCertification": "ISO认证",
+      "certificationRate": "认证比率",
+      "esgRating": "ESG评比状况",
+      "excellent": "优良",
+      "average": "普通",
+      "needsImprovement": "待改善"
+    },
+    "dataCoverage": {
+      "title": "数据覆盖率",
+      "emissionData": "排放数据",
+      "financialData": "金额数据",
+      "coverage": "覆盖率",
+      "completeness": "完成度",
+      "pending": "待完成项目"
+    }
   }
 } 

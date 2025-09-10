@@ -42,7 +42,7 @@
     "data_requests": "Data Requests",
     "questionnaires": "Questionnaire Tracking",
     "war_room": {
-      "title": "War Room"
+      "title": "Carbon War Room"
     },
     "organization_short": "Structure",
     "roles_short": "Roles",
@@ -50,7 +50,7 @@
     "suppliers_short": "Suppliers",
     "data_requests_short": "Data Requests",
     "questionnaires_short": "Questionnaires",
-    "war_room_short": "War Room"
+    "war_room_short": "Carbon War Room"
   },
   "buttons": {
     "create": "Create",
@@ -265,7 +265,7 @@
     "details": "Survey Details"
   },
   "war_room": {
-    "title": "War Room",
+    "title": "Carbon War Room",
     "export": "Export Data",
     "subtitle": "Carbon Emissions Data Overview",
     "supplier_carbon_data": "Supplier Carbon Emission Data",
@@ -325,6 +325,74 @@
       "emission_unit": "Emissions (tCO2e)",
       "organization_emission": "Organization GHG Emissions (tCO2e)",
       "product_footprint": "Product Carbon Footprint (kgCO2e)"
+    }
+  },
+  "warRoom": {
+    "title": "Carbon War Room",
+    "subtitle": "Real-time monitoring of supply chain carbon emissions, intelligent analysis of carbon reduction opportunities and risks",
+    "tabs": {
+      "overview": "Overview Dashboard",
+      "overviewShort": "Overview",
+      "hotspot": "Hotspot Analysis",
+      "hotspotShort": "Hotspot",
+      "trend": "Trend Analysis",
+      "trendShort": "Trend",
+      "simulation": "Scenario Simulation",
+      "simulationShort": "Simulation",
+      "benchmarking": "Benchmarking",
+      "benchmarkingShort": "Benchmark"
+    },
+    "filters": {
+      "title": "Filter Criteria",
+      "isoStatus": "ISO Certification Status",
+      "spendingRange": "Spending Range",
+      "emissionRange": "Emission Range",
+      "carbonAction": "Carbon Reduction Actions",
+      "supplierType": "Supplier Type",
+      "all": "All",
+      "certified": "Certified",
+      "nonCertified": "Non-certified",
+      "implemented": "Implemented",
+      "planning": "Planning",
+      "notImplemented": "Not Implemented",
+      "largeEnterprise": "Large Enterprise",
+      "sme": "SME",
+      "agent": "Agent",
+      "reset": "Reset Filters"
+    },
+    "overview": {
+      "carbonAnalysis": "Carbon Emission Analysis",
+      "scope1": "Scope 1",
+      "scope2": "Scope 2",
+      "scope3": "Scope 3",
+      "totalEmissions": "Total Emissions",
+      "supplierOverview": "Supplier Overview",
+      "keySuppliers": "Key Suppliers",
+      "totalSuppliers": "Total Suppliers",
+      "coverage": "Coverage",
+      "performanceMetrics": "Performance Metrics",
+      "avgIntensity": "Avg Intensity",
+      "perSupplier": "suppliers",
+      "percentage": "Percentage",
+      "reductionTarget": "Reduction Target",
+      "suppliers": "suppliers"
+    },
+    "compliance": {
+      "title": "Compliance & Rating Status",
+      "isoCertification": "ISO Certification",
+      "certificationRate": "Certification Rate",
+      "esgRating": "ESG Rating Status",
+      "excellent": "Excellent",
+      "average": "Average",
+      "needsImprovement": "Needs Improvement"
+    },
+    "dataCoverage": {
+      "title": "Data Coverage",
+      "emissionData": "Emission Data",
+      "financialData": "Financial Data",
+      "coverage": "Coverage",
+      "completeness": "Completeness",
+      "pending": "Pending items"
     }
   }
 } 
