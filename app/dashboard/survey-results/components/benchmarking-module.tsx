@@ -14,10 +14,10 @@ import { ApexOptions } from 'apexcharts'
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface BenchmarkingModuleProps {
-  tWarRoom?: any;
+  t?: (key: string, params?: Record<string, string | number>) => string;
 }
 
-export default function BenchmarkingModule({ tWarRoom }: BenchmarkingModuleProps) {
+export default function BenchmarkingModule({ t }: BenchmarkingModuleProps) {
   const [selectedIndustry, setSelectedIndustry] = useState<string>("logistics");
   const [selectedRegion, setSelectedRegion] = useState<string>("taiwan");
   const [selectedSize, setSelectedSize] = useState<string>("medium");

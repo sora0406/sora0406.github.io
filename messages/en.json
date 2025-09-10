@@ -269,7 +269,33 @@
     "export": "Export Data",
     "subtitle": "Carbon Emissions Data Overview",
     "supplier_carbon_data": "Supplier Carbon Emission Data",
-    "overview": "Data Overview",
+    "overview": {
+      "carbonAnalysis": "Carbon Emission Analysis",
+      "scope1": "Scope 1",
+      "scope2": "Scope 2",
+      "scope3": "Scope 3",
+      "totalEmissions": "Total Emissions",
+      "supplierOverview": "Supplier Overview",
+      "keySuppliers": "Key Suppliers",
+      "totalSuppliers": "Total Suppliers",
+      "coverage": "Coverage",
+      "performanceMetrics": "Performance Metrics",
+      "avgIntensity": "Avg Intensity",
+      "perSupplier": "suppliers",
+      "percentage": "Percentage",
+      "reductionTarget": "Reduction Target",
+      "suppliers": "suppliers",
+      "energyUsageStatus": "Energy Usage Status",
+      "totalElectricityConsumption": "Total Electricity Consumption",
+      "renewableEnergy": "Renewable Energy",
+      "gridEnergy": "Grid Electricity",
+      "electricityStructure": "Electricity Mix",
+      "viewDetails": "View Details",
+      "expenditureAndEmissionAnalysis": "Expenditure and Emission Analysis",
+      "renewableRate": "Renewable Rate",
+      "carbonReductionMeasuresAndEffectiveness": "Carbon Reduction Measures and Effectiveness"
+
+    },
     "statistics": {
       "total_responses": "Total Responses",
       "carbon_footprint": "Total Product Carbon Footprint",
@@ -307,29 +333,11 @@
       "no_data": "No matching data found",
       "view_survey": "View"
     },
-    "filters": {
-      "search": "Search suppliers...",
-      "display_fields": "Display Fields",
-      "select_fields": "Select fields to display",
-      "toggle_date": "Show Date",
-      "hide_date": "Hide Date",
-      "export": "Export"
-    },
+ 
     "chart_options": {
       "suppliers": "Suppliers",
       "map": "Map"
     },
-    "tags": {
-      "all_years": "All Years Data",
-      "data_year": "{{year}} Data",
-      "emission_unit": "Emissions (tCO2e)",
-      "organization_emission": "Organization GHG Emissions (tCO2e)",
-      "product_footprint": "Product Carbon Footprint (kgCO2e)"
-    }
-  },
-  "warRoom": {
-    "title": "Carbon War Room",
-    "subtitle": "Real-time monitoring of supply chain carbon emissions, intelligent analysis of carbon reduction opportunities and risks",
     "tabs": {
       "overview": "Overview Dashboard",
       "overviewShort": "Overview",
@@ -343,6 +351,12 @@
       "benchmarkingShort": "Benchmark"
     },
     "filters": {
+      "search": "Search suppliers...",
+      "display_fields": "Display Fields",
+      "select_fields": "Select fields to display",
+      "toggle_date": "Show Date",
+      "hide_date": "Hide Date",
+      "export": "Export",
       "title": "Filter Criteria",
       "isoStatus": "ISO Certification Status",
       "spendingRange": "Spending Range",
@@ -360,23 +374,6 @@
       "agent": "Agent",
       "reset": "Reset Filters"
     },
-    "overview": {
-      "carbonAnalysis": "Carbon Emission Analysis",
-      "scope1": "Scope 1",
-      "scope2": "Scope 2",
-      "scope3": "Scope 3",
-      "totalEmissions": "Total Emissions",
-      "supplierOverview": "Supplier Overview",
-      "keySuppliers": "Key Suppliers",
-      "totalSuppliers": "Total Suppliers",
-      "coverage": "Coverage",
-      "performanceMetrics": "Performance Metrics",
-      "avgIntensity": "Avg Intensity",
-      "perSupplier": "suppliers",
-      "percentage": "Percentage",
-      "reductionTarget": "Reduction Target",
-      "suppliers": "suppliers"
-    },
     "compliance": {
       "title": "Compliance & Rating Status",
       "isoCertification": "ISO Certification",
@@ -393,6 +390,16 @@
       "coverage": "Coverage",
       "completeness": "Completeness",
       "pending": "Pending items"
+    },
+    "status": {
+      "filterResults": "Filter Results"
+    },
+    "tags": {
+      "all_years": "All Years Data",
+      "data_year": "{{year}} Data",
+      "emission_unit": "Emissions (tCO2e)",
+      "organization_emission": "Organization GHG Emissions (tCO2e)",
+      "product_footprint": "Product Carbon Footprint (kgCO2e)"
     }
   }
 } 

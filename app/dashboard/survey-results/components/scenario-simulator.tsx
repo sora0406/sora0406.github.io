@@ -16,10 +16,10 @@ import { ApexOptions } from 'apexcharts'
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface ScenarioSimulatorProps {
-  tWarRoom?: any;
+  t?: (key: string, params?: Record<string, string | number>) => string;
 }
 
-export default function ScenarioSimulator({ tWarRoom }: ScenarioSimulatorProps) {
+export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
   const [scenarioType, setScenarioType] = useState<string>("aggressive_reduction");
   const [targetYear, setTargetYear] = useState<number>(2030);
   const [reductionTarget, setReductionTarget] = useState<number[]>([50]);

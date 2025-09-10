@@ -46,11 +46,11 @@ import BenchmarkingModule from "./components/benchmarking-module"
 
 // 篩選器介面定義
 interface FilterState {
-  isoStatus: 'all' | 'certified' | 'non-certified'; // ISO認證狀態
-  spendingRange: [number, number]; // 支出金額範圍
-  emissionRange: [number, number]; // 排放量範圍 (tCO2e)
-  carbonAction: 'all' | 'implemented' | 'planning' | 'not-implemented'; // 減碳作為
-  supplierType: 'all' | 'large-enterprise' | 'sme' | 'agent'; // 供應商類型
+  isoStatus: 'all' | 'certified' | 'non-certified'; // {t('compliance.isoCertification')}狀態
+  spendingRange: [number, number]; // {t('filters.spendingRange')}
+  emissionRange: [number, number]; // {t('filters.emissionRange')} (tCO2e)
+  carbonAction: 'all' | 'implemented' | 'planning' | 'not-implemented'; // {t('filters.carbonAction')}
+  supplierType: 'all' | 'large-enterprise' | 'sme' | 'agent'; // {t('filters.supplierType')}
 }
 
 interface CarbonOverviewProps {
@@ -59,15 +59,15 @@ interface CarbonOverviewProps {
   tWarRoom: any;
 }
 
-// 1. 碳排放總覽儀表板元件
+// 1. 碳排放{t('tabs.overview')}元件
 const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selectedYear: string | null; t: any }) => {
-  // 模擬範疇1-3排放量數據（實際應從stats中計算）
+  // {t('tabs.simulationShort')}{t('overview.scope1')}-3排放量數據（實際應從stats中計算）
   const scopeEmissions = useMemo(() => {
     const totalEmission = parseFloat(stats.orgTotalEmission) || 0;
     return {
-      scope1: (totalEmission * 0.35).toFixed(1), // 範疇1約35%
-      scope2: (totalEmission * 0.45).toFixed(1), // 範疇2約45%
-      scope3: (totalEmission * 0.20).toFixed(1)  // 範疇3約20%
+      scope1: (totalEmission * 0.35).toFixed(1), // {t('overview.scope1')}約35%
+      scope2: (totalEmission * 0.45).toFixed(1), // {t('overview.scope2')}約45%
+      scope3: (totalEmission * 0.20).toFixed(1)  // {t('overview.scope3')}約20%
     };
   }, [stats.orgTotalEmission]);
 
@@ -75,7 +75,7 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
     <div className="space-y-3 mb-3">
       {/* 整合的核心指標區塊 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-        {/* 整合的範疇1-3排放量 */}
+        {/* 整合的{t('overview.scope1')}-3排放量 */}
         <Card className="border border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
             <CardTitle className="text-xs font-medium text-foreground">
@@ -107,7 +107,7 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
         </CardContent>
       </Card>
 
-        {/* 整合的關鍵供應商與數據覆蓋率 */}
+        {/* 整合的{t('overview.keySuppliers')}與數據{t('overview.coverage')} */}
         <Card className="border border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
             <CardTitle className="text-xs font-medium text-foreground">
@@ -137,7 +137,7 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
         </CardContent>
       </Card>
 
-        {/* 排放績效指標 */}
+        {/* {t('overview.performanceMetrics')} */}
         <Card className="border border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
             <CardTitle className="text-xs font-medium text-foreground">
@@ -151,7 +151,7 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
                 <div className="text-sm font-bold text-foreground">
             {stats.orgCount > 0 ? (parseFloat(stats.orgTotalEmission) / stats.orgCount).toFixed(1) : '0'} 
           </div>
-                <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.avgIntensity')}<br/>(tCO2e/{t('overview.perSupplier')})</div>
+                <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.avgIntensity')}<br/>(tCO2e/{t('overview.suppliers')})</div>
               </div>
               <div className="text-center">
                 <div className="text-sm font-bold text-foreground">
@@ -176,11 +176,11 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
 interface ParetoAnalysisProps {
   organizationResponses: any[];
   selectedYear: string | null;
-  tWarRoom: any;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 // 2. 帕雷托分析元件
-const ParetoAnalysisWidget = ({ organizationResponses, selectedYear, tWarRoom }: ParetoAnalysisProps) => {
+const ParetoAnalysisWidget = ({ organizationResponses, selectedYear, t }: ParetoAnalysisProps) => {
   const paretoData = useMemo(() => {
     const filteredData = selectedYear 
       ? organizationResponses.filter(r => r.answers["基本資訊"]?.["盤查期間"]?.includes(`${selectedYear}年`))
@@ -246,19 +246,19 @@ const ParetoAnalysisWidget = ({ organizationResponses, selectedYear, tWarRoom }:
     yaxis: [
       {
         title: {
-          text: '排放量 (tCO2e)'
+          text: t('overview.totalEmissions') + ' (tCO2e)'
         }
       },
       {
         opposite: true,
         title: {
-          text: '累積百分比 (%)'
+          text: t('overview.percentage') + ' (%)'
         },
         max: 100
       }
     ],
     title: {
-      text: '供應商碳排放帕雷托分析',
+      text: t('tabs.hotspot'),
       align: 'center',
       style: {
         fontSize: '14px',
@@ -291,8 +291,8 @@ const ParetoAnalysisWidget = ({ organizationResponses, selectedYear, tWarRoom }:
         <CardTitle className="flex items-center gap-2">
           <BarChart3 className="h-3 w-3 text-primary" />
           <div>
-            <h3 className="text-xs font-medium">供應商排放熱點</h3>
-            <p className="text-[10px] text-muted-foreground">20/80法則識別關鍵供應商</p>
+            <h3 className="text-xs font-medium">{t('tabs.hotspot')}</h3>
+            <p className="text-[10px] text-muted-foreground">20/80法則識別{t('overview.keySuppliers')}</p>
           </div>
         </CardTitle>
       </CardHeader>
@@ -301,7 +301,7 @@ const ParetoAnalysisWidget = ({ organizationResponses, selectedYear, tWarRoom }:
         <div className="grid grid-cols-3 gap-1 mb-2">
           <div className="bg-blue-50 border-l-2 border-blue-500 p-1 text-center">
             <div className="text-sm font-bold text-foreground">{keySuppliers.length}</div>
-            <div className="text-[9px] text-muted-foreground">關鍵供應商</div>
+            <div className="text-[9px] text-muted-foreground">{t('overview.keySuppliers')}</div>
             </div>
           <div className="bg-orange-50 border-l-2 border-orange-500 p-1 text-center">
             <div className="text-sm font-bold text-foreground">{keyEmissionPercentage.toFixed(1)}%</div>
@@ -348,8 +348,8 @@ const ParetoAnalysisWidget = ({ organizationResponses, selectedYear, tWarRoom }:
   );
 };
 
-// 3. 熱點地圖元件 (簡化版)
-const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], tWarRoom: any }) => {
+// 3. {t('tabs.hotspotShort')}地圖元件 (簡化版)
+const HotspotMapComponent = ({ supplierData, t }: { supplierData: any[], t: (key: string, params?: Record<string, string | number>) => string }) => {
   const regionData = useMemo(() => {
     const regions = [
       { name: '北部', count: 8, emission: 25600, risk: 'high' },
@@ -367,8 +367,8 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
         <CardTitle className="flex items-center gap-2">
           <MapPin className="h-3 w-3 text-green-600" />
           <div>
-            <h3 className="text-xs font-medium">地理熱點分析</h3>
-            <p className="text-[10px] text-muted-foreground">供應商地理分布與排放量熱點識別</p>
+            <h3 className="text-xs font-medium">地理{t('tabs.hotspot')}</h3>
+            <p className="text-[10px] text-muted-foreground">供應商地理分布與排放量{t('tabs.hotspotShort')}識別</p>
           </div>
         </CardTitle>
       </CardHeader>
@@ -385,7 +385,7 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
                 strokeWidth="1"
               />
               
-              {/* 區域熱點標記 */}
+              {/* 區域{t('tabs.hotspotShort')}標記 */}
               {regionData.map((region, index) => {
                 const positions = [
                   { x: 180, y: 130 }, // 北部
@@ -444,7 +444,7 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
           {regionData.map((region) => (
             <div key={region.name} className="bg-muted/30 p-1 text-center">
               <div className="text-[10px] font-medium text-foreground">{region.name}</div>
-              <div className="text-[9px] text-muted-foreground">{region.count} 家</div>
+              <div className="text-[9px] text-muted-foreground">{region.count} {t('overview.suppliers')}</div>
               <div className="text-[8px] text-muted-foreground">{region.emission.toFixed(0)} tCO2e</div>
               <div className={`text-[8px] px-1 mt-1 inline-block ${
                 region.risk === 'high' ? 'bg-red-100 text-red-800' : 
@@ -460,10 +460,10 @@ const HotspotMapComponent = ({ supplierData, tWarRoom }: { supplierData: any[], 
   );
 };
 
-// 4. 趨勢分析面板
-const TrendAnalysisPanel = ({ data, tWarRoom }: { data: any[], tWarRoom: any }) => {
+// 4. {t('tabs.trend')}面板
+const TrendAnalysisPanel = ({ data, t }: { data: any[], t: (key: string, params?: Record<string, string | number>) => string }) => {
   const trendData = useMemo(() => {
-    // 模擬月度趨勢數據
+    // {t('tabs.simulationShort')}月度{t('tabs.trendShort')}數據
     const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
     const currentYear = [5200, 5100, 4900, 4800, 4750, 4600, 4500, 4400, 4300, 4200, 4100, 4000];
     const previousYear = [5500, 5400, 5300, 5200, 5100, 5000, 4900, 4800, 4700, 4600, 4500, 4400];
@@ -474,7 +474,7 @@ const TrendAnalysisPanel = ({ data, tWarRoom }: { data: any[], tWarRoom: any }) 
       series: [
         { name: '2023年實際', data: currentYear },
         { name: '2022年', data: previousYear },
-        { name: '減排目標', data: target }
+        { name: t('overview.reductionTarget'), data: target }
       ]
     };
   }, [data]);
@@ -496,11 +496,11 @@ const TrendAnalysisPanel = ({ data, tWarRoom }: { data: any[], tWarRoom: any }) 
     },
     yaxis: {
       title: {
-        text: '排放量 (tCO2e)'
+        text: t('overview.totalEmissions') + ' (tCO2e)'
       }
     },
     title: {
-      text: '供應鏈碳排放趨勢分析',
+      text: 'Supply Chain Carbon Emissions ' + t('tabs.trend'),
       align: 'center',
       style: {
         fontSize: '14px',
@@ -521,8 +521,8 @@ const TrendAnalysisPanel = ({ data, tWarRoom }: { data: any[], tWarRoom: any }) 
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-3 w-3 text-green-600" />
           <div>
-            <h3 className="text-xs font-medium">趨勢分析與預測</h3>
-            <p className="text-[10px] text-muted-foreground">時間序列分析、同期比較與減排進度追蹤</p>
+            <h3 className="text-xs font-medium">{t('tabs.trend')}</h3>
+            {/* <p className="text-[10px] text-muted-foreground">時間序列分析、同期比較與減排進度追蹤</p> */}
           </div>
         </CardTitle>
       </CardHeader>
@@ -544,7 +544,7 @@ const TrendAnalysisPanel = ({ data, tWarRoom }: { data: any[], tWarRoom: any }) 
             </div>
           </div>
 
-          {/* 趨勢圖表 */}
+          {/* {t('tabs.trendShort')}圖表 */}
           <div className="lg:col-span-3">
             <div className="h-48">
               {typeof window !== 'undefined' && (
@@ -615,7 +615,7 @@ const CompliancePanel = ({ t }: { t: any }) => {
   );
 };
 
-// 6. 數據與覆蓋率分析面板
+// 6. 數據與{t('overview.coverage')}分析面板
 const DataCoveragePanel = ({ stats, t }: { stats: any, t: any }) => {
   const coverageData = {
     emissionCoverage: 85.3,
@@ -637,11 +637,11 @@ const DataCoveragePanel = ({ stats, t }: { stats: any, t: any }) => {
         <div className="grid grid-cols-2 gap-2 mb-2">
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{coverageData.emissionCoverage}%</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">{t('dataCoverage.emissionData')}<br/>{t('dataCoverage.coverage')}</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('dataCoverage.emissionData')}<br/>{t('overview.coverage')}</div>
           </div>
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{coverageData.financialCoverage}%</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">{t('dataCoverage.financialData')}<br/>{t('dataCoverage.coverage')}</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('dataCoverage.financialData')}<br/>{t('overview.coverage')}</div>
           </div>
         </div>
         <div className="pt-2 border-t border-border">
@@ -666,8 +666,8 @@ const DataCoveragePanel = ({ stats, t }: { stats: any, t: any }) => {
   );
 };
 
-// 7. 關鍵供應商與結構分析面板
-const KeySupplierStructurePanel = ({ stats, tWarRoom }: { stats: any, tWarRoom: any }) => {
+// 7. {t('overview.keySuppliers')}與結構分析面板
+const KeySupplierStructurePanel = ({ stats, t }: { stats: any, t: (key: string, params?: Record<string, string | number>) => string }) => {
   const structureData = {
     keySuppliers: Math.round(stats.orgCount * 0.2),
     keyEmission: parseFloat(stats.orgTotalEmission) * 0.8,
@@ -680,7 +680,7 @@ const KeySupplierStructurePanel = ({ stats, tWarRoom }: { stats: any, tWarRoom: 
     <Card className="border border-border bg-card">
       <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
         <CardTitle className="text-xs font-medium text-foreground">
-          關鍵供應商結構
+          {t('overview.keySuppliers')}
         </CardTitle>
         <Users className="h-3 w-3 text-purple-600" />
       </CardHeader>
@@ -688,7 +688,7 @@ const KeySupplierStructurePanel = ({ stats, tWarRoom }: { stats: any, tWarRoom: 
         <div className="grid grid-cols-2 gap-2 mb-2">
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{structureData.keySuppliers}</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">關鍵供應商<br/>數量</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.keySuppliers')}<br/>數量</div>
                   </div>
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{structureData.keyEmission.toFixed(0)}</div>
@@ -700,11 +700,11 @@ const KeySupplierStructurePanel = ({ stats, tWarRoom }: { stats: any, tWarRoom: 
           <div className="grid grid-cols-3 gap-1 text-center">
             <div className="bg-blue-50 border-l-2 border-blue-500 p-1">
               <div className="text-xs font-bold text-foreground">{structureData.smeCount}</div>
-              <div className="text-[9px] text-muted-foreground">中小企業</div>
+              <div className="text-[9px] text-muted-foreground">{t('filters.sme')}</div>
             </div>
             <div className="bg-orange-50 border-l-2 border-orange-500 p-1">
               <div className="text-xs font-bold text-foreground">{structureData.agentCount}</div>
-              <div className="text-[9px] text-muted-foreground">代理商</div>
+              <div className="text-[9px] text-muted-foreground">{t('filters.agent')}</div>
         </div>
             <div className="bg-green-50 border-l-2 border-green-500 p-1">
               <div className="text-xs font-bold text-foreground">{structureData.directCount}</div>
@@ -718,7 +718,7 @@ const KeySupplierStructurePanel = ({ stats, tWarRoom }: { stats: any, tWarRoom: 
 };
 
 // 8. 能源使用與細節分析面板
-const EnergyUsagePanel = ({ tWarRoom }: { tWarRoom: any }) => {
+const EnergyUsagePanel = ({ t }: { t: (key: string, params?: Record<string, string | number>) => string }) => {
   const energyData = {
     renewableRate: 42.6,
     totalEnergy: 1247,
@@ -730,7 +730,7 @@ const EnergyUsagePanel = ({ tWarRoom }: { tWarRoom: any }) => {
     <Card className="border border-border bg-card">
       <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
         <CardTitle className="text-xs font-medium text-foreground">
-          能源使用狀況
+          {t('overview.energyUsageStatus')}
         </CardTitle>
         <Zap className="h-3 w-3 text-yellow-600" />
       </CardHeader>
@@ -738,26 +738,26 @@ const EnergyUsagePanel = ({ tWarRoom }: { tWarRoom: any }) => {
         <div className="grid grid-cols-2 gap-2 mb-2">
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{energyData.renewableRate}%</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">再生能源<br/>使用率</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.renewableRate')}</div>
           </div>
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{energyData.totalEnergy}</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">總用電量<br/>(MWh)</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.totalElectricityConsumption')}<br/>(MWh)</div>
           </div>
         </div>
         <div className="pt-2 border-t border-border">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-[10px] text-muted-foreground">用電結構</span>
-            <button className="text-[9px] text-blue-600 hover:text-blue-800">檢視細項</button>
+            <span className="text-[10px] text-muted-foreground">{t('overview.electricityStructure')}</span>   
+            <button className="text-[9px] text-blue-600 hover:text-blue-800">{t('overview.viewDetails')}</button>
           </div>
           <div className="grid grid-cols-2 gap-1 text-center">
             <div className="bg-green-50 border-l-2 border-green-500 p-1">
               <div className="text-xs font-bold text-foreground">{energyData.renewableEnergy}</div>
-              <div className="text-[9px] text-muted-foreground">再生能源</div>
+              <div className="text-[9px] text-muted-foreground">{t('overview.renewableEnergy')}</div>
             </div>
             <div className="bg-gray-50 border-l-2 border-gray-500 p-1">
               <div className="text-xs font-bold text-foreground">{energyData.gridEnergy}</div>
-              <div className="text-[9px] text-muted-foreground">電網用電</div>
+              <div className="text-[9px] text-muted-foreground">{t('overview.gridEnergy')}</div>
             </div>
           </div>
         </div>
@@ -787,9 +787,9 @@ const FilterPanel = ({
       <CardContent className="px-3 pb-2">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 items-center">
           
-          {/* 1. ISO認證狀態 */}
+          {/* 1. {t('compliance.isoCertification')}狀態 */}
           <div className="space-y-1 ">
-            <Label className="text-[10px] text-muted-foreground">{t('filters.isoStatus')}</Label>
+            <Label className="text-[10px] text-muted-foreground">{t('compliance.isoCertification')}狀態</Label>
             <Select 
               value={filters.isoStatus} 
               onValueChange={(value: any) => onFiltersChange({...filters, isoStatus: value})}
@@ -805,10 +805,10 @@ const FilterPanel = ({
             </Select>
           </div>
 
-          {/* 2. 支出金額範圍 */}
+          {/* 2. {t('filters.spendingRange')} */}
           <div className="space-y-1">
             <Label className="text-[10px] text-muted-foreground">
-              {t('filters.spendingRange')} ({filters.spendingRange[0]}-{filters.spendingRange[1]}萬元)
+              {t('filters.spendingRange')} ({filters.spendingRange[0]}-{filters.spendingRange[1]}M)
             </Label>
             <Slider
               value={filters.spendingRange}
@@ -820,7 +820,7 @@ const FilterPanel = ({
             />
           </div>
 
-          {/* 3. 排放量範圍 */}
+          {/* 3. {t('filters.emissionRange')} */}
           <div className="space-y-1">
             <Label className="text-[10px] text-muted-foreground">
               {t('filters.emissionRange')} ({filters.emissionRange[0]}-{filters.emissionRange[1]} tCO2e)
@@ -835,7 +835,7 @@ const FilterPanel = ({
             />
           </div>
 
-          {/* 4. 減碳作為 */}
+          {/* 4. {t('filters.carbonAction')} */}
           <div className="space-y-1">
             <Label className="text-[10px] text-muted-foreground">{t('filters.carbonAction')}</Label>
             <Select 
@@ -854,7 +854,7 @@ const FilterPanel = ({
             </Select>
           </div>
 
-          {/* 5. 供應商類型 */}
+          {/* 5. {t('filters.supplierType')} */}
           <div className="space-y-1">
             <Label className="text-[10px] text-muted-foreground">{t('filters.supplierType')}</Label>
             <Select 
@@ -882,8 +882,8 @@ const FilterPanel = ({
             className="h-6 text-[10px] px-2"
             onClick={() => onFiltersChange({
               isoStatus: 'all',
-              spendingRange: [0, 1000],
-              emissionRange: [0, 5000],
+              spendingRange: [0, 10],
+              emissionRange: [0, 50],
               carbonAction: 'all',
               supplierType: 'all'
             })}
@@ -896,8 +896,8 @@ const FilterPanel = ({
   );
 };
 
-// 9. 減碳作為與成效分析面板
-const CarbonReductionPanel = ({ tWarRoom }: { tWarRoom: any }) => {
+// 9. {t('filters.carbonAction')}與成效分析面板
+const CarbonReductionPanel = ({ t }: { t: (key: string, params?: Record<string, string | number>) => string }) => {
   const reductionData = {
     hasActionPlan: 12,
     totalSuppliers: 20,
@@ -910,7 +910,7 @@ const CarbonReductionPanel = ({ tWarRoom }: { tWarRoom: any }) => {
     <Card className="border border-border bg-card">
       <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
         <CardTitle className="text-xs font-medium text-foreground">
-          減碳作為與成效
+          {t('filters.carbonAction')}
         </CardTitle>
         <TrendingDown className="h-3 w-3 text-green-600" />
       </CardHeader>
@@ -922,7 +922,7 @@ const CarbonReductionPanel = ({ tWarRoom }: { tWarRoom: any }) => {
           </div>
           <div className="text-center">
             <div className="text-sm font-bold text-foreground">{((reductionData.hasActionPlan/reductionData.totalSuppliers)*100).toFixed(0)}%</div>
-            <div className="text-[10px] text-muted-foreground">計畫覆蓋率</div>
+            <div className="text-[10px] text-muted-foreground">計畫{t('overview.coverage')}</div>
           </div>
         </div>
         <div className="pt-2 border-t border-border">
@@ -1005,16 +1005,16 @@ export default function CarbonWarRoomPage({
   // 篩選邏輯
   const filteredOrganizationResponses = useMemo(() => {
     return organizationResponses.filter(response => {
-      // 模擬供應商數據（實際應從response中獲取）
+      // {t('tabs.simulationShort')}供應商數據（實際應從response中獲取）
       const mockSupplierData = {
         isoStatus: Math.random() > 0.3 ? 'certified' : 'non-certified',
         spending: Math.floor(Math.random() * 1000),
-        emission: parseFloat(response.answers["排放量資料"]?.["總排放量"]?.split(" ")[0] || "0"),
+        emission: parseFloat(response.answers["排放量資料"]?.["{t('overview.totalEmissions')}"]?.split(" ")[0] || "0"),
         carbonAction: ['implemented', 'planning', 'not-implemented'][Math.floor(Math.random() * 3)],
         supplierType: ['large-enterprise', 'sme', 'agent'][Math.floor(Math.random() * 3)]
       };
 
-      // 應用篩選條件
+      // 應用{t('filters.title')}
       if (filters.isoStatus !== 'all' && mockSupplierData.isoStatus !== filters.isoStatus) return false;
       if (mockSupplierData.spending < filters.spendingRange[0] || mockSupplierData.spending > filters.spendingRange[1]) return false;
       if (mockSupplierData.emission < filters.emissionRange[0] || mockSupplierData.emission > filters.emissionRange[1]) return false;
@@ -1064,7 +1064,7 @@ export default function CarbonWarRoomPage({
   // 處理數據刷新
   const handleRefresh = async () => {
     setRefreshing(true);
-    // 模擬API調用
+    // {t('tabs.simulationShort')}API調用
     await new Promise(resolve => setTimeout(resolve, 2000));
     setRefreshing(false);
   };
@@ -1077,7 +1077,7 @@ export default function CarbonWarRoomPage({
       <div className="compact-container max-w-7xl mx-auto">
         {/* 頁面標題與控制項 */}
         <div className="flex flex-col lg:flex-row lg:justify-start lg:items-center gap-4 mb-5">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center ">
       
             <div>
               {/* <h5 className="  text-md  tracking-tight">Carbon War Room</h5> */}
@@ -1113,7 +1113,7 @@ export default function CarbonWarRoomPage({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">所有年份</SelectItem>
+                  <SelectItem value="all">All Years</SelectItem>
                   {availableYears.map(year => (
                     <SelectItem key={year} value={year}>{year}</SelectItem>
                   ))}
@@ -1162,7 +1162,7 @@ export default function CarbonWarRoomPage({
             
           </TabsList>
 
-          {/* 總覽頁籤 */}
+          {/* {t('tabs.overviewShort')}頁籤 */}
           <TabsContent value="overview" className="mt-2 space-y-2">
             {/* 篩選器 */}
             <FilterPanel filters={filters} onFiltersChange={setFilters} t={t} />
@@ -1178,13 +1178,13 @@ export default function CarbonWarRoomPage({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
               <CompliancePanel t={t} />
               <DataCoveragePanel stats={stats} t={t} />
-              <KeySupplierStructurePanel stats={stats} tWarRoom={tWarRoom} />
-              <EnergyUsagePanel tWarRoom={tWarRoom} />
-              <CarbonReductionPanel tWarRoom={tWarRoom} />
+              <KeySupplierStructurePanel stats={stats} t={t} />
+              <EnergyUsagePanel t={t} />
+              <CarbonReductionPanel t={t} />
               <Card className="border border-border bg-card">
                 <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
                   <CardTitle className="text-xs font-medium text-foreground">
-                    支出與排碳分析
+                    {t('overview.expenditureAndEmissionAnalysis')}
                   </CardTitle>
                   <Globe className="h-3 w-3 text-indigo-600" />
                 </CardHeader>
@@ -1212,42 +1212,42 @@ export default function CarbonWarRoomPage({
               </Card>
             </div>
 
-            {/* 趨勢分析區塊 */}
+            {/* {t('tabs.trend')}區塊 */}
             <div className="mt-3">
-              <TrendAnalysisPanel data={filteredOrganizationResponses} tWarRoom={tWarRoom} />
+              <TrendAnalysisPanel data={filteredOrganizationResponses} t={t} />
             </div>
           </TabsContent>
 
-          {/* 熱點分析頁籤 */}
+          {/* {t('tabs.hotspot')}頁籤 */}
           <TabsContent value="hotspot" className="mt-2 space-y-2">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
               {/* 帕雷托分析 */}
             <ParetoAnalysisWidget 
                 organizationResponses={filteredOrganizationResponses}
               selectedYear={selectedYear}
-              tWarRoom={tWarRoom}
+              t={t}
             />
-              {/* 地理熱點分析 */}
+              {/* 地理{t('tabs.hotspot')} */}
             <HotspotMapComponent 
                 supplierData={filteredOrganizationResponses}
-              tWarRoom={tWarRoom}
+              t={t}
             />
             </div>
           </TabsContent>
 
-          {/* 趨勢分析頁籤 */}
+          {/* {t('tabs.trend')}頁籤 */}
           <TabsContent value="trend" className="mt-2 space-y-2">
-            <TrendAnalysisPanel data={filteredOrganizationResponses} tWarRoom={tWarRoom} />
+            <TrendAnalysisPanel data={filteredOrganizationResponses} t={t} />
           </TabsContent>
 
-          {/* 情境模擬頁籤 */}
+          {/* {t('tabs.simulation')}頁籤 */}
           <TabsContent value="simulation" className="mt-2 space-y-2">
-            <ScenarioSimulator tWarRoom={tWarRoom} />
+            <ScenarioSimulator t={t} />
           </TabsContent>
 
-          {/* 基準比較頁籤 */}
+          {/* {t('tabs.benchmarking')}頁籤 */}
           <TabsContent value="benchmarking" className="mt-2 space-y-2">
-            <BenchmarkingModule tWarRoom={tWarRoom} />
+            <BenchmarkingModule t={t} />
           </TabsContent>
         </Tabs>
 
@@ -1257,9 +1257,9 @@ export default function CarbonWarRoomPage({
             <div className="flex flex-wrap items-center gap-3">
               <span>更新時間: {format(new Date(), 'MM-dd HH:mm')}</span>
               <span className="hidden sm:inline">•</span>
-              <span>篩選結果: {filteredOrganizationResponses.length}/{organizationResponses.length}家</span>
+              <span>{t('status.filterResults')}: {filteredOrganizationResponses.length}/{organizationResponses.length}{t('overview.suppliers')}</span>
               <span className="hidden sm:inline">•</span>
-              <span>覆蓋率: {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}%</span>
+              <span>{t('overview.coverage')}: {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}%</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-1.5 w-1.5 bg-green-500 rounded-full animate-pulse"></div>
