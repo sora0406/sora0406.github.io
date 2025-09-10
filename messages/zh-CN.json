@@ -99,9 +99,8 @@
     "requests_count": "数据要求总数",
     "pending_count": "待处理请求",
     "completed_count": "已完成请求",
-    "view_all": "查看所有",
-    "recent_activity": "近期活动",
-    "quick_actions": "快速操作"
+    "view_all": "查看所有"
+ 
   },
   "messages": {
     "success": "操作成功",

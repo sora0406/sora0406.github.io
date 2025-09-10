@@ -74,7 +74,7 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
   return (
     <div className="space-y-3 mb-3">
       {/* 整合的核心指標區塊 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {/* 整合的{t('overview.scope1')}-3排放量 */}
         <Card className="border border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
@@ -108,7 +108,7 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
       </Card>
 
         {/* 整合的{t('overview.keySuppliers')}與數據{t('overview.coverage')} */}
-        <Card className="border border-border bg-card">
+        {/* <Card className="border border-border bg-card">
           <CardHeader className="flex flex-row items-center justify-between pb-1 px-3 pt-2">
             <CardTitle className="text-xs font-medium text-foreground">
               {t('overview.supplierOverview')}
@@ -117,7 +117,7 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
         </CardHeader>
           <CardContent className="px-3 pb-2">
             <div className="grid grid-cols-2 gap-2 mb-2">
-              <div className="text-center">
+              <div className="text-center">11111
                 <div className="text-sm font-bold text-foreground">{Math.round(stats.orgCount * 0.2)}</div>
                 <div className="text-[10px] text-muted-foreground">{t('overview.keySuppliers')}</div>
           </div>
@@ -135,7 +135,7 @@ const CarbonOverviewDashboard = ({ stats, selectedYear, t }: { stats: any; selec
               </div>
             </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
         {/* {t('overview.performanceMetrics')} */}
         <Card className="border border-border bg-card">
@@ -691,8 +691,9 @@ const KeySupplierStructurePanel = ({ stats, t }: { stats: any, t: (key: string, 
             <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.keySuppliers')}<br/>數量</div>
                   </div>
           <div className="text-center">
-            <div className="text-sm font-bold text-foreground">{structureData.keyEmission.toFixed(0)}</div>
-            <div className="text-[10px] text-muted-foreground leading-tight">排放量<br/>(tCO2e)</div>
+            <div className="text-sm font-bold text-foreground">        {((stats.totalResponses / (stats.totalResponses + 5)) * 100).toFixed(1)}%</div>
+          
+            <div className="text-[10px] text-muted-foreground leading-tight">{t('overview.coverage')}</div>
                 </div>
               </div>
         <div className="pt-2 border-t border-border">
@@ -712,6 +713,7 @@ const KeySupplierStructurePanel = ({ stats, t }: { stats: any, t: (key: string, 
             </div>
           </div>
         </div>
+      
       </CardContent>
     </Card>
   );
