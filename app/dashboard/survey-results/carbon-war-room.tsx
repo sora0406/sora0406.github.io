@@ -289,51 +289,64 @@ const ParetoAnalysisWidget = ({ organizationResponses, selectedYear, tWarRoom }:
   ];
 
   return (
-    <Card className="modern-card col-span-2">
+    <Card className="modern-card">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-3">
           <div className="p-2 bg-primary/10 rounded-lg">
             <BarChart3 className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold">帕雷托分析</h3>
+            <h3 className="text-lg font-semibold">供應商排放熱點</h3>
             <p className="text-sm text-muted-foreground font-normal">20/80法則識別關鍵供應商</p>
           </div>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* 關鍵指標 */}
-          <div className="space-y-3">
-            <div className="compact-card text-center border-l-4 border-l-blue-500">
-              <div className="text-2xl font-bold text-foreground">{keySuppliers.length}</div>
-              <div className="text-sm text-muted-foreground">關鍵供應商數量</div>
-            </div>
-            <div className="compact-card text-center border-l-4 border-l-orange-500">
-              <div className="text-2xl font-bold text-foreground">{keyEmissionPercentage.toFixed(1)}%</div>
-              <div className="text-sm text-muted-foreground">排放量貢獻度</div>
-            </div>
-            <div className="compact-card text-center border-l-4 border-l-green-500">
-              <div className="text-2xl font-bold text-foreground">
-                {paretoData.length > 0 ? ((keySuppliers.length / paretoData.length) * 100).toFixed(1) : 0}%
-              </div>
-              <div className="text-sm text-muted-foreground">供應商比例</div>
-            </div>
+        {/* 關鍵指標 */}
+        <div className="grid grid-cols-3 gap-3 mb-4">
+          <div className="compact-card text-center border-l-4 border-l-blue-500">
+            <div className="text-xl font-bold text-foreground">{keySuppliers.length}</div>
+            <div className="text-xs text-muted-foreground">關鍵供應商</div>
           </div>
+          <div className="compact-card text-center border-l-4 border-l-orange-500">
+            <div className="text-xl font-bold text-foreground">{keyEmissionPercentage.toFixed(1)}%</div>
+            <div className="text-xs text-muted-foreground">排放貢獻度</div>
+          </div>
+          <div className="compact-card text-center border-l-4 border-l-green-500">
+            <div className="text-xl font-bold text-foreground">
+              {paretoData.length > 0 ? ((keySuppliers.length / paretoData.length) * 100).toFixed(1) : 0}%
+            </div>
+            <div className="text-xs text-muted-foreground">供應商比例</div>
+          </div>
+        </div>
 
-          {/* 帕雷托圖表 */}
-          <div className="lg:col-span-2">
-            <div className="h-80">
-              {typeof window !== 'undefined' && paretoData.length > 0 && (
-                <ReactApexChart 
-                  options={chartOptions} 
-                  series={series} 
-                  type="line" 
-                  height={300} 
-                />
-              )}
+        {/* 帕雷托圖表 */}
+        <div className="h-64 mb-4">
+          {typeof window !== 'undefined' && paretoData.length > 0 && (
+            <ReactApexChart 
+              options={chartOptions} 
+              series={series} 
+              type="line" 
+              height={240} 
+            />
+          )}
+        </div>
+
+        {/* 前5名供應商列表 */}
+        <div className="space-y-2">
+          <h4 className="text-sm font-medium text-foreground mb-2">排放量前5名供應商</h4>
+          {paretoData.slice(0, 5).map((supplier, index) => (
+            <div key={supplier.name} className="flex justify-between items-center py-2 px-3 bg-muted/50 rounded-md">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-muted-foreground w-4">#{index + 1}</span>
+                <span className="text-sm text-foreground">{supplier.name}</span>
+              </div>
+              <div className="text-right">
+                <div className="text-sm font-medium text-foreground">{supplier.emission.toFixed(1)} tCO2e</div>
+                <div className="text-xs text-muted-foreground">{supplier.individualPercentage.toFixed(1)}%</div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </CardContent>
     </Card>
@@ -808,18 +821,14 @@ export default function CarbonWarRoomPage({
 
         {/* 頁籤導航 */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="modern-tabs h-auto p-1 grid w-full grid-cols-3 lg:grid-cols-6 gap-1">
+          <TabsList className="modern-tabs h-auto p-1 grid w-full grid-cols-3 lg:grid-cols-5 gap-1">
             <TabsTrigger value="overview" className="modern-tab">
               <span className="hidden sm:inline">總覽儀表板</span>
               <span className="sm:hidden">總覽</span>
             </TabsTrigger>
-            <TabsTrigger value="pareto" className="modern-tab">
-              <span className="hidden sm:inline">帕雷托分析</span>
-              <span className="sm:hidden">帕雷托</span>
-            </TabsTrigger>
-            <TabsTrigger value="geography" className="modern-tab">
-              <span className="hidden sm:inline">地理分析</span>
-              <span className="sm:hidden">地理</span>
+            <TabsTrigger value="hotspot" className="modern-tab">
+              <span className="hidden sm:inline">熱點分析</span>
+              <span className="sm:hidden">熱點</span>
             </TabsTrigger>
             <TabsTrigger value="trend" className="modern-tab">
               <span className="hidden sm:inline">趨勢分析</span>
@@ -853,21 +862,21 @@ export default function CarbonWarRoomPage({
             </div>
           </TabsContent>
 
-          {/* 帕雷托分析頁籤 */}
-          <TabsContent value="pareto" className="mt-4 space-y-4">
-            <ParetoAnalysisWidget 
-              organizationResponses={organizationResponses}
-              selectedYear={selectedYear}
-              tWarRoom={tWarRoom}
-            />
-          </TabsContent>
-
-          {/* 地理分析頁籤 */}
-          <TabsContent value="geography" className="mt-4 space-y-4">
-            <HotspotMapComponent 
-              supplierData={organizationResponses}
-              tWarRoom={tWarRoom}
-            />
+          {/* 熱點分析頁籤 */}
+          <TabsContent value="hotspot" className="mt-4 space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* 帕雷托分析 */}
+              <ParetoAnalysisWidget 
+                organizationResponses={organizationResponses}
+                selectedYear={selectedYear}
+                tWarRoom={tWarRoom}
+              />
+              {/* 地理熱點分析 */}
+              <HotspotMapComponent 
+                supplierData={organizationResponses}
+                tWarRoom={tWarRoom}
+              />
+            </div>
           </TabsContent>
 
           {/* 趨勢分析頁籤 */}
