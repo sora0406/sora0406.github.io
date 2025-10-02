@@ -8,11 +8,15 @@ export function useSupplierData() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 從 localStorage 載入保存的數據源選擇
+  // 從 localStorage 載入保存的數據源選擇，如果沒有保存的選擇則預設為 materials (Case 3)
   useEffect(() => {
     const savedDataSource = localStorage.getItem('supplier-data-source') as SupplierDataSource;
     if (savedDataSource && (savedDataSource === 'default' || savedDataSource === 'tsmc' || savedDataSource === 'materials')) {
       setDataSource(savedDataSource);
+    } else {
+      // 如果沒有保存的選擇，預設為 materials (Case 3)
+      setDataSource('materials');
+      localStorage.setItem('supplier-data-source', 'materials');
     }
     setIsLoading(false);
   }, []);

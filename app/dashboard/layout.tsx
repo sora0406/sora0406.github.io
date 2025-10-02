@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
 import { locales, getLanguageName } from "@/lib/i18n"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -436,11 +437,31 @@ export default function DashboardLayout({
       // 使用指定的語言或當前語言
       const localeToUse = specifiedLocale || currentLocale;
       
-      const localizedPath = getLocalizedPath(path, localeToUse);
-      console.log("導航到路徑:", localizedPath); // 記錄導航路徑
-      
-      // 使用 router.push 來確保正確的路由處理
-      router.push(localizedPath);
+      // 如果指定了語言，需要構建新的語言路徑
+      if (specifiedLocale) {
+        // 移除當前語言前綴
+        let cleanPath = pathname;
+        for (const loc of locales) {
+          if (cleanPath.startsWith(`/${loc}/`)) {
+            cleanPath = cleanPath.replace(`/${loc}`, '');
+            break;
+          }
+        }
+        
+        // 確保路徑以 / 開頭
+        if (!cleanPath.startsWith('/')) {
+          cleanPath = '/' + cleanPath;
+        }
+        
+        // 添加新的語言前綴
+        const newPath = `/${specifiedLocale}${cleanPath}`;
+        console.log("語言切換到路徑:", newPath);
+        router.push(newPath);
+      } else {
+        const localizedPath = getLocalizedPath(path, localeToUse);
+        console.log("導航到路徑:", localizedPath);
+        router.push(localizedPath);
+      }
     }
   };
 
@@ -749,33 +770,10 @@ export default function DashboardLayout({
             
               </div>
 
-              {/* 右側帳號信息和地球圖標 */}
+              {/* 右側帳號信息和語言切換器 */}
               <div className="flex items-center gap-2">
-                {/* 地球圖標 - 語言切換 */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <div className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
-                      <Globe className="h-4 w-4" />
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {locales.map((locale) => {
-                      return (
-                        <DropdownMenuItem key={locale} asChild>
-                          <div 
-                            className="flex items-center gap-2 cursor-pointer" 
-                            onClick={() => {
-                              // 直接使用當前路徑，讓 handleNavigate 函數處理清理工作
-                              handleNavigate(pathname, locale);
-                            }}
-                          >
-                            {getLanguageName(locale)}
-            </div>
-                        </DropdownMenuItem>
-                      );
-                    })}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {/* 語言切換器 */}
+                <LanguageSwitcher />
                 
                 {/* 帳號信息 */}
                 <div className="flex items-center gap-2 cursor-pointer   px-2 py-1 rounded-md">

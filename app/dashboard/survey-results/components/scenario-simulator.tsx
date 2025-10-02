@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,8 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Play, Settings, TrendingDown, Target, Calculator } from "lucide-react"
+import { Settings, TrendingDown, Target, Calculator } from "lucide-react"
 import dynamic from 'next/dynamic'
 import { ApexOptions } from 'apexcharts'
 
@@ -29,7 +28,6 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
   const [renewableAdoption, setRenewableAdoption] = useState<number[]>([80]);
   const [efficiencyImprovement, setEfficiencyImprovement] = useState<number[]>([30]);
   const [carbonPrice, setCarbonPrice] = useState<number[]>([150]);
-  const [isSimulating, setIsSimulating] = useState(false);
   const [simulationResults, setSimulationResults] = useState<any>(null);
 
     // 情境類型選項
@@ -40,13 +38,8 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
       { value: "policy_impact", label: translate('scenarioSimulator.basicSettings.scenarioTypes.policyImpact.label'), description: translate('scenarioSimulator.basicSettings.scenarioTypes.policyImpact.description') }
     ];
 
-  // 執行模擬
-  const runSimulation = async () => {
-    setIsSimulating(true);
-    
-    // 模擬API調用延遲
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+  // 即時執行模擬
+  const runSimulation = () => {
     // 生成模擬結果
     const baselineEmission = 45000; // 基準排放量
     const reduction = (reductionTarget[0] / 100) * baselineEmission;
@@ -71,8 +64,12 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
     };
     
     setSimulationResults(results);
-    setIsSimulating(false);
   };
+
+  // 當參數改變時自動執行模擬
+  useEffect(() => {
+    runSimulation();
+  }, [scenarioType, targetYear, reductionTarget, renewableAdoption, efficiencyImprovement, carbonPrice]);
 
   // 生成年度預測數據
   const generateYearlyProjections = (baseline: number, targetYear: number, targetReduction: number) => {
@@ -164,18 +161,20 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="parameters">
-            <TabsList>
-              <TabsTrigger value="parameters">{translate('scenarioSimulator.tabs.parameters')}</TabsTrigger>
-              <TabsTrigger value="results">{translate('scenarioSimulator.tabs.results')}</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="parameters" className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* 基本參數 */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">{translate('scenarioSimulator.basicSettings.title')}</h3>
-                  
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* 左側：參數設定 */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Settings className="h-5 w-5 text-blue-600" />
+                <h3 className="text-lg font-semibold">{translate('scenarioSimulator.tabs.parameters')}</h3>
+              </div>
+              
+              {/* 基本參數 */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">{translate('scenarioSimulator.basicSettings.title')}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="scenario-type">{translate('scenarioSimulator.basicSettings.scenarioType')}</Label>
                     <Select value={scenarioType} onValueChange={setScenarioType}>
@@ -187,7 +186,6 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                           <SelectItem key={type.value} value={type.value}>
                             <div className="flex flex-col text-left">
                               <span>{type.label}</span>
-                              {/* <span className="text-xs text-muted-foreground">{type.description}</span> */}
                             </div>
                           </SelectItem>
                         ))}
@@ -201,12 +199,12 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="2027">{translate('scenarioSimulator.basicSettings.targetYear.2027')}</SelectItem>
-                          <SelectItem value="2030">{translate('scenarioSimulator.basicSettings.targetYear.2030')}</SelectItem>
-                          <SelectItem value="2035">{translate('scenarioSimulator.basicSettings.targetYear.2035')}</SelectItem>
-                          <SelectItem value="2050">{translate('scenarioSimulator.basicSettings.targetYear.2050')}</SelectItem>
-                        </SelectContent>
+                      <SelectContent>
+                        <SelectItem value="2027">{translate('scenarioSimulator.basicSettings.targetYear.2027')}</SelectItem>
+                        <SelectItem value="2030">{translate('scenarioSimulator.basicSettings.targetYear.2030')}</SelectItem>
+                        <SelectItem value="2035">{translate('scenarioSimulator.basicSettings.targetYear.2035')}</SelectItem>
+                        <SelectItem value="2050">{translate('scenarioSimulator.basicSettings.targetYear.2050')}</SelectItem>
+                      </SelectContent>
                     </Select>
                   </div>
 
@@ -221,12 +219,15 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                       className="w-full"
                     />
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                {/* 技術參數 */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">{translate('scenarioSimulator.technicalParameters.title')}</h3>
-                  
+              {/* 技術參數 */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">{translate('scenarioSimulator.technicalParameters.title')}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label>{translate('scenarioSimulator.technicalParameters.renewableAdoption')}: {renewableAdoption[0]}%</Label>
                     <Slider
@@ -262,76 +263,71 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
                       className="w-full"
                     />
                   </div>
-                </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* 右側：模擬結果 */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingDown className="h-5 w-5 text-green-600" />
+                <h3 className="text-lg font-semibold">{translate('scenarioSimulator.tabs.results')}</h3>
               </div>
 
-              <div className="flex justify-center pt-4">
-                <Button 
-                  onClick={runSimulation} 
-                  disabled={isSimulating}
-                  className="flex items-center gap-2"
-                >
-                  <Play className="h-4 w-4" />
-                  {isSimulating ? translate('scenarioSimulator.actions.simulating') : translate('scenarioSimulator.actions.runSimulation')}
-                </Button>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="results">
               {simulationResults ? (
                 <div className="space-y-6">
                   {/* 關鍵結果指標 */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <Card className="bg-blue-50 border-blue-200">
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-blue-700">
+                        <div className="text-xl font-bold text-blue-700">
                           {(simulationResults.totalReduction / 1000).toFixed(1)}k
                         </div>
-                        <div className="text-sm text-blue-600">{translate('scenarioSimulator.results.reductionAmount')}</div>
+                        <div className="text-xs text-blue-600">{translate('scenarioSimulator.results.reductionAmount')}</div>
                       </CardContent>
                     </Card>
                     
                     <Card className="bg-green-50 border-green-200">
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-green-700">
+                        <div className="text-xl font-bold text-green-700">
                           {simulationResults.reductionPercentage}%
                         </div>
-                        <div className="text-sm text-green-600">{translate('scenarioSimulator.results.reductionPercentage')}</div>
+                        <div className="text-xs text-green-600">{translate('scenarioSimulator.results.reductionPercentage')}</div>
                       </CardContent>
                     </Card>
                     
                     <Card className="bg-orange-50 border-orange-200">
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-orange-700">
+                        <div className="text-xl font-bold text-orange-700">
                           ${(simulationResults.costEstimate / 1000000).toFixed(1)}M
                         </div>
-                        <div className="text-sm text-orange-600">{translate('scenarioSimulator.results.investmentCost')}</div>
+                        <div className="text-xs text-orange-600">{translate('scenarioSimulator.results.investmentCost')}</div>
                       </CardContent>
                     </Card>
                     
                     <Card className="bg-purple-50 border-purple-200">
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-purple-700">
+                        <div className="text-xl font-bold text-purple-700">
                           {simulationResults.paybackPeriod.toFixed(1)}
                         </div>
-                        <div className="text-sm text-purple-600">{translate('scenarioSimulator.results.paybackPeriod')}</div>
+                        <div className="text-xs text-purple-600">{translate('scenarioSimulator.results.paybackPeriod')}</div>
                       </CardContent>
                     </Card>
                   </div>
 
                   {/* 趨勢圖表 */}
                   <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg font-semibold">{translate('scenarioSimulator.results.title')}</CardTitle>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base">{translate('scenarioSimulator.results.title')}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="h-80">
+                      <div className="h-64">
                         {typeof window !== 'undefined' && chartSeries.length > 0 && (
                           <ReactApexChart 
                             options={chartOptions} 
                             series={chartSeries} 
                             type="line" 
-                            height={300} 
+                            height={250} 
                           />
                         )}
                       </div>
@@ -340,44 +336,42 @@ export default function ScenarioSimulator({ t }: ScenarioSimulatorProps) {
 
                   {/* 風險評估 */}
                   <Card>
-                    <CardHeader>
-                      <CardTitle>{translate('scenarioSimulator.results.riskAssessment')}</CardTitle>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base">{translate('scenarioSimulator.results.riskAssessment')}</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm font-medium">{translate('scenarioSimulator.results.implementationProbability')}</span>
-                            <span className="text-sm">{(simulationResults.riskAnalysis.implementationProbability * 100).toFixed(0)}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-blue-600 h-2 rounded-full" 
-                              style={{ width: `${simulationResults.riskAnalysis.implementationProbability * 100}%` }}
-                            ></div>
-                          </div>
+                    <CardContent className="space-y-4">
+                      <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-sm font-medium">{translate('scenarioSimulator.results.implementationProbability')}</span>
+                          <span className="text-sm">{(simulationResults.riskAnalysis.implementationProbability * 100).toFixed(0)}%</span>
                         </div>
-                        
-                        <div>
-                          <span className="text-sm font-medium">{translate('scenarioSimulator.results.keyRiskFactors')}</span>
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {simulationResults.riskAnalysis.keyRiskFactors.map((factor: string, index: number) => (
-                              <Badge key={index} variant="outline">{factor}</Badge>
-                            ))}
-                          </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-blue-600 h-2 rounded-full" 
+                            style={{ width: `${simulationResults.riskAnalysis.implementationProbability * 100}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <span className="text-sm font-medium">{translate('scenarioSimulator.results.keyRiskFactors')}</span>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {simulationResults.riskAnalysis.keyRiskFactors.map((factor: string, index: number) => (
+                            <Badge key={index} variant="outline" className="text-xs">{factor}</Badge>
+                          ))}
                         </div>
                       </div>
                     </CardContent>
                   </Card>
                 </div>
               ) : (
-                <div className="text-center py-12">
-                  <Settings className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">{translate('scenarioSimulator.actions.pleaseSetParameters')}</p>
+                <div className="text-center py-8">
+                  <Settings className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">{translate('scenarioSimulator.actions.pleaseSetParameters')}</p>
                 </div>
               )}
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -22,10 +22,25 @@ export function LanguageSwitcher() {
   // 切換語言
   const handleSwitchLanguage = (locale: string) => {
     startTransition(() => {
-      // 構建新的語言路徑
-      // 現在所有路由都有語言前綴，我們需要將現有前綴替換為新的語言前綴
-      const path = pathname.replace(`/${currentLocale}`, `/${locale}`)
-      router.replace(path)
+      // 移除當前語言前綴
+      let cleanPath = pathname;
+      const locales = ['zh-TW', 'en', 'zh-CN'];
+      
+      for (const loc of locales) {
+        if (cleanPath.startsWith(`/${loc}/`)) {
+          cleanPath = cleanPath.replace(`/${loc}`, '');
+          break;
+        }
+      }
+      
+      // 確保路徑以 / 開頭
+      if (!cleanPath.startsWith('/')) {
+        cleanPath = '/' + cleanPath;
+      }
+      
+      // 添加新的語言前綴
+      const newPath = `/${locale}${cleanPath}`;
+      router.replace(newPath);
     })
   }
 
