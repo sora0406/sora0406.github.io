@@ -1,5 +1,8 @@
 import { defaultLocale } from "@/lib/i18n"
 
+// 強制所有頁面動態渲染
+export const dynamic = 'force-dynamic'
+
 export default function RootLayout({
   children,
 }: {

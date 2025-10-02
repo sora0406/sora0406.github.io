@@ -7,20 +7,17 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { getSuppliers, type Supplier } from "@/lib/mocks/suppliers"
 
+// 強制動態渲染
+export const dynamic = 'force-dynamic'
+
 // 取得所有供應商用於生成靜態路徑
 const allSuppliers = [...getSuppliers('default'), ...getSuppliers('tsmc')]
 
-// 新增靜態路徑參數生成
-export function generateStaticParams() {
-  return allSuppliers.map((supplier) => ({
-    id: supplier.id,
-  }))
-}
-
-export default function SupplierDetailPage({ params }: { params: { id: string } }) {
+export default async function SupplierDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   
   // 查找供應商資料
-  const supplier = allSuppliers.find((s: Supplier) => s.id === params.id)
+  const supplier = allSuppliers.find((s: Supplier) => s.id === id)
 
   if (!supplier) {
     return <div className="flex items-center justify-center h-full">找不到供應商</div>
